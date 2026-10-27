@@ -1,0 +1,104 @@
+/* ---------------------------------------------------------------------------
+   ElaadNL colour system
+   Base palette is verbatim from "inhoud huisstijl ElaadNL.pdf":
+   #007ea4  #00abd7  #899903  #dedc00  #4d4d4c  #f7f6f5
+   plus #0094be (the web theme-color used on elaad.nl).
+   Tints/shades are derived in OKLCH from those six hues — never invent new hues.
+--------------------------------------------------------------------------- */
+:root{
+  /* --- brand base (do not alter) --- */
+  --elaad-blue:#007ea4;
+  --elaad-blue-web:#0094be;
+  --elaad-cyan:#00abd7;
+  --elaad-olive:#899903;
+  --elaad-yellow:#dedc00;
+  --elaad-grey:#4d4d4c;
+  --elaad-off-white:#f7f6f5;
+
+  /* --- blue ramp (primary) --- */
+  --blue-50:#e8f5f9;
+  --blue-100:#c7e8f1;
+  --blue-200:#8fd4e6;
+  --blue-300:#4dbedb;
+  --blue-400:#00abd7;
+  --blue-500:#0094be;
+  --blue-600:#007ea4;
+  --blue-700:#00688a;
+  --blue-800:#004e64;
+  --blue-900:#003643;
+
+  /* --- yellow / olive ramp (accent) --- */
+  --yellow-50:#fbfbe0;
+  --yellow-100:#f5f4a8;
+  --yellow-200:#ecea5c;
+  --yellow-300:#dedc00;
+  --yellow-400:#c3c000;
+  --yellow-500:#a8a802;
+  --olive-500:#899903;
+  --olive-600:#6f7d02;
+  --olive-700:#556101;
+
+  /* --- neutral ramp --- */
+  --grey-0:#ffffff;
+  --grey-25:#f7f6f5;
+  --grey-50:#f0efed;
+  --grey-100:#e3e1de;
+  --grey-200:#cbc8c4;
+  --grey-300:#aca9a5;
+  --grey-400:#8b8886;
+  --grey-500:#6d6a68;
+  --grey-600:#4d4d4c;
+  --grey-700:#3b3b3a;
+  --grey-800:#2a2a29;
+  --grey-900:#1a1a19;
+
+  /* --- semantic status --- */
+  --status-success:#899903;
+  --status-success-bg:#f1f4dc;
+  --status-warning:#c3a000;
+  --status-warning-bg:#fbf5da;
+  --status-danger:#b8342a;
+  --status-danger-bg:#f9e7e5;
+  --status-info:#0094be;
+  --status-info-bg:#e8f5f9;
+
+  /* --- semantic aliases: use these in components --- */
+  --brand-primary:#007ea4;
+  --brand-primary-hover:#00688a;
+  --brand-primary-active:#004e64;
+  --brand-secondary:#00abd7;
+  --brand-accent:#dedc00;
+  --brand-accent-ink:#4d4d4c;
+
+  --surface-page:#ffffff;
+  --surface-muted:#f7f6f5;
+  --surface-card:#ffffff;
+  --surface-card-muted:#f7f6f5;
+  --surface-inverse:#004e64;
+  --surface-brand:#007ea4;
+  --surface-overlay:rgba(0,60,78,.62);
+
+  --text-heading:#004e64;
+  --text-body:#4d4d4c;
+  --text-muted:#6d6a68;
+  --text-subtle:#8b8886;
+  --text-on-brand:#ffffff;
+  --text-on-accent:#4d4d4c;
+  --text-link:#007ea4;
+  --text-link-hover:#004e64;
+
+  --border-subtle:#e3e1de;
+  --border-default:#cbc8c4;
+  --border-strong:#4d4d4c;
+  --border-brand:#00abd7;
+  --focus-ring:#00abd7;
+
+  /* --- signature gradient (huisstijl: diagonal #007ea4 -> #dedc00) --- */
+  --gradient-brand:linear-gradient(135deg,#007ea4 0%,#dedc00 100%); /* @kind color */
+  --gradient-brand-soft:linear-gradient(135deg,#007ea4 0%,#00abd7 45%,#dedc00 100%); /* @kind color */
+  --gradient-brand-reverse:linear-gradient(135deg,#dedc00 0%,#007ea4 100%); /* @kind color */
+  --gradient-brand-vertical:linear-gradient(180deg,#007ea4 0%,#dedc00 100%); /* @kind color */
+  /* readability veil over photography */
+  --gradient-protect:linear-gradient(90deg,rgba(0,78,100,.86) 0%,rgba(0,78,100,.55) 55%,rgba(0,78,100,0) 100%); /* @kind color */
+  --gradient-protect-bottom:linear-gradient(0deg,rgba(0,78,100,.85) 0%,rgba(0,78,100,0) 70%); /* @kind color */
+}

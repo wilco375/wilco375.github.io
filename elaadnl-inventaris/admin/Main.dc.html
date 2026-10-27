@@ -1,0 +1,1945 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Software- en domeininventaris</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/elaadnl/styles.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/fonts.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/colors.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/typography.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/spacing.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/shape.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/charts.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/breakpoints.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/base.css">
+<script src="ds/elaadnl/_ds_bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#f7f6f5}
+a{color:#007ea4}a:hover{color:#004e64}
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; background: #f7f6f5; color: #4d4d4c; font-family: var(--font-body, Montserrat, system-ui, sans-serif); font-size: 14px; line-height: 1.5">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 12px 24px; background: #ffffff; border-bottom: 1px solid #e3e1de">
+  <div style="display: flex; align-items: center; gap: 14px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Logo" brand="elaad" height="{{ logoH }}" src="ds/elaadnl/assets/logos/logo-elaadnl.png"></x-import>
+    <div style="display: flex; flex-direction: column">
+      <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 16px; color: #004e64">Software- en domeininventaris</span>
+      <span style="font-size: 12px; color: #6d6a68">Applicaties, domeinen en kwetsbaarheden op één plek</span>
+    </div>
+  </div>
+  <div style="flex: 1 1 24px"></div>
+  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.SearchField" placeholder="Zoek applicatie of domein" value="{{ q }}" on-change="{{ onQ }}" on-submit="{{ onQSubmit }}" style="width: 300px; max-width: 100%"></x-import>
+  <div style="display: flex; align-items: center; gap: 10px">
+    <span style="display: inline-flex; color: #007ea4"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="user" size="20px"></x-import></span>
+    <div style="display: flex; flex-direction: column">
+      <span style="font-weight: 600; color: #004e64">{{ me.name }}</span>
+      <span style="font-size: 12px; color: #6d6a68">{{ me.role }}</span>
+    </div>
+  </div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1 1 auto; align-items: stretch">
+
+<nav aria-label="Hoofdmenu" style="flex: 1 1 236px; box-sizing: border-box; padding: 16px 12px; background: #ffffff; border-right: 1px solid #e3e1de; display: flex; flex-direction: column; gap: 4px">
+  <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+    <button type="button" onClick="{{ n.go }}" aria-current="{{ n.current }}" style="display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 12px; border: 0; border-radius: 4px; cursor: pointer; text-align: left; font-family: var(--font-display, 'Exo 2', sans-serif); font-size: 14px; background: {{ n.bg }}; color: {{ n.fg }}; font-weight: {{ n.fw }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="{{ n.icon }}" size="18px"></x-import>
+      <span style="flex: 1 1 auto">{{ n.label }}</span>
+      <sc-if value="{{ n.hasCount }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ n.countTone }}">{{ n.count }}</x-import>
+      </sc-if>
+    </button>
+  </sc-for>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 24px clamp(16px, 3vw, 32px) 56px; display: flex; flex-direction: column; gap: 20px">
+
+<sc-if value="{{ hasFlash }}" hint-placeholder-val="{{ false }}">
+  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="{{ flashTone }}" on-dismiss="{{ clearFlash }}">{{ flash }}</x-import>
+</sc-if>
+
+<!-- ============ DASHBOARD ============ -->
+<sc-if value="{{ v.dash }}" hint-placeholder-val="{{ true }}">
+<section style="display: flex; flex-direction: column; gap: 20px">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+    <div>
+      <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">Vrijdag 23 oktober 2026</div>
+      <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Dashboard</h1>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ openAdd }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Applicatie toevoegen</x-import>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+    <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.StatTile" label="{{ s.label }}" value="{{ s.value }}" delta="{{ s.delta }}" delta-tone="neutral" variant="card"></x-import>
+    </sc-for>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px; align-items: start">
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 20px 20px 8px">
+      <h2 style="margin: 0 0 4px; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 18px; color: #004e64">Aandacht nodig</h2>
+      <p style="margin: 0 0 8px; font-size: 13px; color: #6d6a68">Gesorteerd op prioriteit: KEV-status, EPSS en CVSS samen.</p>
+      <sc-if value="{{ noAtt }}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 0; padding: 16px 0; color: #6d6a68">Niets dat nu je aandacht vraagt.</p>
+      </sc-if>
+      <sc-for list="{{ att }}" as="a" hint-placeholder-count="5">
+        <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-top: 1px solid #e3e1de">
+          <span style="display: inline-flex; padding-top: 2px; color: {{ a.color }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="{{ a.icon }}" size="20px"></x-import></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ a.tone }}">{{ a.kind }}</x-import>
+              <span style="font-size: 12px; color: #6d6a68">{{ a.when }}</span>
+            </div>
+            <span style="font-weight: 600; color: #004e64">{{ a.title }}</span>
+            <span style="font-size: 13px">{{ a.text }}</span>
+          </div>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" on-click="{{ a.go }}">{{ a.cta }}</x-import>
+        </div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 20px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px">
+        <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 18px; color: #004e64">Background jobs</h2>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" size="sm" on-click="{{ goJobs }}">Alle jobs<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-right" size="16px"></x-import></x-import>
+      </div>
+      <sc-for list="{{ jobRows }}" as="j" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) 104px; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #e3e1de">
+          <div style="display: flex; flex-direction: column; min-width: 0">
+            <span style="font-weight: 500">{{ j.name }}</span>
+            <span style="font-size: 12px; color: #6d6a68; font-variant-numeric: tabular-nums">Laatst succesvol {{ j.last }}</span>
+          </div>
+          <span style="justify-self: start"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ j.tone }}" dot="{{ yes }}">{{ j.status }}</x-import></span>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ notAdmin }}" hint-placeholder-val="{{ false }}">
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 20px">
+      <h2 style="margin: 0 0 4px; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 18px; color: #004e64">Mijn applicaties</h2>
+      <p style="margin: 0 0 8px; font-size: 13px; color: #6d6a68">Applicaties waarvan jij applicatiebeheerder bent.</p>
+      <sc-if value="{{ noMyApps }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 16px 0; display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+          <span>Je beheert nog geen applicaties. Ken je een applicatie die ontbreekt? Voeg hem toe, dan vult het securityteam de details aan.</span>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" on-click="{{ openAdd }}">Applicatie toevoegen</x-import>
+        </div>
+      </sc-if>
+      <sc-for list="{{ myApps }}" as="m" hint-placeholder-count="3">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 0; border-top: 1px solid #e3e1de">
+          <button type="button" onClick="{{ m.go }}" style="flex: 1 1 160px; border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left">{{ m.name }}</button>
+          <span style="font-size: 12px; color: #6d6a68">Bevestigd {{ m.bevestigd }}</span>
+          <sc-if value="{{ m.late }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="warning">Review nodig</x-import></sc-if>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ m.tone }}" dot="{{ yes }}">{{ m.status }}</x-import>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ APPLICATIES ============ -->
+<sc-if value="{{ v.apps }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+    <div>
+      <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">{{ appCountLabel }}</div>
+      <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Applicaties</h1>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ openAdd }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Applicatie toevoegen</x-import>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.SearchField" placeholder="Zoek op naam of URL" value="{{ q }}" on-change="{{ onQ }}" style="flex: 1 1 240px"></x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Filter op type" options="{{ typeOpts }}" value="{{ fType }}" on-change="{{ onType }}" style="width: 170px"></x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Filter op status" options="{{ statusOpts }}" value="{{ fStatus }}" on-change="{{ onStatus }}" style="width: 170px"></x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Filter op herkomst" options="{{ herkomstOpts }}" value="{{ fHerkomst }}" on-change="{{ onHerkomst }}" style="width: 220px"></x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Sorteren" options="{{ sortOpts }}" value="{{ sort }}" on-change="{{ onSort }}" style="width: 200px"></x-import>
+    </div>
+    <sc-if value="{{ canProt }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Checkbox" label="Heeft open kritieke CVE" checked="{{ fKritiek }}" on-change="{{ onKritiek }}"></x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Checkbox" label="Bevat persoonsgegevens" checked="{{ fPersoons }}" on-change="{{ onPersoons }}"></x-import>
+        <span style="font-size: 12px; color: #6d6a68">Filters op afgeschermde velden tonen alleen applicaties waarvan jij de details mag zien.</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noProt }}" hint-placeholder-val="{{ false }}">
+      <span style="font-size: 12px; color: #6d6a68">Filteren op CVE's, impact of persoonsgegevens kan alleen voor applicaties waarvan je de details mag zien.</span>
+    </sc-if>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 1280px">
+      <div style="display: grid; grid-template-columns: minmax(0, 2.2fr) 100px minmax(0, 1.3fr) 150px minmax(0, 1.3fr) 130px 110px 90px 170px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <span>Naam</span><span>Type</span><span>Herkomst</span><span>Bereikbaarheid</span><span>Beheerder</span><span>Status</span><span>CVE's</span><span>Findings</span><span>Laatst bevestigd</span>
+      </div>
+      <sc-if value="{{ noAppRows }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 24px 16px; color: #6d6a68">Geen applicaties die aan deze filters voldoen.</div>
+      </sc-if>
+      <sc-for list="{{ appRows }}" as="r" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: minmax(0, 2.2fr) 100px minmax(0, 1.3fr) 150px minmax(0, 1.3fr) 130px 110px 90px 170px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+          <div style="display: flex; flex-direction: column; min-width: 0">
+            <button type="button" onClick="{{ r.open }}" style="border: 0; background: none; padding: 0; font: inherit; font-size: 14px; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left">{{ r.name }}</button>
+            <span style="font-size: 12px; color: #6d6a68; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ r.url }}</span>
+          </div>
+          <span>{{ r.type }}</span>
+          <span>{{ r.herkomst }}</span>
+          <span style="color: {{ r.bereikFg }}">{{ r.bereik }}</span>
+          <span>{{ r.beheerder }}</span>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ r.statusTone }}" dot="{{ yes }}">{{ r.status }}</x-import></span>
+          <span>
+            <sc-if value="{{ r.visible }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ r.cveTone }}">{{ r.cveLabel }}</x-import></sc-if>
+            <sc-if value="{{ r.locked }}" hint-placeholder-val="{{ false }}"><span style="color: #6d6a68">Afgeschermd</span></sc-if>
+          </span>
+          <span style="font-variant-numeric: tabular-nums">{{ r.fLabel }}</span>
+          <span style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-variant-numeric: tabular-nums">{{ r.bevestigd }}<sc-if value="{{ r.late }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="warning">Te laat</x-import></sc-if></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ APPLICATIE DETAIL ============ -->
+<sc-if value="{{ v.app }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <nav aria-label="Kruimelpad" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px">
+    <button type="button" onClick="{{ goApps }}" style="border: 0; background: none; padding: 0; font: inherit; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">Applicaties</button>
+    <span style="display: inline-flex; color: #8b8886"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="caret-right" size="14px"></x-import></span>
+    <span style="color: #4d4d4c">{{ app.name }}</span>
+  </nav>
+
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; align-items: center; gap: 8px">
+        <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">{{ app.name }}</h1>
+        <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.IconButton" variant="ghost" label="Naam, type en URL bewerken" on-click="{{ openHdrEdit }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="pencil-simple" size="18px"></x-import></x-import></sc-if>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ app.statusTone }}" dot="{{ yes }}">{{ app.status }}</x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="brand">{{ app.type }}</x-import>
+        <span style="font-size: 13px; color: #6d6a68">{{ app.url }}</span>
+      </div>
+      <span style="font-size: 13px; color: #6d6a68">Laatst bevestigd op {{ app.bevestigd }} · Beheerder: {{ app.beheerders }}</span>
+      <sc-if value="{{ editMode }}" hint-placeholder-val="{{ true }}"><span role="status" aria-live="polite" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: {{ saveColor }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="{{ saveIcon }}" size="16px"></x-import>{{ saveText }}</span></sc-if>
+    </div>
+    <sc-if value="{{ showActions }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ confirmApp }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="check-circle" size="18px"></x-import>Gegevens bevestigen</x-import>
+        <sc-if value="{{ app.notArchived }}" hint-placeholder-val="{{ true }}">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ openArchive }}">Archiveren</x-import>
+        </sc-if>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ app.late }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info" title="Review nodig">De gegevens van deze applicatie zijn langer dan het reviewinterval niet bevestigd. Controleer de registratie en klik op Gegevens bevestigen.</x-import>
+  </sc-if>
+  <sc-if value="{{ app.hasInactive }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Geen actieve interne beheerder">{{ app.inactive }}</x-import>
+  </sc-if>
+  <sc-if value="{{ app.incomplete }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Registratie onvolledig">Locatie, herkomst, technologieën of impact ontbreken nog. Vul ze hieronder aan; wijzigingen worden automatisch opgeslagen. Het securityteam vult de rest aan.</x-import>
+  </sc-if>
+
+  <sc-if value="{{ app.locked }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info" title="Details afgeschermd">Technologieën, CVE's, impact, locatie en findings zijn alleen zichtbaar voor admins en de applicatiebeheerders van deze applicatie. Klopt er iets niet? Neem contact op met de beheerder.</x-import>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Openbare gegevens</h2>
+        <div style="display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px; font-size: 13px">
+          <span style="color: #6d6a68">Type</span><span>{{ app.type }}</span>
+          <span style="color: #6d6a68">Herkomst</span><span>{{ app.herkomst }}</span>
+          <span style="color: #6d6a68">Beheerder</span><span>{{ app.beheerders }}</span>
+          <span style="color: #6d6a68">Domeinen</span><span>{{ app.domainList }}</span>
+        </div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
+        <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Contact</h2>
+        <span style="font-size: 13px">{{ app.firstContact }}</span>
+        <a href="mailto:{{ app.firstMail }}" style="font-weight: 600">{{ app.firstMail }}</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ app.visible }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ editSecretWarn }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Mogelijk geheim gevonden, niet opgeslagen">Een van de tekstvelden lijkt een wachtwoord, API-key of token te bevatten. Haal het weg en bewaar het in de wachtwoordkluis. Weet je zeker dat het geen geheim is? Dan kun je toch opslaan.</x-import>
+      <div><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" on-click="{{ forceSave }}">Toch opslaan</x-import></div>
+    </sc-if>
+    <sc-if value="{{ hasEditErr }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ editErr }}</x-import>
+    </sc-if>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Tabs" items="{{ appTabs }}" value="{{ appTab }}" on-change="{{ setAppTab }}" variant="underline"></x-import>
+
+    <sc-if value="{{ t.overzicht }}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px">
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Gebruik en gegevens</h2>
+          <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Toelichting op het gebruik</span><sc-if value="{{ notEdit }}" hint-placeholder-val="{{ true }}"><span>{{ app.gebruik }}</span></sc-if><sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" aria-label="Toelichting op het gebruik" rows="{{ rows3 }}" value="{{ dr.gebruik }}" on-change="{{ ed.gebruik }}"></x-import></sc-if></div>
+          <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Opgeslagen gegevens</span><sc-if value="{{ notEdit }}" hint-placeholder-val="{{ true }}"><span>{{ app.opslag }}</span></sc-if><sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" aria-label="Opgeslagen gegevens" rows="{{ rows3 }}" value="{{ dr.opslag }}" on-change="{{ ed.opslag }}"></x-import><span style="font-size: 12px; color: #6d6a68">Zet hier nooit wachtwoorden of API-keys in.</span></sc-if></div>
+          <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Aangemaakt door</span><span>{{ app.creator }}</span></div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Locatie en herkomst</h2>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Herkomst</span>
+            <sc-if value="{{ notEdit }}" hint-placeholder-val="{{ true }}"><span>{{ app.herkomst }}</span></sc-if>
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Herkomst" options="{{ herkomstOnlyOpts }}" value="{{ dr.herkomst }}" on-change="{{ ed.herkomst }}" style="width: 100%"></x-import></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Gehost bij</span>
+            <sc-if value="{{ notEdit }}" hint-placeholder-val="{{ true }}"><span>{{ app.hosting }}</span></sc-if>
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" aria-label="Gehost bij" value="{{ dr.hosting }}" on-change="{{ ed.hosting }}" placeholder="Bijvoorbeeld eigen datacenter of leverancier" style="width: 100%"></x-import></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">VLAN</span>
+            <sc-if value="{{ notEdit }}" hint-placeholder-val="{{ true }}"><span>{{ app.vlan }}</span></sc-if>
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" aria-label="VLAN" value="{{ dr.vlan }}" on-change="{{ ed.vlan }}" placeholder="Bijvoorbeeld VLAN 210 (DMZ)" style="width: 100%"></x-import></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Bereikbaarheid</span>
+            <sc-if value="{{ notEdit }}" hint-placeholder-val="{{ true }}"><span>{{ app.bereik }}</span></sc-if>
+            <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Bereikbaarheid" options="{{ bereikOpts }}" value="{{ dr.bereik }}" on-change="{{ ed.bereik }}" style="width: 100%"></x-import></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Open CVE's</span>
+            <span>{{ app.openCount }}</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ t.tech }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+          <div style="min-width: 760px">
+            <div style="padding: 16px 16px 12px"><h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Technologieën en afhankelijkheden</h2></div>
+            <sc-if value="{{ app.canEdit }}" hint-placeholder-val="{{ true }}">
+              <div style="padding: 0 16px 16px; display: flex; flex-direction: column; gap: 8px">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="tech-zoek" aria-label="Technologie toevoegen" value="{{ techQ }}" on-change="{{ onTechQ }}" placeholder="+ Technologie toevoegen" autocomplete="off" style="width: 100%"></x-import>
+                <span style="font-size: 12px; color: #6d6a68">Zoek in eerder ingevoerde technologieën of typ een nieuwe naam.</span>
+                <sc-if value="{{ hasTechSugg }}" hint-placeholder-val="{{ false }}">
+                  <div style="border: 1px solid #e3e1de; border-radius: 6px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; max-width: 560px">
+                    <sc-for list="{{ techSugg }}" as="sg" hint-placeholder-count="3">
+                      <button type="button" onClick="{{ sg.add }}" style="display: flex; justify-content: space-between; gap: 12px; min-height: 44px; align-items: center; padding: 0 12px; border: 0; border-bottom: 1px solid #e3e1de; background: #ffffff; font: inherit; cursor: pointer; text-align: left">
+                        <span style="font-weight: 600; color: #004e64">{{ sg.name }}</span>
+                        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #6d6a68">{{ sg.cpe }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ showNewTech }}" hint-placeholder-val="{{ false }}">
+                  <div><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" on-click="{{ startNewTech }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="16px"></x-import>Nieuwe technologie “{{ techQ }}” aanmaken</x-import></div>
+                </sc-if>
+                <sc-if value="{{ hasCpe }}" hint-placeholder-val="{{ false }}">
+                  <div style="border: 1px solid #00abd7; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; max-width: 560px">
+                    <span style="font-weight: 600; color: #004e64">Kies een CPE voor “{{ techCpeFor }}”</span>
+                    <span style="font-size: 12px; color: #6d6a68">Suggesties op productniveau uit de NVD CPE-dictionary en Shodan CVEDB.</span>
+                    <sc-for list="{{ cpeSugg }}" as="cp" hint-placeholder-count="3">
+                      <button type="button" onClick="{{ cp.pick }}" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; min-height: 44px; align-items: center; padding: 6px 12px; border: 1px solid #e3e1de; border-radius: 4px; background: #ffffff; font: inherit; cursor: pointer; text-align: left">
+                        <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #004e64">{{ cp.cpe }}</span>
+                        <span style="font-size: 12px; color: #6d6a68">{{ cp.src }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 240px 44px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-top: 1px solid #e3e1de; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+              <span>Technologie</span><span>CPE</span><span>Meldingsniveau</span><span></span>
+            </div>
+            <sc-if value="{{ noTechs }}" hint-placeholder-val="{{ false }}"><div style="padding: 16px; color: #6d6a68">Nog geen technologieën gekoppeld.</div></sc-if>
+            <sc-for list="{{ appTechs }}" as="tt" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 240px 44px; gap: 12px; align-items: center; padding: 8px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+                <span style="font-weight: 600; color: #004e64">{{ tt.name }}</span>
+                <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #6d6a68; overflow-wrap: anywhere">{{ tt.cpe }}</span>
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Meldingsniveau voor {{ tt.name }}" options="{{ levelOpts }}" value="{{ tt.level }}" on-change="{{ tt.setLevel }}" disabled="{{ tt.readOnly }}"></x-import>
+                <div style="display: flex; justify-content: center">
+                  <sc-if value="{{ tt.canRemove }}" hint-placeholder-val="{{ true }}">
+                    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.IconButton" variant="ghost" label="{{ tt.removeLabel }}" on-click="{{ tt.remove }}"><svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg></x-import>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+          <div style="min-width: 1000px">
+            <div style="padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">CVE's voor deze applicatie</h2><span style="font-size: 12px; color: #6d6a68">Klik op het potlood naast een status om die te wijzigen.</span></div>
+            <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 70px 80px 70px 100px minmax(0, 1.6fr); gap: 12px; padding: 10px 16px; background: #f7f6f5; border-top: 1px solid #e3e1de; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+              <span>CVE</span><span>Technologie</span><span>CVSS</span><span>EPSS</span><span>KEV</span><span>Prioriteit</span><span>Status</span>
+            </div>
+            <sc-if value="{{ noAppCves }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px 16px; color: #6d6a68">Geen CVE's gevonden voor de gekoppelde technologieën.</div></sc-if>
+            <sc-for list="{{ appCves }}" as="c" hint-placeholder-count="3">
+              <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 70px 80px 70px 100px minmax(0, 1.6fr); gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+                <a href="https://nvd.nist.gov/vuln/detail/{{ c.cve }}" rel="noreferrer" target="_blank" style="justify-self: start; font-weight: 600">{{ c.cve }}</a>
+                <span>{{ c.tech }}</span>
+                <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-variant-numeric: tabular-nums">{{ c.cvss }}</span>
+                <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-variant-numeric: tabular-nums">{{ c.epss }}</span>
+                <span>
+                  <sc-if value="{{ c.isKev }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="danger">KEV</x-import></sc-if>
+                  <sc-if value="{{ c.notKev }}" hint-placeholder-val="{{ true }}"><span style="color: #6d6a68">Nee</span></sc-if>
+                </span>
+                <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ c.prioTone }}">{{ c.prio }}</x-import></span>
+                <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+                  <div style="display: flex; align-items: center; gap: 2px">
+                    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ c.statusTone }}" dot="{{ yes }}">{{ c.status }}</x-import>
+                    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.IconButton" variant="ghost" label="Status wijzigen voor {{ c.cve }}" on-click="{{ c.change }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="pencil-simple" size="16px"></x-import></x-import>
+                  </div>
+                  <sc-if value="{{ c.hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #6d6a68">{{ c.note }}</span></sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ t.impact }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ app.noImpact }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Impact nog niet geclassificeerd">De BIV-classificatie en impact bij een hack zijn nog niet ingevuld.</x-import>
+      </sc-if>
+      <sc-if value="{{ app.hasImpact }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+          <sc-for list="{{ bivItems }}" as="b" hint-placeholder-count="3">
+            <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px">
+                <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">{{ b.label }}</span>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 8px">
+                <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; color: #004e64">{{ b.score }}</span>
+                <span style="font-size: 13px; color: #6d6a68">van 3 · {{ b.level }}</span>
+              </div>
+              <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+                <span style="height: 6px; border-radius: 2px; background: {{ b.c1 }}"></span>
+                <span style="height: 6px; border-radius: 2px; background: {{ b.c2 }}"></span>
+                <span style="height: 6px; border-radius: 2px; background: {{ b.c3 }}"></span>
+              </div>
+              <span style="font-size: 13px">{{ b.toel }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; margin-bottom: 8px">
+            <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Gevolgen bij een hack</h2>
+          </div>
+          <sc-for list="{{ impactFlags }}" as="fl" hint-placeholder-count="5">
+            <div style="display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); gap: 8px 16px; padding: 10px 0; border-top: 1px solid #e3e1de; align-items: start">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Checkbox" label="{{ fl.label }}" checked="{{ fl.checked }}" disabled="{{ yes }}"></x-import>
+              <span style="font-size: 13px; color: {{ fl.fg }}">{{ fl.toel }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ te.impact }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+        <sc-for list="{{ bivEdit }}" as="be" hint-placeholder-count="3">
+          <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px">
+              <label for="{{ be.id }}" style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">{{ be.label }}</label>
+            </div>
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="{{ be.id }}" options="{{ bivOpts }}" value="{{ be.score }}" on-change="{{ be.setScore }}"></x-import>
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" aria-label="Toelichting bij {{ be.label }}" rows="{{ rows3 }}" value="{{ be.toel }}" on-change="{{ be.setToel }}" placeholder="Toelichting"></x-import>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 4px">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; margin-bottom: 8px">
+          <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Gevolgen bij een hack</h2>
+        </div>
+        <sc-for list="{{ impEdit }}" as="ie" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); gap: 8px 16px; padding: 10px 0; border-top: 1px solid #e3e1de; align-items: center">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Checkbox" label="{{ ie.label }}" checked="{{ ie.checked }}" on-change="{{ ie.toggle }}"></x-import>
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" aria-label="Toelichting bij {{ ie.label }}" value="{{ ie.toel }}" on-change="{{ ie.setToel }}" placeholder="Toelichting"></x-import>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ t.domeinen }}" hint-placeholder-val="{{ false }}">
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+        <div style="min-width: 840px">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) 160px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+            <span>Domein</span><span>IP of CNAME</span><span>Poorten IPv4</span><span>Poorten IPv6</span><span>Status</span>
+          </div>
+          <sc-if value="{{ noAppDoms }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px 16px; color: #6d6a68">Geen domeinen gekoppeld. Koppel een domein vanuit de domeinlijst.</div></sc-if>
+          <sc-for list="{{ appDoms }}" as="ad" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) 160px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+              <button type="button" onClick="{{ ad.open }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left">{{ ad.name }}</button>
+              <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px">{{ ad.ip }}</span>
+              <span>{{ ad.p4 }}</span>
+              <span>{{ ad.p6 }}</span>
+              <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ ad.tone }}" dot="{{ yes }}">{{ ad.status }}</x-import></span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ t.contacten }}" hint-placeholder-val="{{ false }}">
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+        <div style="min-width: 900px">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; min-height: 64px; box-sizing: border-box">
+            <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Contactpersonen</h2>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) 260px minmax(0, 1.6fr) 220px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-top: 1px solid #e3e1de; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+            <span>Naam</span><span>Rol</span><span>Contactgegevens</span><span>Meldingen</span>
+          </div>
+          <sc-for list="{{ contacts }}" as="ct" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) 260px minmax(0, 1.6fr) 220px; gap: 12px; align-items: center; padding: 8px 16px; min-height: 57px; box-sizing: border-box; border-bottom: 1px solid #e3e1de; font-size: 13px">
+              <span style="font-weight: 600; color: #004e64">{{ ct.name }}</span>
+              <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ ct.tone }}">{{ ct.role }}</x-import></span>
+              <div style="display: flex; flex-direction: column; align-items: flex-start; overflow-wrap: anywhere">
+                <a href="mailto:{{ ct.mail }}">{{ ct.mail }}</a>
+                <span style="font-size: 12px; color: #6d6a68">{{ ct.phone }}</span>
+              </div>
+              <span style="font-size: 12px; color: #6d6a68">{{ ct.notif }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ te.contacten }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 16px">
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+          <div style="min-width: 900px">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; min-height: 64px; box-sizing: border-box">
+              <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Contactpersonen</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) 260px minmax(0, 1.6fr) 220px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-top: 1px solid #e3e1de; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+              <span>Naam</span><span>Rol</span><span>Contactgegevens</span><span>Meldingen</span>
+            </div>
+            <sc-if value="{{ noDraftContacts }}" hint-placeholder-val="{{ false }}"><div style="padding: 20px 16px; color: #6d6a68">Nog geen contactpersonen.</div></sc-if>
+            <sc-for list="{{ draftContacts }}" as="dc" hint-placeholder-count="3">
+              <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) 260px minmax(0, 1.6fr) 220px; gap: 12px; align-items: center; padding: 8px 16px; min-height: 57px; box-sizing: border-box; border-bottom: 1px solid #e3e1de; font-size: 13px">
+                <span style="font-weight: 600; color: #004e64">{{ dc.name }}</span>
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Rol van {{ dc.name }}" options="{{ ncRoleOpts }}" value="{{ dc.role }}" on-change="{{ dc.setRole }}"></x-import>
+                <div style="display: flex; flex-direction: column; overflow-wrap: anywhere">
+                  <span>{{ dc.mail }}</span>
+                  <span style="font-size: 12px; color: #6d6a68">{{ dc.phone }}</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+                  <span style="font-size: 12px; color: #6d6a68">{{ dc.notif }}</span>
+                  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.IconButton" variant="ghost" label="{{ dc.removeLabel }}" on-click="{{ dc.remove }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="x" size="18px"></x-import></x-import>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 16px; color: #004e64">Contactpersoon toevoegen</h2>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Soort" html-for="nc-soort">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="nc-soort" options="{{ ncKindOpts }}" value="{{ ncKind }}" on-change="{{ onNcKind }}"></x-import>
+            </x-import>
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Rol" html-for="nc-rol">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="nc-rol" options="{{ ncRoleOpts }}" value="{{ ncRole }}" on-change="{{ onNcRole }}"></x-import>
+            </x-import>
+          </div>
+          <sc-if value="{{ ncIsUser }}" hint-placeholder-val="{{ true }}">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Gebruiker" html-for="nc-user" style="max-width: 360px">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="nc-user" options="{{ ncUserOpts }}" value="{{ ncUser }}" on-change="{{ onNcUser }}"></x-import>
+            </x-import>
+          </sc-if>
+          <sc-if value="{{ ncIsManual }}" hint-placeholder-val="{{ false }}">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Naam" html-for="nc-naam" required="{{ yes }}">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="nc-naam" value="{{ ncName }}" on-change="{{ onNcName }}" placeholder="Bijvoorbeeld Studio Voorbeeld"></x-import>
+              </x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="E-mailadres" html-for="nc-mail" required="{{ yes }}">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="nc-mail" type="email" value="{{ ncMail }}" on-change="{{ onNcMail }}"></x-import>
+              </x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Telefoon" html-for="nc-tel">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="nc-tel" type="tel" value="{{ ncPhone }}" on-change="{{ onNcPhone }}"></x-import>
+              </x-import>
+            </div>
+          </sc-if>
+          <span style="font-size: 12px; color: #6d6a68">Interne beheerders met een account mogen de applicatie wijzigen. Leveranciers en externe partijen ontvangen standaard geen meldingen.</span>
+          <sc-if value="{{ hasNcErr }}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ ncErr }}</x-import>
+          </sc-if>
+          <div><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ addContact }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Toevoegen</x-import></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ t.historie }}" hint-placeholder-val="{{ false }}">
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Toestand bekijken op datum" hint="Voor incident response: zo zag de registratie er toen uit." html-for="hist-datum" style="width: 280px">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="hist-datum" type="date" value="{{ histDate }}" on-change="{{ onHistDate }}"></x-import>
+          </x-import>
+        </div>
+        <sc-if value="{{ hasHistDate }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info" title="Toestand op {{ histDateNl }}">Status Actief, beheerder {{ app.beheerders }}, {{ app.techCount }} technologieën. Wijzigingen na deze datum staan hieronder; oude waarden komen uit de audit log.</x-import>
+        </sc-if>
+        <sc-if value="{{ noHist }}" hint-placeholder-val="{{ false }}"><span style="color: #6d6a68">Nog geen wijzigingen vastgelegd.</span></sc-if>
+        <sc-for list="{{ appHist }}" as="h" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: 150px 1fr; gap: 4px 16px; padding: 10px 0; border-top: 1px solid #e3e1de; font-size: 13px">
+            <span style="font-variant-numeric: tabular-nums; color: #6d6a68">{{ h.when }}</span>
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <span><strong style="color: #004e64">{{ h.who }}</strong> · {{ h.type }}</span>
+              <span>{{ h.oldv }} <span style="color: #6d6a68">naar</span> {{ h.newv }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </sc-if>
+</section>
+</sc-if>
+
+<!-- ============ DOMEINEN ============ -->
+<sc-if value="{{ v.domains }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <sc-if value="{{ domList }}" hint-placeholder-val="{{ true }}">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+    <div>
+      <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">{{ domCountLabel }}</div>
+      <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Domeinen</h1>
+      <p style="margin: 4px 0 0; font-size: 13px; color: #6d6a68">Ontdekt via CT-logs, subfinder en handmatige invoer. Laatste ontdekking 23-10-2026 09:40.</p>
+    </div>
+    <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ openDomainAdd }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Domein toevoegen</x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" disabled="{{ scanDisabled }}" on-click="{{ openScan }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="magnifying-glass" size="18px"></x-import>{{ scanLabel }}</x-import>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 1280px">
+      <div style="display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 160px minmax(0, 1.4fr) 130px 150px 110px; gap: 12px; align-items: center; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Checkbox" checked="{{ allSel }}" on-change="{{ toggleAll }}" aria-label="Alle scanbare domeinen selecteren"></x-import></sc-if>
+          <span>Domein</span>
+        </div>
+        <span>IPv4 / IPv6</span><span>Status</span><span>Applicatie</span><span>Open poorten</span><span>Automatisch scannen</span><span>Ontdekt via</span>
+      </div>
+      <sc-for list="{{ domRows }}" as="d" hint-placeholder-count="10">
+        <div style="display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr) 160px minmax(0, 1.4fr) 130px 150px 110px; gap: 12px; align-items: center; padding: 8px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px; background: {{ d.rowBg }}">
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0">
+            <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Checkbox" checked="{{ d.checked }}" on-change="{{ d.toggleSel }}" disabled="{{ d.noScan }}" aria-label="Selecteer {{ d.name }}"></x-import></sc-if>
+            <button type="button" onClick="{{ d.open }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; overflow-wrap: anywhere">{{ d.name }}</button>
+            <sc-if value="{{ d.hasFinding }}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; color: #b8342a"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="warning-circle" size="18px" title="Open finding"></x-import></span></sc-if>
+            <sc-if value="{{ d.nieuw }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="info">Nieuw</x-import></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; min-width: 0; overflow-wrap: anywhere">
+            <span>{{ d.ip4 }}</span><span style="color: #6d6a68">{{ d.ip6 }}</span>
+          </div>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ d.tone }}" dot="{{ yes }}">{{ d.status }}</x-import></span>
+          <span>
+            <sc-if value="{{ d.hasApp }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ d.appGo }}" style="border: 0; background: none; padding: 0; font: inherit; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left">{{ d.appName }}</button></sc-if>
+            <sc-if value="{{ d.noApp }}" hint-placeholder-val="{{ false }}"><span style="color: #6d6a68">Niet gekoppeld</span></sc-if>
+          </span>
+          <span style="font-variant-numeric: tabular-nums">{{ d.ports }}</span>
+          <span>
+            <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Switch" checked="{{ d.auto }}" on-change="{{ d.toggleAuto }}" label="{{ d.autoLabel }}"></x-import></sc-if>
+            <sc-if value="{{ notAdmin }}" hint-placeholder-val="{{ false }}"><span>{{ d.autoLabel }}</span></sc-if>
+          </span>
+          <span style="color: #6d6a68">{{ d.via }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ hasDSel }}" hint-placeholder-val="{{ false }}">
+    <nav aria-label="Kruimelpad" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px">
+      <button type="button" onClick="{{ closeDomain }}" style="border: 0; background: none; padding: 0; font: inherit; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">Domeinen</button>
+      <span style="display: inline-flex; color: #8b8886"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="caret-right" size="14px"></x-import></span>
+      <span style="color: #4d4d4c; overflow-wrap: anywhere">{{ dSel.name }}</span>
+    </nav>
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 20px; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">Domeindetails</span>
+          <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 22px; color: #004e64; overflow-wrap: anywhere">{{ dSel.name }}</h2>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ dSel.tone }}" dot="{{ yes }}">{{ dSel.status }}</x-import>
+            <span style="font-size: 12px; color: #6d6a68">Ontdekt via {{ dSel.via }} op {{ dSel.found }}</span>
+          </div>
+        </div>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ closeDomain }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-left" size="18px"></x-import>Terug naar domeinen</x-import>
+      </div>
+
+      <sc-if value="{{ dSel.dangling }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger" title="Mogelijk dangling DNS">Het CNAME-record wijst naar een externe dienst waarvan de resource niet meer bestaat (NXDOMAIN). Iemand anders kan deze naam claimen en zo dit subdomein overnemen. Verwijder het record of claim de resource terug.</x-import>
+      </sc-if>
+      <sc-if value="{{ dSel.archivedLive }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Gekoppelde applicatie is gearchiveerd">Het domein resolvet nog en de website geeft HTTP 200. Zet de dienst uit of verwijder het DNS-record.</x-import>
+      </sc-if>
+      <sc-if value="{{ dSel.diff }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Verschil tussen IPv4 en IPv6">Op IPv4 staan meer poorten open dan op IPv6. Vaak is dit een firewallregel die maar voor één protocol is ingesteld.</x-import>
+      </sc-if>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">DNS-records</span>
+          <sc-for list="{{ dSel.records }}" as="rec" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: 64px 1fr; gap: 8px; font-size: 13px">
+              <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">{{ rec.t }}</span>
+              <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; overflow-wrap: anywhere">{{ rec.v }}</span>
+            </div>
+          </sc-for>
+          <div style="display: grid; grid-template-columns: 64px 1fr; gap: 8px; font-size: 13px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">rDNS</span><span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px">{{ dSel.rdns }}</span>
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">ASN</span><span style="font-size: 13px">{{ dSel.asn }}</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Open poorten (TCP)</span>
+          <div style="display: grid; grid-template-columns: 64px 1fr; gap: 6px 8px; font-size: 13px">
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">IPv4</span><span>{{ dSel.p4 }}</span>
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">IPv6</span><span>{{ dSel.p6 }}</span>
+            <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">HTTP</span><span>{{ dSel.http }}</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">Screenshot</span>
+          <div role="img" aria-label="Plaatshouder voor screenshot van {{ dSel.name }}" style="aspect-ratio: 16 / 10; border: 1px solid #e3e1de; border-radius: 6px; background: #f7f6f5; display: flex; flex-direction: column; overflow: hidden">
+            <div style="height: 18px; background: #e3e1de; display: flex; align-items: center; gap: 4px; padding: 0 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: #aca9a5"></span><span style="width: 6px; height: 6px; border-radius: 50%; background: #aca9a5"></span><span style="width: 6px; height: 6px; border-radius: 50%; background: #aca9a5"></span></div>
+            <div style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 8px; text-align: center; font-size: 12px; color: #6d6a68">{{ dSel.shot }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; padding-top: 12px; border-top: 1px solid #e3e1de">
+        <sc-if value="{{ dSel.hasApp }}" hint-placeholder-val="{{ true }}">
+          <span>Gekoppeld aan <button type="button" onClick="{{ dSel.appGo }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">{{ dSel.appName }}</button></span>
+        </sc-if>
+        <sc-if value="{{ dSel.noApp }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Koppelen aan bestaande applicatie" html-for="koppel-app" style="width: 280px">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="koppel-app" options="{{ linkOpts }}" value="{{ linkApp }}" on-change="{{ onLinkApp }}"></x-import>
+          </x-import>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" disabled="{{ linkDisabled }}" on-click="{{ dSel.link }}">Koppelen</x-import>
+          <span style="color: #6d6a68">of</span>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ dSel.newApp }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Nieuwe applicatie aanmaken</x-import>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</section>
+</sc-if>
+
+<!-- ============ FINDINGS ============ -->
+<sc-if value="{{ v.findings }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div>
+    <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">Open poorten zonder gekoppelde applicatie</div>
+    <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Findings</h1>
+  </div>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 1200px">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr) 96px 200px minmax(0, 1.8fr) 330px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <span>Poort</span><span>Dienst</span><span>Gevonden</span><span>Status</span><span>Reden</span><span>Acties</span>
+      </div>
+      <sc-for list="{{ findRows }}" as="f" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr) 96px 200px minmax(0, 1.8fr) 330px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+          <div style="display: flex; flex-direction: column; align-items: flex-start; min-width: 0">
+            <button type="button" onClick="{{ f.openDom }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; max-width: 100%; overflow-wrap: anywhere; word-break: break-word">{{ f.target }}</button>
+            <span style="font-size: 12px; color: #6d6a68">{{ f.ipv }}</span>
+          </div>
+          <span style="min-width: 0; overflow-wrap: anywhere">{{ f.svc }}</span>
+          <span style="font-variant-numeric: tabular-nums">{{ f.found }}</span>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ f.tone }}" dot="{{ yes }}">{{ f.status }}</x-import></span>
+          <span style="font-size: 12px; color: #6d6a68; min-width: 0; overflow-wrap: anywhere">{{ f.reason }}</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-if value="{{ f.isNew }}" hint-placeholder-val="{{ true }}">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" size="sm" on-click="{{ f.mkApp }}">Applicatie aanmaken</x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" on-click="{{ f.accept }}">Accepteren</x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" size="sm" on-click="{{ f.ignore }}">Negeren</x-import>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ JOBS ============ -->
+<sc-if value="{{ v.jobs }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div>
+    <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">Alleen zichtbaar voor admins</div>
+    <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Background jobs</h1>
+  </div>
+  <sc-if value="{{ hasFailJob }}" hint-placeholder-val="{{ true }}">
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger" title="{{ failJob.name }} mislukt">Laatst succesvol op {{ failJob.last }}. Admins hebben een melding in Slack gekregen.</x-import>
+      <pre style="margin: 0; padding: 12px; background: #1a1a19; color: #f0efed; border-radius: 6px; font-size: 12px; line-height: 1.6; overflow-x: auto; white-space: pre">{{ failJob.log }}</pre>
+    </div>
+  </sc-if>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 1100px">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.8fr) 130px 110px 160px 190px 70px 120px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <span>Job</span><span>Interval</span><span>Status</span><span>Laatst succesvol</span><span>Laatste run</span><span>Duur</span><span></span>
+      </div>
+      <sc-for list="{{ jobRows }}" as="j" hint-placeholder-count="11">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.8fr) 130px 110px 160px 190px 70px 120px; gap: 12px; align-items: center; padding: 8px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+          <span style="font-weight: 600; color: #004e64">{{ j.name }}</span>
+          <span>{{ j.interval }}</span>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ j.tone }}" dot="{{ yes }}">{{ j.status }}</x-import></span>
+          <span style="font-variant-numeric: tabular-nums">{{ j.last }}</span>
+          <span style="font-variant-numeric: tabular-nums">{{ j.lastRun }}</span>
+          <span style="font-variant-numeric: tabular-nums">{{ j.dur }}</span>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" disabled="{{ j.running }}" on-click="{{ j.run }}">Nu starten</x-import></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ AUDIT LOG ============ -->
+<sc-if value="{{ v.audit }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+    <div>
+      <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">Alleen-lezen, niet te wijzigen</div>
+      <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Audit log</h1>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Filter op soort wijziging" options="{{ auditOpts }}" value="{{ auditType }}" on-change="{{ onAuditType }}" style="width: 220px"></x-import>
+  </div>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 1100px">
+      <div style="display: grid; grid-template-columns: 150px 140px 130px minmax(0, 1.8fr) minmax(0, 1.4fr) minmax(0, 1.4fr); gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <span>Wanneer</span><span>Wie</span><span>Soort</span><span>Object</span><span>Oude waarde</span><span>Nieuwe waarde</span>
+      </div>
+      <sc-for list="{{ auditRows }}" as="au" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 150px 140px 130px minmax(0, 1.8fr) minmax(0, 1.4fr) minmax(0, 1.4fr); gap: 12px; align-items: start; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+          <span style="font-variant-numeric: tabular-nums">{{ au.when }}</span>
+          <span>{{ au.who }}</span>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="neutral">{{ au.type }}</x-import></span>
+          <span style="font-weight: 600; color: #004e64">{{ au.obj }}</span>
+          <span style="color: #6d6a68">{{ au.oldv }}</span>
+          <span>{{ au.newv }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ GEBRUIKERS ============ -->
+<sc-if value="{{ v.users }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+    <div>
+      <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">{{ usersCountLabel }}</div>
+      <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Gebruikers</h1>
+      <p style="margin: 4px 0 0; font-size: 13px; color: #6d6a68; max-width: 720px">Een account ontstaat bij de eerste login via de OAuth-proxy. Gearchiveerde gebruikers kunnen niet meer inloggen; wat ze hebben gewijzigd blijft in de audit log staan.</p>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Filter op status" options="{{ userFilterOpts }}" value="{{ userFilter }}" on-change="{{ onUserFilter }}" style="width: 200px"></x-import>
+  </div>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 1240px">
+      <div style="display: grid; grid-template-columns: minmax(220px, 1.8fr) 120px minmax(0, 1.8fr) 170px 140px 330px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <span>Naam</span><span>Rol</span><span>Applicatiebeheerder van</span><span>Laatst ingelogd</span><span>Status</span><span>Acties</span>
+      </div>
+      <sc-if value="{{ noUserRows }}" hint-placeholder-val="{{ false }}"><div style="padding: 24px 16px; color: #6d6a68">Geen gebruikers met deze status.</div></sc-if>
+      <sc-for list="{{ userRows }}" as="u" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: minmax(220px, 1.8fr) 120px minmax(0, 1.8fr) 170px 140px 330px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+          <div style="display: flex; flex-direction: column; min-width: 0">
+            <span style="font-weight: 600; color: #004e64">{{ u.name }}<sc-if value="{{ u.isSelf }}" hint-placeholder-val="{{ false }}"><span style="font-weight: 400; color: #6d6a68"> (jij)</span></sc-if></span>
+            <a href="mailto:{{ u.mail }}" style="align-self: flex-start; font-size: 12px; overflow-wrap: anywhere">{{ u.mail }}</a>
+            <span style="font-size: 12px; color: #6d6a68">{{ u.phone }}</span>
+          </div>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ u.roleTone }}">{{ u.roleLabel }}</x-import></span>
+          <div style="display: flex; flex-direction: column; min-width: 0">
+            <span style="font-weight: 600">{{ u.appsLabel }}</span>
+            <span style="font-size: 12px; color: #6d6a68">{{ u.appsNames }}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+            <span style="font-variant-numeric: tabular-nums">{{ u.last }}</span>
+            <sc-if value="{{ u.inactive }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="warning">{{ u.inactiveLabel }}</x-import></sc-if>
+          </div>
+          <span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ u.statusTone }}" dot="{{ yes }}">{{ u.statusLabel }}</x-import></span>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center">
+            <sc-if value="{{ u.canAct }}" hint-placeholder-val="{{ true }}">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" disabled="{{ u.adminDisabled }}" on-click="{{ u.toggleAdmin }}">{{ u.adminLabel }}</x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" size="sm" on-click="{{ u.archive }}">Archiveren</x-import>
+            </sc-if>
+            <sc-if value="{{ u.isSelf }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #6d6a68">Je eigen account wijzig je niet hier</span></sc-if>
+            <sc-if value="{{ u.adminDisabled }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #6d6a68">Laatste admin</span></sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ MELDINGEN ============ -->
+<sc-if value="{{ v.notif }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div>
+    <div style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #007ea4">Instellingen</div>
+    <h1 style="margin: 4px 0 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Meldingen</h1>
+  </div>
+  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info">Hier beheer je welke e-mailmeldingen je krijgt op {{ notifAccount }}</x-import>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 820px">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) 120px minmax(0, 2fr) 220px; gap: 12px; padding: 10px 16px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+        <span>Abonnement</span><span>Bereik</span><span>Gebeurtenissen</span><span>Frequentie</span>
+      </div>
+      <sc-for list="{{ subs }}" as="sb" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) 120px minmax(0, 2fr) 220px; gap: 12px; align-items: center; padding: 10px 16px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-weight: 600; color: #004e64">{{ sb.onderwerp }}</span>
+            <sc-if value="{{ sb.auto }}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #6d6a68">Automatisch, omdat je applicatiebeheerder bent</span></sc-if>
+          </div>
+          <span>{{ sb.bereik }}</span>
+          <span>{{ sb.events }}</span>
+          <span>
+            <sc-if value="{{ sb.fixed }}" hint-placeholder-val="{{ false }}"><span>Realtime (vast)</span></sc-if>
+            <sc-if value="{{ sb.notFixed }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Frequentie voor {{ sb.onderwerp }}" options="{{ sb.opts }}" value="{{ sb.choice }}" on-change="{{ sb.setFreq }}"></x-import></sc-if>
+          </span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+</main>
+</div>
+
+<!-- ============ DIALOGEN ============ -->
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.scan }}" title="Port scan starten" description="Controleer per domein of het IP-adres bij ons hoort. Scan alleen systemen waarvoor we toestemming hebben." width="{{ w760 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <div style="border: 1px solid #e3e1de; border-radius: 6px; overflow-x: auto">
+      <div style="min-width: 640px">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.5fr) minmax(0, 1.5fr) minmax(0, 1.6fr); gap: 10px; padding: 8px 12px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">
+          <span>Domein</span><span>IP-adres</span><span>Reverse DNS</span><span>ASN / eigenaar (whois)</span>
+        </div>
+        <sc-for list="{{ scanRows }}" as="sr" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.5fr) minmax(0, 1.5fr) minmax(0, 1.6fr); gap: 10px; align-items: start; padding: 8px 12px; border-bottom: 1px solid #e3e1de; font-size: 13px">
+            <span style="font-weight: 600; color: #004e64; overflow-wrap: anywhere">{{ sr.name }}</span>
+            <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; overflow-wrap: anywhere">{{ sr.ips }}</span>
+            <span style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; overflow-wrap: anywhere">{{ sr.rdns }}</span>
+            <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+              <span>{{ sr.asn }}</span>
+              <sc-if value="{{ sr.ext }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="warning">Externe partij</x-import></sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <sc-if value="{{ scanHasExt }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Externe partijen in de selectie">{{ scanExtText }}</x-import>
+    </sc-if>
+    <p style="margin: 0; font-size: 13px; color: #6d6a68">Alleen TCP. {{ scanIpText }} Na een geslaagde scan gaat automatisch scannen aan voor deze domeinen.</p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ doScan }}">Port scan starten</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.cve }}" title="Status wijzigen: {{ cveSel.cve }}" description="{{ cveSel.desc }}" width="{{ w560 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Nieuwe status" html-for="cve-status" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="cve-status" options="{{ cveOpts }}" value="{{ cveNew }}" on-change="{{ onCveNew }}"></x-import>
+    </x-import>
+    <sc-if value="{{ needReason }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Reden" hint="Verplicht. Zichtbaar voor admins en applicatiebeheerders." html-for="cve-reden" required="{{ yes }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="cve-reden" rows="{{ rows3 }}" value="{{ cveReason }}" on-change="{{ onCveReason }}" placeholder="Bijvoorbeeld: de kwetsbare module staat niet aan in onze configuratie."></x-import>
+      </x-import>
+    </sc-if>
+    <sc-if value="{{ needDate }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Vervaldatum risicoacceptatie (optioneel)" hint="Na deze datum gaat de status automatisch terug naar Open. Laat je het leeg, dan blijft het risico geaccepteerd tot je de status zelf wijzigt." html-for="cve-datum">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="cve-datum" type="date" value="{{ cveDate }}" on-change="{{ onCveDate }}"></x-import>
+      </x-import>
+    </sc-if>
+    <sc-if value="{{ hasCveErr }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ cveErr }}</x-import>
+    </sc-if>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ saveCve }}">Status opslaan</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.archive }}" title="{{ archiveTitle }}" description="Gearchiveerde applicaties blijven zichtbaar in de lijst en de audit log. Alleen een admin kan ze verwijderen." width="{{ w560 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <sc-for list="{{ archiveLive }}" as="al" hint-placeholder-count="1">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="{{ al.name }} is nog live">{{ al.text }}</x-import>
+    </sc-for>
+    <sc-if value="{{ archiveClean }}" hint-placeholder-val="{{ false }}">
+      <span>Er zijn geen gekoppelde domeinen die nog resolven.</span>
+    </sc-if>
+    <span style="font-size: 13px; color: #6d6a68">We blijven gearchiveerde applicaties periodiek controleren. Is het domein dan nog live, dan krijgt het securityteam een melding.</span>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="danger" on-click="{{ doArchive }}">{{ archiveCta }}</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.add }}" title="Applicatie toevoegen" description="{{ addDesc }}" width="{{ w600 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68">{{ addStepLabel }}</span>
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px">
+        <span style="height: 4px; border-radius: 2px; background: #007ea4"></span>
+        <span style="height: 4px; border-radius: 2px; background: {{ addBar2 }}"></span>
+      </div>
+    </div>
+
+    <sc-if value="{{ addStep1 }}" hint-placeholder-val="{{ true }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Naam" html-for="add-naam" required="{{ yes }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="add-naam" value="{{ addName }}" on-change="{{ onAddName }}" placeholder="Bijvoorbeeld Kassa-testomgeving"></x-import>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="URL of omschrijving" hint="Een URL, of waar de applicatie draait als hij geen URL heeft." html-for="add-url" required="{{ yes }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="add-url" value="{{ addUrl }}" on-change="{{ onAddUrl }}" placeholder="https://… of waar het draait"></x-import>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Beheerder" hint="Jij wordt ook applicatiebeheerder, omdat je de applicatie aanmaakt." html-for="add-beheerder" required="{{ yes }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="add-beheerder" options="{{ userOpts }}" value="{{ addBeheerderV }}" on-change="{{ onAddBeheerder }}"></x-import>
+      </x-import>
+    </sc-if>
+
+    <sc-if value="{{ addStep2 }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info">We vinden het erg fijn als je ons wilt helpen door zo veel mogelijk van de onderstaande gegevens in te vullen. Je kunt deze stap ook overslaan of de gegevens later aanvullen op de pagina van de applicatie.</x-import>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Type" html-for="add-type">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="add-type" options="{{ typeOnlyOpts }}" value="{{ addType }}" on-change="{{ onAddType }}"></x-import>
+        </x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Herkomst" html-for="add-herkomst">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="add-herkomst" options="{{ herkomstOnlyOpts }}" value="{{ addHerkomst }}" on-change="{{ onAddHerkomst }}"></x-import>
+        </x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Bereikbaarheid" html-for="add-bereik">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="add-bereik" options="{{ bereikOpts }}" value="{{ addBereik }}" on-change="{{ onAddBereik }}"></x-import>
+        </x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Gehost bij" html-for="add-hosting">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="add-hosting" value="{{ addHosting }}" on-change="{{ onAddHosting }}" placeholder="Bijvoorbeeld eigen datacenter of leverancier"></x-import>
+        </x-import>
+      </div>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Toelichting op het gebruik" html-for="add-toel">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="add-toel" rows="{{ rows3 }}" value="{{ addToel }}" on-change="{{ onAddToel }}" placeholder="Waarvoor gebruiken we deze applicatie?"></x-import>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Opgeslagen gegevens" hint="Zet hier nooit wachtwoorden of API-keys in." html-for="add-opslag">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="add-opslag" rows="{{ rows3 }}" value="{{ addOpslag }}" on-change="{{ onAddOpslag }}" placeholder="Welke gegevens staan erin? Bijvoorbeeld persoonsgegevens of meetdata."></x-import>
+      </x-import>
+      <span style="font-size: 12px; color: #6d6a68">Technologieën, contactpersonen en impact vul je aan op de pagina van de applicatie.</span>
+    </sc-if>
+
+    <sc-if value="{{ secretWarn }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Mogelijk geheim gevonden">Je tekst lijkt een wachtwoord, API-key of token te bevatten. Haal het weg en bewaar het in de wachtwoordkluis. Weet je zeker dat het geen geheim is? Dan kun je toch opslaan.</x-import>
+    </sc-if>
+    <sc-if value="{{ hasAddErr }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ addErr }}</x-import>
+    </sc-if>
+
+    <sc-if value="{{ addStep1 }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ nextAdd }}">Volgende<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-right" size="18px"></x-import></x-import>
+      </div>
+    </sc-if>
+    <sc-if value="{{ addStep2 }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ backAdd }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-left" size="18px"></x-import>Terug</x-import>
+        <span style="flex: 1 1 auto"></span>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ skipAdd }}">Overslaan</x-import>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ saveAdd }}">{{ addCta }}</x-import>
+      </div>
+    </sc-if>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.finding }}" title="{{ findingTitle }}" description="{{ findingDesc }}" width="{{ w560 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Reden" html-for="f-reden" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="f-reden" rows="{{ rows3 }}" value="{{ findingReason }}" on-change="{{ onFindingReason }}" placeholder="Bijvoorbeeld: beheerpoort, alleen bereikbaar via de thuiswerk-toegang."></x-import>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Vervaldatum" hint="Optioneel. Daarna wordt de finding weer actief." html-for="f-datum">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="f-datum" type="date" value="{{ findingDate }}" on-change="{{ onFindingDate }}"></x-import>
+    </x-import>
+    <sc-if value="{{ hasFindingErr }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ findingErr }}</x-import>
+    </sc-if>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ saveFinding }}">Opslaan</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.domain }}" title="Domein toevoegen" description="Voor subdomeinen die niet in CT-logs staan, bijvoorbeeld achter een wildcardcertificaat." width="{{ w520 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Domeinnaam" error="{{ newDomainErr }}" html-for="nd-naam" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="nd-naam" value="{{ newDomain }}" on-change="{{ onNewDomain }}" placeholder="bijvoorbeeld api.elaad.example"></x-import>
+    </x-import>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ saveDomain }}">Toevoegen</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.uarch }}" title="{{ uArchTitle }}" description="{{ uArchDesc }}" width="{{ w560 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <sc-if value="{{ hasUArchApps }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column">
+        <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6d6a68; padding-bottom: 6px">Applicaties die worden overgedragen</span>
+        <sc-for list="{{ uArchApps }}" as="ua" hint-placeholder-count="2">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid #e3e1de">
+            <span style="flex: 1 1 auto; font-weight: 600; color: #004e64">{{ ua.name }}</span>
+            <sc-if value="{{ ua.sole }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="warning">Enige beheerder</x-import></sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Applicaties overdragen aan" hint="Deze persoon wordt applicatiebeheerder en krijgt voortaan de meldingen over deze applicaties." html-for="u-target" required="{{ yes }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="u-target" options="{{ uTargetOpts }}" value="{{ uTarget }}" on-change="{{ onUTarget }}"></x-import>
+      </x-import>
+    </sc-if>
+    <sc-if value="{{ noUArchApps }}" hint-placeholder-val="{{ false }}">
+      <span>{{ uSelName }} is van geen enkele applicatie beheerder. Er hoeft niets te worden overgedragen.</span>
+    </sc-if>
+    <span style="font-size: 13px; color: #6d6a68">Na archiveren kan {{ uSelName }} niet meer inloggen en stoppen de meldingsabonnementen. De audit log blijft ongewijzigd.</span>
+    <sc-if value="{{ hasUErr }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ uErr }}</x-import>
+    </sc-if>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="danger" on-click="{{ doUserArch }}">{{ uArchCta }}</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.uadmin }}" title="{{ uAdminTitle }}" description="{{ uAdminDesc }}" width="{{ w520 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="{{ uAdminTone }}">{{ uAdminText }}</x-import>
+    <span style="font-size: 13px; color: #6d6a68">Deze rechtenwijziging wordt vastgelegd in de audit log.</span>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="{{ uAdminVariant }}" on-click="{{ doUserAdmin }}">{{ uAdminCta }}</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.hdr }}" title="Naam, type en URL bewerken" description="{{ hdrDesc }}" width="{{ w520 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Naam" html-for="hdr-naam" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="hdr-naam" value="{{ hdrName }}" on-change="{{ onHdrName }}"></x-import>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Type" html-for="hdr-type">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="hdr-type" options="{{ typeOnlyOpts }}" value="{{ hdrType }}" on-change="{{ onHdrType }}"></x-import>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="URL of omschrijving" html-for="hdr-url" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="hdr-url" value="{{ hdrUrl }}" on-change="{{ onHdrUrl }}"></x-import>
+    </x-import>
+    <sc-if value="{{ hasHdrErr }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ hdrErr }}</x-import>
+    </sc-if>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ saveHdr }}">Opslaan</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ sessOpen }}" title="Je sessie is verlopen" description="Log opnieuw in om verder te gaan. Wat je aan het invullen was, hebben we lokaal bewaard." width="{{ w480 }}">
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info" title="Concept bewaard">Formulier Status wijzigen: CVE-2026-27154, 1 veld ingevuld.</x-import>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ relogin }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-square-out" size="18px"></x-import>Opnieuw inloggen in nieuw tabblad</x-import>
+    </div>
+  </div>
+</x-import>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"rol":{"editor":"enum","options":["Admin","Applicatiebeheerder","Gebruiker"],"default":"Admin","section":"Prototype"},"sessieVerlopen":{"editor":"boolean","default":false,"section":"Prototype"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: 'dashboard', appId: 'a2', appTab: 'overzicht',
+      q: '', fType: '', fStatus: '', fHerkomst: '', fKritiek: false, fPersoons: false, sort: 'naam',
+      sel: {}, domainId: '', domLink: {}, linkApp: '',
+      dlg: '', cveId: '', cveNew: 'Gepatcht', cveReason: '', cveDate: '', cveErr: '',
+      findingId: '', findingAct: 'Genegeerd', findingReason: '', findingDate: '', findingErr: '', findingLink: '', addDomain: '',
+      cveOv: {}, findingOv: {}, autoOv: {}, archived: {}, confirmed: {}, jobsRun: {}, techOv: {}, appTechAdd: {}, newTechs: [],
+      techQ: '', techCpeFor: '', histDate: '',
+      newApps: [], addName: '', addUrl: '', addBeheerder: '', addType: '', addToel: '', addErr: '', secretWarn: false,
+      addStep: 1, addHerkomst: '', addBereik: '', addHosting: '', addOpslag: '',
+      newDomain: '', newDomainErr: '', newDomains: [],
+      auditNew: [], auditType: '', subFreq: {}, subOn: {},
+      flash: '', flashTone: 'success', sessionClosed: false,
+      userOv: {}, transfers: {}, userFilter: 'Actief', uDlgUser: '', uTarget: '', uErr: '',
+      appEdits: {}, editMode: false, draft: null, editErr: '', editSecretWarn: false, saveState: '', savedAt: '', hdrName: '', hdrType: '', hdrUrl: '', hdrErr: '', techRemoved: {},
+      ncKind: 'user', ncRole: 'Functioneel eigenaar', ncUser: '', ncName: '', ncMail: '', ncPhone: '', ncErr: ''
+    };
+  }
+
+  me() {
+    const rol = this.props.rol ?? 'Admin';
+    const M = {
+      Admin: { name: 'Sanne Jansen', role: 'Admin' },
+      Applicatiebeheerder: { name: 'Mark de Boer', role: 'Applicatiebeheerder' },
+      Gebruiker: { name: 'Lotte Visser', role: 'Gebruiker' }
+    };
+    return M[rol] || M.Admin;
+  }
+
+  log(type, obj, oldv, newv) {
+    const d = new Date();
+    const t = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    return { when: '23-10-2026 ' + t, who: this.me().name, type: type, obj: obj, oldv: oldv, newv: newv };
+  }
+
+  allApps() {
+    const ov = this.state.appEdits || {};
+    return this.seed().apps.concat(this.state.newApps).map((a) => (ov[a.id] ? Object.assign({}, a, ov[a.id]) : a));
+  }
+  allDomains() { return this.seed().domains.concat(this.state.newDomains); }
+
+  uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+    });
+  }
+
+  seed() {
+    if (this._s) return this._s;
+    const T = (name, cpe, level) => ({ name: name, cpe: cpe, level: level || "Alle CVE's" });
+    const techs = [
+      T('nginx', 'cpe:2.3:a:f5:nginx'), T('Node.js', 'cpe:2.3:a:nodejs:node.js'), T('React', 'cpe:2.3:a:facebook:react'),
+      T('PostgreSQL', 'cpe:2.3:a:postgresql:postgresql'), T('WordPress', 'cpe:2.3:a:wordpress:wordpress'),
+      T('PHP', 'cpe:2.3:a:php:php', 'CVSS ≥ 7,0'), T('MySQL', 'cpe:2.3:a:oracle:mysql'), T('Grafana', 'cpe:2.3:a:grafana:grafana'),
+      T('Python', 'cpe:2.3:a:python:python'), T('Django', 'cpe:2.3:a:djangoproject:django'),
+      T('Linux kernel', 'cpe:2.3:o:linux:linux_kernel', 'Alleen CISA KEV'), T('Apache Tomcat', 'cpe:2.3:a:apache:tomcat'),
+      T('Redis', 'cpe:2.3:a:redis:redis'), T('OpenVPN', 'cpe:2.3:a:openvpn:openvpn'), T('OpenJDK', 'cpe:2.3:a:oracle:openjdk'),
+      T('Spring Boot', 'cpe:2.3:a:vmware:spring_boot'), T('Keycloak', 'cpe:2.3:a:redhat:keycloak')
+    ];
+    const base = { hosting: '[Nog niet ingevuld]', vlan: '[Nog niet ingevuld]', bereik: '[Nog niet ingevuld]', gebruik: '[Nog niet ingevuld]', opslag: '[Nog niet ingevuld]', biv: null, impact: null, contacts: null, reviewLate: false, inactive: '', techs: [] };
+    const A = (o) => Object.assign({}, base, o);
+    const apps = [
+      A({ id: 'a1', uuid: '3f2c9a1e-7b4d-4c1a-9e2f-81d6c0b5a7e4', name: 'Bedrijfswebsite', url: 'https://elaad.example', type: 'Website', herkomst: 'Standaard (SaaS/ingekocht)', bereik: 'Internet', hosting: 'Webbureau Noord, Amsterdam', vlan: 'n.v.t. (extern gehost)', beheerders: ['Pieter Bakker'], creator: 'Pieter Bakker', status: 'Actief', bevestigd: '14-08-2026', techs: ['WordPress', 'PHP', 'nginx', 'MySQL'], gebruik: 'Publieke website met nieuws, publicaties en evenementen.', opslag: 'Publieke content; inschrijvingen voor evenementen (naam, e-mail, organisatie).', biv: { b: 2, i: 2, v: 2, tb: 'Een dag uitval is vervelend maar acceptabel.', ti: 'Defacement schaadt ons imago.', tv: 'Inschrijfgegevens van bezoekers.' }, impact: { bedrijf: false, persoons: true, bijzonder: false, imago: true, bc: false, tp: 'Naam en e-mail van inschrijvers voor evenementen.', ti: 'Zichtbaar voor de hele markt.' } }),
+      A({ id: 'a2', uuid: '9b41d2c7-3e8a-4f5b-a6c1-0d27e9f4b318', name: 'Klantportaal', url: 'https://klanten.elaad.example', type: 'Website', herkomst: 'Zelf gebouwd/gehost', bereik: 'Internet', hosting: 'Hyperscaler West-Europa, containerplatform', vlan: 'n.v.t. (cloud)', beheerders: ['Mark de Boer'], creator: 'Mark de Boer', status: 'Actief', bevestigd: '02-06-2026', reviewLate: true, techs: ['React', 'Node.js', 'nginx', 'PostgreSQL'], gebruik: 'Online omgeving waar klanten hun bestellingen, facturen en documenten bekijken.', opslag: 'Bestelgegevens en facturen; nieuwsbriefaanmeldingen (naam en e-mailadres).', biv: { b: 2, i: 3, v: 1, tb: 'Een paar dagen uitval is vervelend maar acceptabel.', ti: 'Gemanipuleerde bestellingen of facturen leiden tot fouten en klachten.', tv: 'Bestel- en klantgegevens zijn vertrouwelijk.' }, impact: { bedrijf: false, persoons: true, bijzonder: false, imago: true, bc: false, tp: 'Naam, adres en e-mailadres van klanten.', ti: 'Foute gegevens bij klanten leiden tot klachten.' }, contacts: [{ name: 'Mark de Boer', role: 'Interne beheerder', mail: 'mark.deboer@elaad.example', phone: '+31 6 1234 5678' }, { name: 'Fatima El Amrani', role: 'Functioneel eigenaar', mail: 'fatima.elamrani@elaad.example', phone: '' }, { name: 'Studio Datavorm', role: 'Leverancier/externe partij', mail: 'support@datavorm.example', phone: '+31 20 123 4567', ext: true }] }),
+      A({ id: 'a3', uuid: 'c27e5f10-84b9-4d63-9f0e-5a1b6c3d7e92', name: 'Klantportaal (test)', url: 'https://test.klanten.elaad.example', type: 'Website', herkomst: 'Zelf gebouwd/gehost', bereik: 'IP-whitelist', hosting: 'Hyperscaler West-Europa, containerplatform', vlan: 'n.v.t. (cloud)', beheerders: ['Mark de Boer'], creator: 'Mark de Boer', status: 'Actief', bevestigd: '02-06-2026', reviewLate: true, techs: ['React', 'Node.js', 'nginx', 'PostgreSQL'], gebruik: 'Testomgeving van Klantportaal.', opslag: 'Kopie van testgegevens, geen persoonsgegevens.', biv: { b: 1, i: 1, v: 1, tb: 'Alleen intern gebruikt.', ti: 'Geen gevolgen voor productie.', tv: 'Geen vertrouwelijke data.' }, impact: { bedrijf: false, persoons: false, bijzonder: false, imago: false, bc: false } }),
+      A({ id: 'a4', uuid: '5d8a2e31-c6f4-4b07-8e92-1f3a7b6c0d45', name: 'Verkoopdashboard', url: 'https://cijfers.elaad.example', type: 'Website', herkomst: 'Zelf gebouwd/gehost', bereik: 'Internet', hosting: 'Eigen datacenter Noord', vlan: 'VLAN 210 (DMZ)', beheerders: ['Fatima El Amrani'], creator: 'Fatima El Amrani', status: 'Actief', bevestigd: '30-09-2026', techs: ['Grafana', 'PostgreSQL', 'nginx'], gebruik: 'Dashboard met verkoopcijfers voor het managementteam.', opslag: 'Geaggregeerde verkoopcijfers.', biv: { b: 2, i: 2, v: 2, tb: 'Wordt gebruikt in presentaties.', ti: 'Cijfers worden geciteerd.', tv: 'Ruwe verkoopdata is vertrouwelijk.' }, impact: { bedrijf: true, persoons: false, bijzonder: false, imago: true, bc: false, tb: 'Ruwe verkoopdata van klanten.', ti: 'Lek van klantdata.' } }),
+      A({ id: 'a5', uuid: 'e1b7c4a9-2d35-4f8e-b0c6-9a4d3e2f1b78', name: 'Roosterplanner', url: 'https://rooster.elaad.example', type: 'Website', herkomst: 'Zelf gebouwd/gehost', bereik: 'Internet', beheerders: ['Mark de Boer'], creator: 'Mark de Boer', status: 'Onvolledig', bevestigd: '11-09-2026', techs: ['Python', 'Django'], gebruik: 'Maakt werkroosters voor medewerkers.' }),
+      A({ id: 'a6', uuid: '7a3f9d2e-6b18-4c5a-9e4d-2b8c1f0a3e67', name: 'Magazijnbeheer', url: 'Intern: magazijn.intern.lan', type: 'Applicatie', herkomst: 'Zelf gebouwd/gehost', bereik: 'Alleen lokaal netwerk', hosting: 'Serverruimte B', vlan: 'VLAN 120 (Magazijn)', beheerders: ['Joost Hendriks'], creator: 'Joost Hendriks', status: 'Actief', bevestigd: '18-10-2026', techs: ['React', 'PostgreSQL', 'Keycloak', 'Linux kernel'], gebruik: 'Voorraad en bestellingen in het magazijn bijhouden.', opslag: 'Voorraadlijsten en leveranciersafspraken (vertrouwelijk).', biv: { b: 3, i: 3, v: 3, tb: 'Het magazijn staat stil zonder voorraadsysteem.', ti: 'Voorraadcijfers moeten kloppen.', tv: 'Afspraken met leveranciers zijn vertrouwelijk.' }, impact: { bedrijf: true, persoons: false, bijzonder: false, imago: true, bc: true, tb: 'Vertrouwelijke leveranciersafspraken.', ti: 'Vertrouwen van klanten en leveranciers.', tc: 'Bestellingen kunnen niet worden verwerkt.' } }),
+      A({ id: 'a7', uuid: '2c6e8b4d-9f13-4a7e-8d5c-6e0f2a9b4c31', name: 'Ontwikkelhub', url: 'https://code.elaad.example', type: 'Applicatie', herkomst: 'Zelf gebouwd/gehost', bereik: 'IP-whitelist', hosting: 'Eigen datacenter Noord', vlan: 'VLAN 200 (servers)', beheerders: ['Sanne Jansen'], creator: 'Sanne Jansen', status: 'Actief', bevestigd: '05-10-2026', techs: ['Apache Tomcat', 'PostgreSQL', 'Redis'], gebruik: 'Broncode en CI/CD voor alle eigen ontwikkeling.', opslag: 'Broncode, CI-variabelen, deploy-sleutels.', biv: { b: 2, i: 3, v: 3, tb: 'Deploys liggen stil.', ti: 'Supply-chain-risico bij gewijzigde code.', tv: 'Secrets in CI-variabelen.' }, impact: { bedrijf: true, persoons: false, bijzonder: false, imago: true, bc: true, tb: 'Broncode en secrets.', ti: 'Compromittering van onze tooling.', tc: 'Geen releases mogelijk.' } }),
+      A({ id: 'a8', uuid: 'f4d1a7c3-5e29-4b86-a1f7-3c8e9d2b5a10', name: 'Thuiswerk-toegang', url: 'https://toegang.elaad.example', type: 'Applicatie', herkomst: 'Standaard (SaaS/ingekocht)', bereik: 'Internet', hosting: 'Eigen datacenter Noord', vlan: 'VLAN 10 (edge)', beheerders: ['Sanne Jansen'], creator: 'Sanne Jansen', status: 'Actief', bevestigd: '05-10-2026', techs: ['OpenVPN'], gebruik: 'Externe toegang voor medewerkers.', opslag: 'Gebruikersaccounts, sessielogs.', biv: { b: 3, i: 3, v: 3, tb: 'Niemand kan op afstand werken.', ti: 'Toegang tot het interne netwerk.', tv: 'Inloggegevens van medewerkers.' }, impact: { bedrijf: true, persoons: true, bijzonder: false, imago: true, bc: true, tb: 'Toegang tot het hele interne netwerk.', tp: 'Accountnamen en sessielogs.', ti: 'Inbraak via thuiswerktoegang is nieuwswaardig.', tc: 'Thuiswerken onmogelijk.' } }),
+      A({ id: 'a9', uuid: '8e2b5c9f-1a4d-4e73-b6a8-0c5d9f3e2a17', name: 'Kassa-testomgeving', url: 'Testomgeving voor het kassasysteem', type: 'Applicatie', herkomst: 'Zelf gebouwd/gehost', bereik: 'IP-whitelist', beheerders: ['Ruben Smit'], creator: 'Ruben Smit', status: 'Onvolledig', bevestigd: '12-03-2026', reviewLate: true, techs: ['OpenJDK', 'Spring Boot'], inactive: 'Ruben Smit is de enige interne beheerder en heeft 94 dagen niet ingelogd. Wijs een nieuwe beheerder aan.' }),
+      A({ id: 'a10', uuid: '0b9d4e6a-3c72-4f15-9a8b-7e1c2d5f4a39', name: 'Boekhoudpakket', url: 'SaaS: boek.cijfersnel.example', type: 'Applicatie', herkomst: 'Standaard (SaaS/ingekocht)', beheerders: ['Pieter Bakker'], creator: 'Pieter Bakker', status: 'Onvolledig', bevestigd: '22-10-2026', bereik: 'Internet', gebruik: 'Boekhouding en facturatie.' }),
+      A({ id: 'a11', uuid: 'd6c3f8a2-7b54-4e19-8f0d-4a2e6b9c1d83', name: 'Oude webshop', url: 'https://shop-oud.elaad.example', type: 'Website', herkomst: 'Zelf gebouwd/gehost', bereik: 'Internet', hosting: 'Webbureau Noord, Amsterdam', vlan: 'n.v.t. (extern gehost)', beheerders: ['Pieter Bakker'], creator: 'Pieter Bakker', status: 'Gearchiveerd', bevestigd: '20-10-2026', techs: ['PHP', 'MySQL'], gebruik: 'Vervangen door de nieuwe webshop.', opslag: 'Historische bestellingen.' })
+    ];
+    const C = (id, app, cve, tech, cvss, epss, kev, status, note, found) => ({ id: id, app: app, cve: cve, tech: tech, cvss: cvss, epss: epss, kev: kev, status: status, note: note || '', found: found || '21-10-2026' });
+    const cves = [
+      C('r1', 'a2', 'CVE-2026-31842', 'nginx', 7.5, 0.4, false, 'Open'),
+      C('r2', 'a2', 'CVE-2026-28713', 'Node.js', 9.1, 12.3, false, 'Open'),
+      C('r3', 'a2', 'CVE-2026-19020', 'PostgreSQL', 6.5, 0.2, false, 'Niet van toepassing', 'Reden: extensie pg_trgm wordt niet gebruikt.'),
+      C('r4', 'a3', 'CVE-2026-31842', 'nginx', 7.5, 0.4, false, 'Open'),
+      C('r5', 'a3', 'CVE-2026-28713', 'Node.js', 9.1, 12.3, false, 'Open'),
+      C('r6', 'a4', 'CVE-2026-33410', 'Grafana', 9.4, 31.2, false, 'Open', '', '22-10-2026'),
+      C('r7', 'a7', 'CVE-2026-27154', 'Apache Tomcat', 10.0, 94.1, true, 'Open', '', '23-10-2026'),
+      C('r8', 'a8', 'CVE-2026-24409', 'OpenVPN', 9.8, 88.6, true, 'Open', '', '22-10-2026'),
+      C('r9', 'a1', 'CVE-2026-30377', 'WordPress', 5.4, 0.9, false, 'Open'),
+      C('r10', 'a1', 'CVE-2026-21966', 'PHP', 7.3, 1.8, false, 'Risico geaccepteerd', 'Reden: alleen via CLI te misbruiken. Vervalt op 31-12-2026, daarna weer open.'),
+      C('r11', 'a6', 'CVE-2026-25550', 'PostgreSQL', 8.1, 2.4, false, 'Gepatcht')
+    ];
+    const D = (o) => Object.assign({ ip4: '', ip6: '', cname: '', rdns: '', asn: '', ext: false, app: '', p4: '', p6: '', status: 'Online', auto: false, via: 'CT-log', found: '01-02-2025', nieuw: false, resolves: true, diff: false, http: '', shot: '' }, o);
+    const domains = [
+      D({ id: 'd1', name: 'elaad.example', ip4: '192.0.2.10', ip6: '2001:db8:10::10', rdns: 'web01.webbureau-noord.example', asn: 'AS64500 Webbureau Noord B.V.', ext: true, app: 'a1', p4: '80, 443, 8080', p6: '80, 443', auto: true, via: 'Handmatig', http: '443: HTTP 200, WordPress', shot: 'Homepage elaad.example, 23-10-2026 04:12' }),
+      D({ id: 'd2', name: 'www.elaad.example', cname: 'elaad.example', ip4: '192.0.2.10', ip6: '2001:db8:10::10', rdns: 'web01.webbureau-noord.example', asn: 'AS64500 Webbureau Noord B.V.', ext: true, app: 'a1', p4: '80, 443, 8080', p6: '80, 443', auto: true, http: '443: HTTP 301 naar elaad.example', shot: 'Redirect naar elaad.example' }),
+      D({ id: 'd3', name: 'klanten.elaad.example', ip4: '198.51.100.20', ip6: '2001:db8:20::20', rdns: 'lb-klanten.cloud.example', asn: 'AS64503 Hyperscaler West-Europa', ext: true, app: 'a2', p4: '443', p6: '443', auto: true, http: '443: HTTP 200, React-app', shot: 'Klantportaal startscherm, 23-10-2026 04:12' }),
+      D({ id: 'd4', name: 'test.klanten.elaad.example', ip4: '198.51.100.21', rdns: 'lb-klanten-test.cloud.example', asn: 'AS64503 Hyperscaler West-Europa', ext: true, app: 'a3', p4: '443', via: 'subfinder', http: '443: HTTP 403 (IP-whitelist)', shot: '403 Forbidden' }),
+      D({ id: 'd5', name: 'cijfers.elaad.example', ip4: '198.51.100.30', ip6: '2001:db8:30::30', rdns: 'cijfers.elaad.example', asn: 'AS64502 Elaad Groep', app: 'a4', p4: '443, 3000', p6: '443', auto: true, diff: true, http: '443: HTTP 200 Grafana · 3000: Grafana login', shot: 'Grafana-dashboard, 23-10-2026 04:13' }),
+      D({ id: 'd6', name: 'rooster.elaad.example', ip4: '198.51.100.40', rdns: 'rooster.elaad.example', asn: 'AS64502 Elaad Groep', app: 'a5', p4: '443', status: 'Offline', auto: true, http: '443: HTTP 502 sinds 09:31 (was 200)', shot: 'Screenshot wijkt af: 502 Bad Gateway' }),
+      D({ id: 'd7', name: 'code.elaad.example', ip4: '203.0.113.5', ip6: '2001:db8:50::5', rdns: 'code.elaad.example', asn: 'AS64502 Elaad Groep', app: 'a7', p4: '22, 443', p6: '22, 443', auto: true, via: 'Handmatig', http: '443: HTTP 302 naar /inloggen', shot: 'Inlogpagina ontwikkelhub' }),
+      D({ id: 'd8', name: 'toegang.elaad.example', ip4: '203.0.113.9', rdns: 'toegang.elaad.example', asn: 'AS64502 Elaad Groep', app: 'a8', p4: '443, 10443', auto: true, via: 'Handmatig', http: '10443: VPN-portaal', shot: 'Inlogpagina thuiswerktoegang' }),
+      D({ id: 'd10', name: 'shop-oud.elaad.example', ip4: '203.0.113.60', rdns: 'host60.webbureau-noord.example', asn: 'AS64500 Webbureau Noord B.V.', ext: true, app: 'a11', p4: '443', auto: true, via: 'Handmatig', http: '443: HTTP 200, oude webshop', shot: 'Oude webshop, inlogscherm' }),
+      D({ id: 'd11', name: 'acties.elaad.example', cname: 'elaad-acties.webapps.example', status: 'Mogelijk dangling', resolves: false, found: '14-05-2024', http: 'Geen antwoord', shot: 'Geen screenshot: doel bestaat niet' }),
+      D({ id: 'd12', name: 'test-kassa.elaad.example', ip4: '203.0.113.40', rdns: 'test-kassa.elaad.example', asn: 'AS64502 Elaad Groep', status: 'Niet gecontroleerd', found: '22-10-2026', nieuw: true, shot: 'Nog geen screenshot' }),
+      D({ id: 'd13', name: 'dashboard-dev.elaad.example', ip4: '198.51.100.33', rdns: 'dashboard-dev.elaad.example', asn: 'AS64502 Elaad Groep', status: 'Niet gecontroleerd', via: 'subfinder', found: '23-10-2026', nieuw: true, shot: 'Nog geen screenshot' })
+    ];
+    const findings = [
+      { id: 'f1', dom: 'd5', port: 3000, ipv: 'Alleen IPv4', svc: 'HTTP · Grafana login', found: '22-10-2026', status: 'Nieuw', tplName: 'Grafana op cijfers.elaad.example:3000', tplToel: 'Template HTTP: webdienst op een niet-standaard poort.' },
+      { id: 'f2', dom: 'd7', port: 22, ipv: 'IPv4 en IPv6', svc: 'SSH · OpenSSH', found: '22-10-2026', status: 'Nieuw', tplName: 'SSH-toegang code.elaad.example', tplToel: 'Template SSH: beheertoegang via SSH. Alleen sleutelauthenticatie, toegang voor beheerders.' },
+      { id: 'f3', dom: 'd8', port: 10443, ipv: 'IPv4', svc: 'HTTPS · VPN-portaal', found: '15-09-2026', status: 'Gekoppeld aan applicatie', reason: 'Gekoppeld aan Thuiswerk-toegang' },
+      { id: 'f4', dom: 'd1', port: 8080, ipv: 'Alleen IPv4', svc: 'HTTP · nginx', found: '02-10-2026', status: 'Genegeerd', reason: 'Tijdelijke migratiepoort van Webbureau Noord. Vervalt op 01-12-2026.' }
+    ];
+    const jobs = [
+      { name: 'CT-logmonitoring', interval: 'Elke 15 min', status: 'Geslaagd', last: '23-10-2026 09:40', lastRun: '23-10-2026 09:40', dur: '42 s' },
+      { name: 'Subdomain enumeration', interval: 'Dagelijks', status: 'Geslaagd', last: '23-10-2026 03:00', lastRun: '23-10-2026 03:00', dur: '6 min' },
+      { name: 'DNS-resolutie', interval: 'Elk uur', status: 'Geslaagd', last: '23-10-2026 09:30', lastRun: '23-10-2026 09:30', dur: '18 s' },
+      { name: 'Port scans', interval: 'Dagelijks', status: 'Geslaagd', last: '22-10-2026 23:00', lastRun: '22-10-2026 23:00', dur: '38 min' },
+      { name: 'Service detection', interval: 'Na port scan', status: 'Geslaagd', last: '22-10-2026 23:41', lastRun: '22-10-2026 23:41', dur: '9 min' },
+      { name: 'Screenshots', interval: 'Dagelijks', status: 'Geslaagd', last: '23-10-2026 04:12', lastRun: '23-10-2026 04:12', dur: '3 min' },
+      { name: 'Beschikbaarheidsmonitoring', interval: 'Elke 5 min', status: 'Geslaagd', last: '23-10-2026 09:45', lastRun: '23-10-2026 09:45', dur: '11 s' },
+      { name: 'Dangling-DNS-controle', interval: 'Dagelijks', status: 'Geslaagd', last: '23-10-2026 06:00', lastRun: '23-10-2026 06:00', dur: '24 s' },
+      { name: 'Controle gearchiveerde applicaties', interval: 'Dagelijks', status: 'Geslaagd', last: '23-10-2026 06:05', lastRun: '23-10-2026 06:05', dur: '9 s' },
+      { name: 'CVE-synchronisatie', interval: 'Elk uur', status: 'Mislukt', last: '21-10-2026 22:00', lastRun: '23-10-2026 09:00', dur: '5 min', log: '09:00:01  start incrementele sync, lastModStartDate=2026-10-21T22:00:00Z\n09:00:02  GET services.nvd.nist.gov/rest/json/cves/2.0  HTTP 503\n09:01:02  poging 2 van 5  HTTP 503\n09:02:32  poging 3 van 5  HTTP 503\n09:04:47  poging 4 van 5  HTTP 503\n09:05:12  poging 5 van 5  HTTP 503\n09:05:12  FOUT: sync afgebroken. Shodan CVEDB en CISA KEV wel bijgewerkt.\n09:05:12  melding verstuurd naar #security-meldingen' },
+      { name: 'Reviewherinneringen', interval: 'Wekelijks', status: 'Geslaagd', last: '19-10-2026 08:00', lastRun: '19-10-2026 08:00', dur: '2 s' }
+    ];
+    const audit = [
+      { when: '23-10-2026 09:12', who: 'Sanne Jansen', type: 'Domein', obj: 'toegang.elaad.example', oldv: 'automatisch scannen uit', newv: 'automatisch scannen aan' },
+      { when: '23-10-2026 08:55', who: 'Mark de Boer', type: 'CVE-status', obj: 'CVE-2026-19020 · Klantportaal', oldv: 'Open', newv: 'Niet van toepassing' },
+      { when: '22-10-2026 16:30', who: 'Sanne Jansen', type: 'Port scan', obj: 'code.elaad.example, toegang.elaad.example, cijfers.elaad.example', oldv: '-', newv: 'handmatig gestart' },
+      { when: '22-10-2026 14:02', who: 'Pieter Bakker', type: 'Applicatie', obj: 'Boekhoudpakket', oldv: '-', newv: 'aangemaakt, status Onvolledig' },
+      { when: '21-10-2026 11:47', who: 'Sanne Jansen', type: 'Rechten', obj: 'Ruben Smit · Kassa-testomgeving', oldv: 'gebruiker', newv: 'applicatiebeheerder' },
+      { when: '20-10-2026 10:20', who: 'Pieter Bakker', type: 'Applicatie', obj: 'Oude webshop', oldv: 'Actief', newv: 'Gearchiveerd' },
+      { when: '19-10-2026 15:03', who: 'Sanne Jansen', type: 'Finding', obj: 'elaad.example:8080', oldv: 'Nieuw', newv: 'Genegeerd tot 01-12-2026' },
+      { when: '02-06-2026 10:41', who: 'Mark de Boer', type: 'Applicatie', obj: 'Klantportaal', oldv: 'laatst bevestigd 03-02-2026', newv: 'laatst bevestigd 02-06-2026' },
+      { when: '14-04-2026 13:22', who: 'Mark de Boer', type: 'Technologie', obj: 'PostgreSQL · Klantportaal', oldv: '-', newv: 'gekoppeld' }
+    ];
+    const subs = [
+      { id: 's1', onderwerp: "Kritieke CVE's (CISA KEV)", bereik: 'Globaal', events: "KEV-CVE's en CVE's die later aan KEV worden toegevoegd", freq: 'Realtime', on: true, realtimeOnly: true, roles: ['Admin', 'Applicatiebeheerder', 'Gebruiker'] },
+      { id: 's2', onderwerp: 'Alle meldingen', bereik: 'Globaal', events: 'Alles, ook falende background jobs', freq: 'Realtime', on: true, roles: ['Admin'] },
+      { id: 's3', onderwerp: 'Klantportaal', bereik: 'Applicatie', events: "CVE's, poorten, beschikbaarheid, review", freq: 'Realtime', on: true, auto: true, roles: ['Applicatiebeheerder'] },
+      { id: 's4', onderwerp: 'Klantportaal (test)', bereik: 'Applicatie', events: "CVE's, poorten, beschikbaarheid", freq: 'Dagelijkse digest', on: true, auto: true, roles: ['Applicatiebeheerder'] },
+      { id: 's5', onderwerp: '*.klanten.elaad.example', bereik: '(Sub)domein', events: 'Nieuwe subdomeinen, open of gesloten poorten', freq: 'Dagelijkse digest', on: true, roles: ['Applicatiebeheerder', 'Admin'] },
+      { id: 's6', onderwerp: 'Roosterplanner', bereik: 'Applicatie', events: 'Offline of weer online', freq: 'Realtime', on: true, auto: true, roles: ['Applicatiebeheerder'] },
+      { id: 's7', onderwerp: 'Nieuwe domeinnamen', bereik: 'Globaal', events: 'Nieuw ontdekte (sub)domeinen', freq: 'Dagelijkse digest', on: false, roles: ['Admin', 'Gebruiker'] }
+    ];
+    this._s = { techs: techs, apps: apps, cves: cves, domains: domains, findings: findings, jobs: jobs, audit: audit, subs: subs };
+    return this._s;
+  }
+
+  userSeed() {
+    const U = (name, mail, phone, admin, last, days, archived) => ({ name: name, mail: mail, phone: phone, admin: admin, last: last, days: days, archived: !!archived });
+    return [
+      U('Sanne Jansen', 'sanne.jansen@elaad.example', '+31 6 2345 6789', true, 'Vandaag 08:12', 0),
+      U('Daan Verhoef', 'daan.verhoef@elaad.example', '+31 6 3456 7890', true, '22-10-2026 16:40', 1),
+      U('Mark de Boer', 'mark.deboer@elaad.example', '+31 6 1234 5678', false, 'Vandaag 09:03', 0),
+      U('Fatima El Amrani', 'fatima.elamrani@elaad.example', '', false, '21-10-2026 14:22', 2),
+      U('Pieter Bakker', 'pieter.bakker@elaad.example', '+31 6 4567 8901', false, '20-10-2026 10:20', 3),
+      U('Joost Hendriks', 'joost.hendriks@elaad.example', '', false, 'Vandaag 07:51', 0),
+      U('Ruben Smit', 'ruben.smit@elaad.example', '+31 6 5678 9012', false, '21-07-2026 17:05', 94),
+      U('Lotte Visser', 'lotte.visser@elaad.example', '', false, 'Vandaag 09:30', 0),
+      U('Erik Mulder', 'erik.mulder@elaad.example', '', false, '03-03-2026 11:15', 234, true)
+    ];
+  }
+
+  addTech(app, name) {
+    const S = this.state;
+    const cur = S.appTechAdd[app.id] || [];
+    this.setState({
+      appTechAdd: Object.assign({}, S.appTechAdd, { [app.id]: cur.concat([name]) }), techRemoved: Object.assign({}, S.techRemoved, { [app.id]: (S.techRemoved[app.id] || []).filter((x) => x !== name) }), techQ: '', techCpeFor: '',
+      auditNew: [this.log('Technologie', name + ' · ' + app.name, '-', 'gekoppeld')].concat(S.auditNew),
+      flash: name + ' is gekoppeld aan ' + app.name + ". Nieuwe CVE's voor deze technologie worden vanaf nu gemeld.", flashTone: 'success'
+    });
+  }
+
+  saveCve() {
+    const S = this.state;
+    const c = this.seed().cves.find((x) => x.id === S.cveId);
+    if (!c) return;
+    const need = S.cveNew === 'Niet van toepassing' || S.cveNew === 'Risico geaccepteerd';
+    if (need && !S.cveReason.trim()) { this.setState({ cveErr: 'Geef een reden op. Die is verplicht bij deze status.' }); return; }
+    const oldSt = S.cveOv[c.id] ? S.cveOv[c.id].status : c.status;
+    const date = S.cveDate ? S.cveDate.split('-').reverse().join('-') : '';
+    const note = need ? ('Reden: ' + S.cveReason.trim() + (date ? '. Vervalt op ' + date + ', daarna weer open.' : '')) : '';
+    const app = this.allApps().find((a) => a.id === c.app);
+    this.setState({
+      cveOv: Object.assign({}, S.cveOv, { [c.id]: { status: S.cveNew, note: note } }), dlg: '',
+      auditNew: [this.log('CVE-status', c.cve + ' · ' + app.name, oldSt, S.cveNew)].concat(S.auditNew),
+      flash: 'De status van ' + c.cve + ' voor ' + app.name + ' is nu ' + S.cveNew + '. Vastgelegd in de audit log.', flashTone: 'success'
+    });
+  }
+
+  saveFinding() {
+    const S = this.state;
+    const f = this.seed().findings.find((x) => x.id === S.findingId);
+    if (!f) return;
+    if (!S.findingReason.trim()) { this.setState({ findingErr: 'Geef een reden op.' }); return; }
+    const d = this.allDomains().find((x) => x.id === f.dom);
+    const date = S.findingDate ? S.findingDate.split('-').reverse().join('-') : '';
+    const reason = S.findingReason.trim() + (date ? '. Vervalt op ' + date + '.' : '');
+    this.setState({
+      findingOv: Object.assign({}, S.findingOv, { [f.id]: { status: S.findingAct, reason: reason } }), dlg: '',
+      auditNew: [this.log('Finding', d.name + ':' + f.port, 'Nieuw', S.findingAct + (date ? ' tot ' + date : ''))].concat(S.auditNew),
+      flash: 'Finding ' + d.name + ':' + f.port + ' is ' + S.findingAct.toLowerCase() + '.', flashTone: 'success'
+    });
+  }
+
+  nextAdd() {
+    const S = this.state;
+    const beh = S.addBeheerder || this.me().name;
+    if (!S.addName.trim() || !S.addUrl.trim() || !beh) { this.setState({ addErr: 'Vul naam, URL of omschrijving en beheerder in om verder te gaan.' }); return; }
+    this.setState({ addStep: 2, addErr: '', secretWarn: false });
+  }
+
+  saveAdd(skip) {
+    const S = this.state;
+    const me = this.me();
+    const name = S.addName.trim();
+    const url = S.addUrl.trim();
+    const beh = S.addBeheerder || me.name;
+    if (!name || !url || !beh) { this.setState({ addErr: 'Vul in elk geval naam, URL of omschrijving en beheerder in.' }); return; }
+    const rx = /(AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|xox[abpr]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(password|passwd|wachtwoord|api[_-]?key|token|secret)\s*[:=]\s*\S{6,})/i;
+    const txt = url + (skip ? '' : ' ' + S.addToel + ' ' + S.addOpslag + ' ' + S.addHosting);
+    if (!S.secretWarn && rx.test(txt)) { this.setState({ secretWarn: true, addErr: '' }); return; }
+    const id = 'n' + Date.now();
+    const beheerders = beh === me.name ? [me.name] : [beh, me.name];
+    const app = { id: id, uuid: this.uuid(), name: name, url: url, type: S.addType || '[Nog niet ingevuld]', herkomst: (!skip && S.addHerkomst) || '[Nog niet ingevuld]', bereik: (!skip && S.addBereik) || '[Nog niet ingevuld]', hosting: (!skip && S.addHosting.trim()) || '[Nog niet ingevuld]', vlan: '[Nog niet ingevuld]', beheerders: beheerders, creator: me.name, status: 'Onvolledig', bevestigd: '23-10-2026', reviewLate: false, gebruik: (!skip && S.addToel.trim()) || '[Nog niet ingevuld]', opslag: (!skip && S.addOpslag.trim()) || '[Nog niet ingevuld]', biv: null, impact: null, contacts: null, techs: [], inactive: '' };
+    const upd = {
+      newApps: S.newApps.concat([app]), dlg: '', view: 'app', appId: id, appTab: 'overzicht',
+      addName: '', addUrl: '', addToel: '', addErr: '', secretWarn: false, findingLink: '', addDomain: '',
+      addStep: 1, addHerkomst: '', addBereik: '', addHosting: '', addOpslag: '',
+      auditNew: [this.log('Applicatie', name, '-', 'aangemaakt, status Onvolledig')].concat(S.auditNew),
+      flash: skip ? name + ' is toegevoegd. Je kunt de overige gegevens later aanvullen op deze pagina.' : name + ' is toegevoegd. Bedankt voor het aanvullen; het securityteam vult de rest aan.', flashTone: 'success'
+    };
+    if (S.findingLink) upd.findingOv = Object.assign({}, S.findingOv, { [S.findingLink]: { status: 'Gekoppeld aan applicatie', reason: 'Gekoppeld aan ' + name } });
+    if (S.addDomain) upd.domLink = Object.assign({}, S.domLink, { [S.addDomain]: id });
+    this.setState(upd);
+  }
+
+  renderVals() {
+    const S = this.state;
+    const DB = this.seed();
+    const rol = this.props.rol ?? 'Admin';
+    const isAdmin = rol === 'Admin';
+    const me = this.me();
+    const set = (o) => this.setState(o);
+    const f1 = (n) => n.toFixed(1).replace('.', ',');
+    const apps = this.allApps();
+    const appById = (id) => apps.find((a) => a.id === id);
+    const transfer = (n) => { let x = n; let i = 0; while (S.transfers[x] && i < 10) { x = S.transfers[x]; i++; } return x; };
+    const behOf = (a) => a.beheerders.map(transfer).filter((v, i, arr) => arr.indexOf(v) === i);
+    const canSee = (a) => isAdmin || behOf(a).indexOf(me.name) >= 0;
+    const appStatus = (a) => (S.archived[a.id] ? 'Gearchiveerd' : a.status);
+    const statusTone = (s) => ({ Actief: 'success', Onvolledig: 'warning', Gearchiveerd: 'neutral' }[s] || 'neutral');
+    const cveSt = (c) => (S.cveOv[c.id] ? S.cveOv[c.id].status : c.status);
+    const cveTone = (s) => ({ Open: 'danger', 'Niet van toepassing': 'neutral', Gepatcht: 'success', 'Risico geaccepteerd': 'info' }[s] || 'neutral');
+    const prio = (c) => (c.kev ? 'Kritiek' : (c.cvss >= 9 || c.epss >= 10) ? 'Hoog' : c.cvss >= 7 ? 'Middel' : 'Laag');
+    const prioTone = (p) => ({ Kritiek: 'danger', Hoog: 'warning', Middel: 'info', Laag: 'neutral' }[p]);
+    const isRemoved = (a, tech) => (S.techRemoved[a.id] || []).indexOf(tech) >= 0;
+    const openC = (a) => DB.cves.filter((c) => c.app === a.id && !isRemoved(a, c.tech) && cveSt(c) === 'Open');
+    const isCrit = (c) => c.kev || c.cvss >= 9;
+    const domains = this.allDomains();
+    const domApp = (d) => (S.domLink[d.id] !== undefined ? S.domLink[d.id] : d.app);
+    const domTone = (s) => ({ Online: 'success', Offline: 'danger', 'Mogelijk dangling': 'warning', 'Niet gecontroleerd': 'neutral' }[s] || 'neutral');
+    const fSt = (f) => (S.findingOv[f.id] ? S.findingOv[f.id].status : f.status);
+    const fTone = (s) => ({ Nieuw: 'warning', 'Gekoppeld aan applicatie': 'success', Geaccepteerd: 'info', Genegeerd: 'neutral' }[s] || 'neutral');
+    const openFindings = DB.findings.filter((f) => fSt(f) === 'Nieuw');
+    const appFindings = (a) => DB.findings.filter((f) => { const d = domains.find((x) => x.id === f.dom); return d && domApp(d) === a.id && fSt(f) === 'Nieuw'; }).length;
+    const bevestigd = (a) => S.confirmed[a.id] || a.bevestigd;
+    const reviewLate = (a) => !S.confirmed[a.id] && a.reviewLate;
+    const jobSt = (j) => (S.jobsRun[j.name] ? 'Bezig' : j.status);
+    const jTone = (s) => ({ Geslaagd: 'success', Mislukt: 'danger', Bezig: 'info' }[s] || 'neutral');
+    const flushSave = () => { if (this._saveT) { clearTimeout(this._saveT); this._saveT = null; if (this._saveEdit) this._saveEdit(); } };
+    const goView = (view) => () => { flushSave(); this.setState({ view: view, dlg: '', domainId: '', draft: null, saveState: '', editErr: '', editSecretWarn: false }); };
+    const openApp = (id, tab) => () => { flushSave(); this.setState({ view: 'app', appId: id, appTab: tab || 'overzicht', techQ: '', techCpeFor: '', histDate: '', draft: null, saveState: '', editErr: '', editSecretWarn: false }); };
+    const openDomain = (id) => () => this.setState({ view: 'domains', domainId: id, linkApp: '' }, () => { try { window.scrollTo(0, 0); } catch (err) {} });
+    const mail = (n) => n.toLowerCase().replace(/\s+/g, '') .replace(/^(\w+)/, '$1') + '@elaad.example';
+
+    const navDefs = [
+      ['dashboard', 'Dashboard', 'squares-four', true, 0, 'neutral'],
+      ['apps', 'Applicaties', 'cube', true, isAdmin ? apps.filter((a) => appStatus(a) === 'Onvolledig').length : 0, 'warning'],
+      ['domains', 'Domeinen', 'hard-drives', true, isAdmin ? domains.filter((d) => d.nieuw && !domApp(d)).length : 0, 'info'],
+      ['findings', 'Findings', 'warning-circle', isAdmin, openFindings.length, 'danger'],
+      ['jobs', 'Background jobs', 'clock', isAdmin, DB.jobs.filter((j) => jobSt(j) === 'Mislukt').length, 'danger'],
+      ['users', 'Gebruikers', 'users', isAdmin, 0, 'neutral'],
+      ['audit', 'Audit log', 'file-text', isAdmin, 0, 'neutral'],
+      ['notif', 'Meldingen', 'info', true, 0, 'neutral']
+    ].filter((n) => n[3]);
+    const allowed = navDefs.map((n) => n[0]).concat(['app']);
+    const view = allowed.indexOf(S.view) >= 0 ? S.view : 'dashboard';
+    const activeNav = view === 'app' ? 'apps' : view;
+    const nav = navDefs.map((n) => ({
+      label: n[1], icon: n[2], count: String(n[4]), hasCount: n[4] > 0, countTone: n[5],
+      current: activeNav === n[0] ? 'page' : 'false',
+      bg: activeNav === n[0] ? '#e8f5f9' : 'transparent', fg: activeNav === n[0] ? '#004e64' : '#4d4d4c', fw: activeNav === n[0] ? '700' : '500',
+      go: goView(n[0])
+    }));
+
+    // dashboard
+    const visibleApps = apps.filter(canSee);
+    const myOpen = [].concat.apply([], visibleApps.map(openC));
+    const stats = isAdmin ? [
+      { label: 'Applicaties', value: String(apps.filter((a) => appStatus(a) !== 'Gearchiveerd').length), delta: apps.filter((a) => appStatus(a) === 'Onvolledig').length + ' onvolledig' },
+      { label: "Open CVE's", value: String(myOpen.length), delta: myOpen.filter(isCrit).length + ' kritiek (KEV of CVSS ≥ 9,0)' },
+      { label: 'Nieuwe findings', value: String(openFindings.length), delta: 'Open poorten zonder applicatie' },
+      { label: 'Domeinen', value: String(domains.length), delta: domains.filter((d) => d.nieuw).length + ' nieuw ontdekt' }
+    ] : [
+      { label: 'Mijn applicaties', value: String(visibleApps.length), delta: visibleApps.length ? 'Jij bent applicatiebeheerder' : 'Nog geen applicaties' },
+      { label: "Open CVE's", value: String(myOpen.length), delta: 'In applicaties die jij beheert' },
+      { label: 'Review nodig', value: String(visibleApps.filter(reviewLate).length), delta: 'Bevestig dat je gegevens kloppen' },
+      { label: 'Applicaties totaal', value: String(apps.length), delta: 'De lijst is voor iedereen zichtbaar' }
+    ];
+    const att = [];
+    DB.cves.forEach((c) => {
+      const a = appById(c.app);
+      if (c.kev && cveSt(c) === 'Open' && canSee(a)) att.push({ kind: 'KEV', tone: 'danger', icon: 'warning', color: '#b8342a', when: 'Gemeld ' + c.found, title: c.cve + ' staat op de CISA KEV-lijst', text: 'Raakt ' + a.name + ' via ' + c.tech + '. CVSS ' + f1(c.cvss) + ', EPSS ' + f1(c.epss) + '\u00a0%.', cta: 'Afhandelen', go: openApp(a.id, 'tech') });
+    });
+    if (isAdmin) {
+      const fj = DB.jobs.find((j) => jobSt(j) === 'Mislukt');
+      if (fj) att.push({ kind: 'Job mislukt', tone: 'danger', icon: 'x-circle', color: '#b8342a', when: 'Laatst succesvol ' + fj.last, title: fj.name + ' faalt', text: "De NVD API gaf vijf keer HTTP 503. Nieuwe CVE's uit NVD worden pas gemeld na een geslaagde sync.", cta: 'Bekijk job', go: goView('jobs') });
+      if (!S.archived.dummy) att.push({ kind: 'Gearchiveerd maar live', tone: 'warning', icon: 'warning', color: '#7a6400', when: 'Controle 23-10-2026 06:05', title: 'shop-oud.elaad.example is nog bereikbaar', text: 'Oude webshop is gearchiveerd, maar het domein resolvet nog en geeft HTTP 200.', cta: 'Bekijk domein', go: openDomain('d10') });
+      att.push({ kind: 'Dangling DNS', tone: 'warning', icon: 'warning-circle', color: '#7a6400', when: 'Controle 23-10-2026 06:00', title: 'acties.elaad.example wijst naar een dienst die niet meer bestaat', text: 'Het CNAME-doel elaad-acties.webapps.example geeft NXDOMAIN. Risico op subdomain takeover.', cta: 'Bekijk domein', go: openDomain('d11') });
+      att.push({ kind: 'IPv4/IPv6-verschil', tone: 'info', icon: 'info', color: '#007ea4', when: 'Scan 22-10-2026 23:41', title: 'Poortverschil op cijfers.elaad.example', text: 'Poort 3000/tcp is open op IPv4 maar niet op IPv6.', cta: 'Bekijk domein', go: openDomain('d5') });
+      if (!S.transfers['Ruben Smit']) att.push({ kind: 'Beheerder inactief', tone: 'warning', icon: 'users', color: '#7a6400', when: '94 dagen niet ingelogd', title: 'Kassa-testomgeving heeft geen actieve beheerder', text: 'Ruben Smit is de enige interne beheerder.', cta: 'Bekijk applicatie', go: openApp('a9') });
+    }
+    if (canSee(appById('a5'))) att.push({ kind: 'Offline', tone: 'danger', icon: 'pulse', color: '#b8342a', when: 'Sinds 09:31', title: 'rooster.elaad.example is offline', text: 'Statuscode 502 in plaats van 200. Gemeld na 10 minuten aanhoudende afwijking.', cta: 'Bekijk domein', go: openDomain('d6') });
+    visibleApps.filter(reviewLate).forEach((a) => att.push({ kind: 'Review nodig', tone: 'info', icon: 'calendar-blank', color: '#007ea4', when: 'Laatst bevestigd ' + bevestigd(a), title: 'Bevestig de gegevens van ' + a.name, text: 'Klopt de registratie nog? Bevestig of werk de gegevens bij.', cta: 'Bevestigen', go: openApp(a.id) }));
+
+    const myApps = visibleApps.map((a) => ({ name: a.name, bevestigd: bevestigd(a), late: reviewLate(a), status: appStatus(a), tone: statusTone(appStatus(a)), go: openApp(a.id) }));
+
+    // apps list
+    const q = (S.q || '').trim().toLowerCase();
+    const canProt = isAdmin || visibleApps.length > 0;
+    const list = apps.filter((a) => {
+      if (q && a.name.toLowerCase().indexOf(q) < 0 && a.url.toLowerCase().indexOf(q) < 0) return false;
+      if (S.fType && a.type !== S.fType) return false;
+      if (S.fStatus && appStatus(a) !== S.fStatus) return false;
+      if (S.fHerkomst && a.herkomst !== S.fHerkomst) return false;
+      if (canProt && S.fKritiek && !(canSee(a) && openC(a).some(isCrit))) return false;
+      if (canProt && S.fPersoons && !(canSee(a) && a.impact && a.impact.persoons)) return false;
+      return true;
+    });
+    const sortKey = (a) => bevestigd(a).split('-').reverse().join('');
+    if (S.sort === 'bevestigd') list.sort((x, y) => (sortKey(x) < sortKey(y) ? -1 : 1));
+    else if (S.sort === 'cve' && canProt) list.sort((x, y) => (canSee(y) ? openC(y).length : -1) - (canSee(x) ? openC(x).length : -1));
+    else list.sort((x, y) => x.name.localeCompare(y.name, 'nl'));
+    const appRows = list.map((a) => {
+      const vis = canSee(a); const st = appStatus(a); const oc = vis ? openC(a) : []; const nf = vis ? appFindings(a) : 0;
+      return {
+        name: a.name, url: a.url, type: a.type, herkomst: a.herkomst,
+        bereik: vis ? a.bereik : 'Afgeschermd', bereikFg: vis ? '#4d4d4c' : '#6d6a68',
+        beheerder: behOf(a).join(', '), status: st, statusTone: statusTone(st), visible: vis, locked: !vis,
+        cveLabel: oc.length ? oc.length + ' open' : 'Geen', cveTone: oc.some(isCrit) ? 'danger' : oc.length ? 'warning' : 'neutral',
+        fLabel: vis ? String(nf) : '-', bevestigd: bevestigd(a), late: reviewLate(a), open: openApp(a.id)
+      };
+    });
+
+    // app detail
+    const app = appById(S.appId) || apps[0];
+    const appVis = canSee(app);
+    const appSt = appStatus(app);
+    const allTechs = DB.techs.concat(S.newTechs);
+    const techNames = (app.techs || []).concat(S.appTechAdd[app.id] || []).filter((n, i, arr) => arr.indexOf(n) === i && !isRemoved(app, n));
+    const appTechs = techNames.map((n) => {
+      const t = allTechs.find((x) => x.name === n) || { name: n, cpe: '', level: "Alle CVE's" };
+      const lvl = S.techOv[t.name] || t.level;
+      return {
+        name: t.name, cpe: t.cpe || 'Geen CPE gekoppeld', level: lvl, readOnly: !appVis,
+        canRemove: appVis && appSt !== 'Gearchiveerd', removeLabel: 'Verwijder ' + t.name + ' van ' + app.name,
+        remove: () => this.setState({
+          techRemoved: Object.assign({}, S.techRemoved, { [app.id]: (S.techRemoved[app.id] || []).concat([t.name]) }),
+          auditNew: [this.log('Technologie', t.name + ' · ' + app.name, 'gekoppeld', 'losgekoppeld')].concat(S.auditNew),
+          flash: t.name + ' is losgekoppeld van ' + app.name + '. De CVE\'s voor deze technologie verdwijnen uit de lijst van deze applicatie. Gebruikt een andere applicatie ' + t.name + ' nog, dan blijft de technologie daar staan.', flashTone: 'info'
+        }),
+        setLevel: (e) => { const v = e.target.value; this.setState({ techOv: Object.assign({}, S.techOv, { [t.name]: v }), auditNew: [this.log('Technologie', t.name, 'meldingsniveau ' + lvl, 'meldingsniveau ' + v)].concat(S.auditNew), flash: 'Meldingsniveau van ' + t.name + ' is nu: ' + v + '. Dit geldt voor alle applicaties die ' + t.name + ' gebruiken.', flashTone: 'info' }); }
+      };
+    });
+    const tq = (S.techQ || '').trim();
+    const techSugg = tq ? allTechs.filter((t) => techNames.indexOf(t.name) < 0 && t.name.toLowerCase().indexOf(tq.toLowerCase()) >= 0).slice(0, 5).map((t) => ({ name: t.name, cpe: t.cpe, add: () => this.addTech(app, t.name) })) : [];
+    const exact = allTechs.some((t) => t.name.toLowerCase() === tq.toLowerCase());
+    const slugOf = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    const cs = slugOf(S.techCpeFor || '');
+    const cpeSugg = S.techCpeFor ? [
+      { cpe: 'cpe:2.3:a:' + cs + ':' + cs, src: 'NVD CPE-dictionary' },
+      { cpe: 'cpe:2.3:a:' + cs + '_project:' + cs, src: 'NVD CPE-dictionary' },
+      { cpe: 'cpe:2.3:a:' + cs + 'labs:' + cs + '_server', src: 'Shodan CVEDB' }
+    ].map((c) => Object.assign(c, { pick: () => { const nm = S.techCpeFor; this.setState({ newTechs: S.newTechs.concat([{ name: nm, cpe: c.cpe, level: "Alle CVE's" }]) }, () => this.addTech(app, nm)); } })) : [];
+
+    const appCves = DB.cves.filter((c) => c.app === app.id && !isRemoved(app, c.tech)).map((c) => {
+      const st = cveSt(c); const p = prio(c); const ov = S.cveOv[c.id]; const note = ov ? ov.note : c.note;
+      return {
+        cve: c.cve, tech: c.tech, cvss: f1(c.cvss), epss: f1(c.epss) + '\u00a0%', isKev: c.kev, notKev: !c.kev,
+        prio: p, prioTone: prioTone(p), status: st, statusTone: cveTone(st), note: note, hasNote: !!note,
+        change: () => this.setState({ dlg: 'cve', cveId: c.id, cveNew: st === 'Open' ? 'Gepatcht' : 'Open', cveReason: '', cveDate: '', cveErr: '' })
+      };
+    });
+    const appDomsRaw = domains.filter((d) => domApp(d) === app.id);
+    const appDoms = appDomsRaw.map((d) => ({ name: d.name, ip: d.ip4 || d.cname || '-', p4: d.p4 || 'Nog niet gescand', p6: d.ip6 ? (d.p6 || 'Nog niet gescand') : 'Geen AAAA-record', status: d.status, tone: domTone(d.status), open: openDomain(d.id) }));
+    const mailOf = (n) => { const u = this.userSeed().find((x) => x.name === n); return u ? u.mail : n.toLowerCase().replace(/\s+/g, '.') + '@elaad.example'; };
+    const contactsRaw = app.contacts
+      ? app.contacts.map((c) => (c.role === 'Interne beheerder' && transfer(c.name) !== c.name ? { name: transfer(c.name), role: c.role, mail: mailOf(transfer(c.name)), phone: '' } : c))
+      : behOf(app).map((n) => ({ name: n, role: 'Interne beheerder', mail: mailOf(n), phone: '' }));
+    const contacts = contactsRaw.map((c) => ({ name: c.name, role: c.role, tone: c.ext ? 'neutral' : c.role === 'Interne beheerder' ? 'brand' : 'info', mail: c.mail, phone: c.phone || 'Geen telefoonnummer', notif: c.ext ? 'Ontvangt standaard geen meldingen' : 'Ontvangt meldingen per e-mail' }));
+    const lvlName = ['', 'Laag', 'Midden', 'Hoog'];
+    const bar = (score, i) => (score >= i ? (score === 3 ? '#b8342a' : score === 2 ? '#c3a000' : '#007ea4') : '#e3e1de');
+    const bivItems = app.biv ? [['Beschikbaarheid', app.biv.b, app.biv.tb], ['Integriteit', app.biv.i, app.biv.ti], ['Vertrouwelijkheid', app.biv.v, app.biv.tv]].map((x) => ({ label: x[0], score: String(x[1]), level: lvlName[x[1]], toel: x[2], c1: bar(x[1], 1), c2: bar(x[1], 2), c3: bar(x[1], 3) })) : [];
+    const im = app.impact || {};
+    const impactFlags = [['Lekken bedrijfsgegevens', im.bedrijf, im.tb], ['Lekken persoonsgegevens', im.persoons, im.tp], ['Imagoschade', im.imago, im.ti], ['Impact op bedrijfscontinuïteit', im.bc, im.tc]].map((x) => ({ label: x[0], checked: !!x[1], toel: x[2] || (x[1] ? 'Geen toelichting' : 'Niet van toepassing'), fg: x[2] ? '#4d4d4c' : '#6d6a68' }));
+    const allAudit = S.auditNew.concat(DB.audit);
+    const appHist = allAudit.filter((e) => e.obj.indexOf(app.name) >= 0);
+    const archiveLive = appDomsRaw.filter((d) => d.resolves).map((d) => ({ name: d.name, text: d.name + ' resolvet nog naar ' + (d.ip4 || d.cname) + (d.http ? ' en is bereikbaar (' + d.http + ').' : '.') + ' Zet de dienst uit of verwijder het DNS-record.' }));
+    const appV = {
+      name: app.name, uuid: app.uuid, url: app.url, type: app.type, herkomst: app.herkomst, hosting: app.hosting, vlan: app.vlan, bereik: app.bereik,
+      gebruik: app.gebruik, opslag: app.opslag, creator: app.creator, beheerders: behOf(app).join(', '),
+      status: appSt, statusTone: statusTone(appSt), bevestigd: bevestigd(app), late: appVis && reviewLate(app),
+      visible: appVis, locked: !appVis, canEdit: appVis, notArchived: appSt !== 'Gearchiveerd',
+      incomplete: appVis && appSt === 'Onvolledig', hasInactive: appVis && !!app.inactive && !S.transfers['Ruben Smit'], inactive: app.inactive,
+      hasImpact: !!app.biv, noImpact: !app.biv, openCount: String(openC(app).length), techCount: String(techNames.length),
+      domainList: appDomsRaw.map((d) => d.name).join(', ') || 'Geen',
+      firstContact: contactsRaw[0].name + ' · ' + contactsRaw[0].role, firstMail: contactsRaw[0].mail
+    };
+    const tab = S.appTab;
+
+    // domains
+    const scannable = (d) => !!d.ip4;
+    const domRows = domains.map((d) => {
+      const aid = domApp(d); const a = aid ? appById(aid) : null;
+      const auto = S.autoOv[d.id] !== undefined ? S.autoOv[d.id] : d.auto;
+      const hasF = DB.findings.some((f) => f.dom === d.id && fSt(f) === 'Nieuw');
+      return {
+        name: d.name, ip4: d.ip4 || (d.cname ? 'CNAME ' + d.cname : 'Geen A-record'), ip6: d.ip6 || 'Geen AAAA-record',
+        status: d.status, tone: domTone(d.status), appName: a ? a.name : '', hasApp: !!a, noApp: !a, appGo: a ? openApp(a.id) : null,
+        ports: d.p4 || 'Nog niet gescand', auto: auto, autoLabel: auto ? 'Aan' : 'Uit',
+        toggleAuto: () => { const v = !auto; this.setState({ autoOv: Object.assign({}, S.autoOv, { [d.id]: v }), auditNew: [this.log('Domein', d.name, 'automatisch scannen ' + (auto ? 'aan' : 'uit'), 'automatisch scannen ' + (v ? 'aan' : 'uit'))].concat(S.auditNew), flash: 'Automatisch scannen voor ' + d.name + ' staat nu ' + (v ? 'aan' : 'uit') + '. Vastgelegd in de audit log.', flashTone: 'info' }); },
+        checked: !!S.sel[d.id], noScan: !scannable(d),
+        toggleSel: () => this.setState({ sel: Object.assign({}, S.sel, { [d.id]: !S.sel[d.id] }) }),
+        hasFinding: hasF, nieuw: !!d.nieuw && !a, via: d.via, open: openDomain(d.id),
+        rowBg: S.domainId === d.id ? '#e8f5f9' : '#ffffff'
+      };
+    });
+    const scanSel = domains.filter((d) => S.sel[d.id] && scannable(d));
+    const allSel = domains.filter(scannable).every((d) => S.sel[d.id]);
+    const ips = {};
+    scanSel.forEach((d) => { if (d.ip4) ips[d.ip4] = true; if (d.ip6) ips[d.ip6] = true; });
+    const ipCount = Object.keys(ips).length;
+    const extCount = scanSel.filter((d) => d.ext).length;
+    const scanRows = scanSel.map((d) => ({ name: d.name, ips: [d.ip4, d.ip6].filter(Boolean).join(' / '), rdns: d.rdns || '-', asn: d.asn || '-', ext: !!d.ext }));
+    const dd = domains.find((d) => d.id === S.domainId);
+    let dSel = { name: '', status: '', tone: 'neutral', via: '', found: '', records: [], rdns: '', asn: '', p4: '', p6: '', http: '', shot: '', dangling: false, archivedLive: false, diff: false, hasApp: false, noApp: false, appName: '', appGo: null, link: null, newApp: null };
+    if (dd) {
+      const aid = domApp(dd); const a = aid ? appById(aid) : null;
+      dSel = {
+        name: dd.name, status: dd.status, tone: domTone(dd.status), via: dd.via, found: dd.found,
+        records: [dd.cname ? { t: 'CNAME', v: dd.cname } : null, dd.ip4 ? { t: 'A', v: dd.ip4 } : null, dd.ip6 ? { t: 'AAAA', v: dd.ip6 } : null].filter(Boolean),
+        rdns: dd.rdns || '-', asn: dd.asn || '-', p4: dd.p4 || 'Nog niet gescand', p6: dd.ip6 ? (dd.p6 || 'Nog niet gescand') : 'Geen AAAA-record',
+        http: dd.http || 'Nog niet onderzocht', shot: dd.shot || 'Nog geen screenshot',
+        dangling: dd.status === 'Mogelijk dangling', archivedLive: !!(a && appStatus(a) === 'Gearchiveerd' && dd.resolves), diff: !!dd.diff,
+        hasApp: !!a, noApp: !a, appName: a ? a.name : '', appGo: a ? openApp(a.id) : null,
+        link: () => { if (!S.linkApp) return; const la = appById(S.linkApp); this.setState({ domLink: Object.assign({}, S.domLink, { [dd.id]: S.linkApp }), linkApp: '', auditNew: [this.log('Domein', dd.name, 'niet gekoppeld', 'gekoppeld aan ' + la.name)].concat(S.auditNew), flash: dd.name + ' is gekoppeld aan ' + la.name + '.', flashTone: 'success' }); },
+        newApp: () => this.setState({ dlg: 'add', addName: '', addUrl: 'https://' + dd.name, addType: 'Website', addToel: '', addErr: '', secretWarn: false, addBeheerder: me.name, findingLink: '', addDomain: dd.id })
+      };
+    }
+    const linkOpts = [{ value: '', label: 'Kies een applicatie' }].concat(apps.filter((a) => appStatus(a) !== 'Gearchiveerd').map((a) => ({ value: a.id, label: a.name })));
+
+    // findings
+    const findRows = DB.findings.map((f) => {
+      const d = domains.find((x) => x.id === f.dom); const ov = S.findingOv[f.id]; const st = fSt(f);
+      return {
+        target: d.name + ':' + f.port + '/tcp', ipv: f.ipv, svc: f.svc, found: f.found, status: st, tone: fTone(st),
+        reason: ov ? ov.reason : (f.reason || '-'), isNew: st === 'Nieuw', openDom: openDomain(d.id),
+        mkApp: () => this.setState({ dlg: 'add', addName: f.tplName, addUrl: d.name + ':' + f.port, addType: 'Applicatie', addToel: f.tplToel, addErr: '', secretWarn: false, addBeheerder: me.name, findingLink: f.id, addDomain: '' }),
+        accept: () => this.setState({ dlg: 'finding', findingId: f.id, findingAct: 'Geaccepteerd', findingReason: '', findingDate: '', findingErr: '' }),
+        ignore: () => this.setState({ dlg: 'finding', findingId: f.id, findingAct: 'Genegeerd', findingReason: '', findingDate: '', findingErr: '' })
+      };
+    });
+    const fSel = DB.findings.find((f) => f.id === S.findingId);
+    const fSelDom = fSel ? domains.find((x) => x.id === fSel.dom) : null;
+
+    // jobs
+    const jobRows = DB.jobs.map((j) => {
+      const st = jobSt(j);
+      return {
+        name: j.name, interval: j.interval, status: st, tone: jTone(st), last: j.last,
+        lastRun: S.jobsRun[j.name] ? 'Nu, handmatig gestart' : j.lastRun, dur: S.jobsRun[j.name] ? '-' : j.dur, running: st === 'Bezig',
+        run: () => this.setState({ jobsRun: Object.assign({}, S.jobsRun, { [j.name]: true }), auditNew: [this.log('Job gestart', j.name, '-', 'handmatig gestart')].concat(S.auditNew), flash: j.name + ' is gestart. De status en logs zie je in deze lijst.', flashTone: 'info' })
+      };
+    });
+    const fj = DB.jobs.find((j) => jobSt(j) === 'Mislukt');
+
+    // users
+    const users = this.userSeed().map((u) => Object.assign({}, u, S.userOv[u.name] || {}));
+    const activeAdmins = users.filter((u) => u.admin && !u.archived).length;
+    const appsOf = (n) => apps.filter((a) => behOf(a).indexOf(n) >= 0);
+    const userRows = users.filter((u) => S.userFilter === 'Alle' || (S.userFilter === 'Gearchiveerd' ? u.archived : !u.archived)).map((u) => {
+      const own = appsOf(u.name); const self = u.name === me.name;
+      return {
+        name: u.name, mail: u.mail, phone: u.phone || 'Geen telefoonnummer',
+        roleLabel: u.admin ? 'Admin' : 'Gebruiker', roleTone: u.admin ? 'brand' : 'neutral',
+        appsLabel: own.length ? own.length + (own.length === 1 ? ' applicatie' : ' applicaties') : 'Geen', appsNames: own.map((a) => a.name).join(', '),
+        last: u.last, inactive: !u.archived && u.days >= 90, inactiveLabel: u.days + ' dagen niet ingelogd',
+        statusLabel: u.archived ? 'Gearchiveerd' : 'Actief', statusTone: u.archived ? 'neutral' : 'success',
+        isSelf: self, canAct: !self && !u.archived,
+        adminLabel: u.admin ? 'Admin-rechten intrekken' : 'Admin maken', adminDisabled: !self && !u.archived && u.admin && activeAdmins <= 1,
+        toggleAdmin: () => this.setState({ dlg: 'uadmin', uDlgUser: u.name, uErr: '' }),
+        archive: () => this.setState({ dlg: 'uarch', uDlgUser: u.name, uTarget: '', uErr: '' })
+      };
+    });
+    const uSel = users.find((u) => u.name === S.uDlgUser) || null;
+    const uSelApps = uSel ? appsOf(uSel.name) : [];
+    const uTargetOpts = [{ value: '', label: 'Kies een gebruiker' }].concat(users.filter((u) => !u.archived && (!uSel || u.name !== uSel.name)).map((u) => ({ value: u.name, label: u.name + (u.admin ? ' (admin)' : '') })));
+
+    // bewerken: altijd bewerkbaar voor wie mag wijzigen, met autosave
+    const clean = (x) => ((!x || x === '[Nog niet ingevuld]') ? '' : String(x));
+    const editMode = appVis && appSt !== 'Gearchiveerd';
+    const emptyDraft = { id: '', name: '', url: '', type: '', herkomst: '', bereik: '', hosting: '', vlan: '', gebruik: '', opslag: '', bivB: '', bivI: '', bivV: '', bivTb: '', bivTi: '', bivTv: '', impBedrijf: false, impPersoons: false, impBijzonder: false, impImago: false, impBc: false, impTb: '', impTp: '', impTz: '', impTi: '', impTc: '', contacts: [] };
+    const buildDraft = () => {
+      const b = app.biv || {}; const im2 = app.impact || {};
+      return {
+        id: app.id, name: app.name, url: clean(app.url), type: clean(app.type), herkomst: clean(app.herkomst), bereik: clean(app.bereik), hosting: clean(app.hosting), vlan: clean(app.vlan), gebruik: clean(app.gebruik), opslag: clean(app.opslag),
+        bivB: b.b ? String(b.b) : '', bivI: b.i ? String(b.i) : '', bivV: b.v ? String(b.v) : '', bivTb: b.tb || '', bivTi: b.ti || '', bivTv: b.tv || '',
+        impBedrijf: !!im2.bedrijf, impPersoons: !!im2.persoons, impBijzonder: !!im2.bijzonder, impImago: !!im2.imago, impBc: !!im2.bc, impTb: im2.tb || '', impTp: im2.tp || '', impTz: im2.tz || '', impTi: im2.ti || '', impTc: im2.tc || '',
+        contacts: contactsRaw.map((c) => ({ name: c.name, role: c.role, mail: c.mail, phone: c.phone || '', ext: c.role === 'Leverancier/externe partij', user: users.some((u) => u.name === c.name) }))
+      };
+    };
+    const dr = editMode ? ((S.draft && S.draft.id === app.id) ? S.draft : buildDraft()) : emptyDraft;
+    const textKeys = ['url', 'hosting', 'vlan', 'gebruik', 'opslag', 'bivTb', 'bivTi', 'bivTv', 'impTb', 'impTp', 'impTz', 'impTi', 'impTc'];
+    const queueSave = () => { clearTimeout(this._saveT); this._saveT = setTimeout(() => { this._saveT = null; if (this._saveEdit) this._saveEdit(); }, 700); };
+    const setD = (k, val) => { this.setState({ draft: Object.assign({}, dr, { [k]: val }), editErr: '', editSecretWarn: textKeys.indexOf(k) >= 0 ? false : S.editSecretWarn, saveState: 'pending' }); queueSave(); };
+    const ed = {};
+    ['name', 'url', 'type', 'herkomst', 'bereik', 'hosting', 'vlan', 'gebruik', 'opslag'].forEach((k) => { ed[k] = (e) => setD(k, e.target.value); });
+    const bivEdit = [['Beschikbaarheid', 'bivB', 'bivTb'], ['Integriteit', 'bivI', 'bivTi'], ['Vertrouwelijkheid', 'bivV', 'bivTv']].map((x) => ({ label: x[0], id: 'e-' + x[1], tid: 'e-' + x[2], score: dr[x[1]], toel: dr[x[2]], setScore: (e) => setD(x[1], e.target.value), setToel: (e) => setD(x[2], e.target.value) }));
+    const impEdit = [['Lekken bedrijfsgegevens', 'impBedrijf', 'impTb'], ['Lekken persoonsgegevens', 'impPersoons', 'impTp'], ['Imagoschade', 'impImago', 'impTi'], ['Impact op bedrijfscontinuïteit', 'impBc', 'impTc']].map((x) => ({ label: x[0], checked: !!dr[x[1]], toel: dr[x[2]], toggle: () => setD(x[1], !dr[x[1]]), setToel: (e) => setD(x[2], e.target.value) }));
+    const draftContacts = dr.contacts.map((c, i) => ({
+      name: c.name, mail: c.mail || '-', phone: c.phone || 'Geen telefoonnummer', role: c.role, kind: c.user ? 'Gebruiker van de inventaris' : 'Handmatig ingevoerd', notif: c.role === 'Leverancier/externe partij' ? 'Ontvangt standaard geen meldingen' : 'Ontvangt meldingen per e-mail', removeLabel: 'Verwijder ' + c.name,
+      setRole: (e) => { const cs = dr.contacts.slice(); cs[i] = Object.assign({}, c, { role: e.target.value, ext: e.target.value === 'Leverancier/externe partij' }); setD('contacts', cs); },
+      remove: () => setD('contacts', dr.contacts.filter((x, j) => j !== i))
+    }));
+    const addContact = () => {
+      let c = null;
+      if (S.ncKind === 'user') {
+        const u = users.find((x) => x.name === S.ncUser);
+        if (!u) { set({ ncErr: 'Kies een gebruiker.' }); return; }
+        c = { name: u.name, mail: u.mail, phone: u.phone || '', role: S.ncRole, user: true };
+      } else {
+        if (!S.ncName.trim() || !S.ncMail.trim()) { set({ ncErr: 'Vul in elk geval naam en e-mailadres in.' }); return; }
+        c = { name: S.ncName.trim(), mail: S.ncMail.trim(), phone: S.ncPhone.trim(), role: S.ncRole, user: false };
+      }
+      c.ext = c.role === 'Leverancier/externe partij';
+      set({ draft: Object.assign({}, dr, { contacts: dr.contacts.concat([c]) }), ncUser: '', ncName: '', ncMail: '', ncPhone: '', ncErr: '', editErr: '', saveState: 'pending' });
+      queueSave();
+    };
+    const secretRx = /(AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|xox[abpr]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(password|passwd|wachtwoord|api[_-]?key|token|secret)\s*[:=]\s*\S{6,})/i;
+    const normBiv = (o) => JSON.stringify(o ? [o.b, o.i, o.v, o.tb || '', o.ti || '', o.tv || ''] : null);
+    const normImp = (o) => { const x = o || {}; return JSON.stringify(['bedrijf', 'persoons', 'bijzonder', 'imago', 'bc'].map((k) => !!x[k]).concat(['tb', 'tp', 'tz', 'ti', 'tc'].map((k) => (x[k] || '').trim()))); };
+    const flagStr = (o) => (o ? ['bedrijf', 'persoons', 'imago', 'bc'].filter((k) => o[k]).length + ' van 4 gevolgen aangevinkt' : 'leeg');
+    const nowHm = () => { const t = new Date(); return String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0'); };
+    const saveEdit = (force) => {
+      const d = (S.draft && S.draft.id === app.id) ? S.draft : null;
+      if (!d || !editMode) return;
+      if (!d.name.trim() || !d.url.trim()) { set({ editErr: 'Naam en URL of omschrijving zijn verplicht. Deze wijziging is nog niet opgeslagen.', saveState: 'error' }); return; }
+      const internal = d.contacts.filter((c) => c.role === 'Interne beheerder' && c.user).map((c) => c.name);
+      if (!internal.length) { set({ editErr: 'Er moet minimaal één interne beheerder met een account zijn (tabblad Contactpersonen). Deze wijziging is nog niet opgeslagen.', saveState: 'error' }); return; }
+      if (force !== true && secretRx.test(textKeys.map((k) => d[k]).join(' '))) { set({ editSecretWarn: true, editErr: '', saveState: 'error' }); return; }
+      const v = (x) => ((x && String(x).trim()) ? String(x).trim() : '[Nog niet ingevuld]');
+      const someBiv = d.bivB || d.bivI || d.bivV;
+      const fullBiv = !!(d.bivB && d.bivI && d.bivV);
+      const biv = fullBiv ? { b: +d.bivB, i: +d.bivI, v: +d.bivV, tb: d.bivTb.trim(), ti: d.bivTi.trim(), tv: d.bivTv.trim() } : (someBiv ? (app.biv || null) : null);
+      const impact = { bedrijf: d.impBedrijf, persoons: d.impPersoons, bijzonder: d.impBijzonder, imago: d.impImago, bc: d.impBc, tb: d.impTb.trim(), tp: d.impTp.trim(), tz: d.impTz.trim(), ti: d.impTi.trim(), tc: d.impTc.trim() };
+      const complete = ['herkomst', 'bereik', 'hosting', 'gebruik', 'opslag'].every((k) => d[k] && String(d[k]).trim()) && !!biv && techNames.length > 0;
+      const status = complete ? 'Actief' : 'Onvolledig';
+      const upd = { name: d.name.trim(), url: d.url.trim(), type: v(d.type), herkomst: v(d.herkomst), bereik: v(d.bereik), hosting: v(d.hosting), vlan: v(d.vlan), gebruik: v(d.gebruik), opslag: v(d.opslag), biv: biv, impact: impact, contacts: d.contacts, beheerders: internal, status: status };
+      const labels = { name: 'Naam', url: 'URL', type: 'Type', herkomst: 'Herkomst', bereik: 'Bereikbaarheid', hosting: 'Gehost bij', vlan: 'VLAN', gebruik: 'Toelichting gebruik', opslag: 'Opgeslagen gegevens' };
+      const changes = Object.keys(labels).filter((k) => String(app[k]) !== String(upd[k])).map((k) => this.log('Applicatie', upd.name + ' · ' + labels[k], String(app[k]), upd[k]));
+      if (normBiv(app.biv) !== normBiv(biv)) changes.push(this.log('Applicatie', upd.name + ' · BIV', app.biv ? app.biv.b + '-' + app.biv.i + '-' + app.biv.v : 'leeg', biv ? biv.b + '-' + biv.i + '-' + biv.v : 'leeg'));
+      if (normImp(app.impact) !== normImp(impact)) changes.push(this.log('Applicatie', upd.name + ' · Impact', flagStr(app.impact), flagStr(impact)));
+      if (contactsRaw.map((c) => c.name + '|' + c.role).join() !== d.contacts.map((c) => c.name + '|' + c.role).join()) changes.push(this.log('Applicatie', upd.name + ' · Contactpersonen', contactsRaw.map((c) => c.name).join(', '), d.contacts.map((c) => c.name).join(', ')));
+      if (appSt !== status) changes.push(this.log('Applicatie', upd.name, appSt, status));
+      const out = { appEdits: Object.assign({}, S.appEdits, { [app.id]: Object.assign({}, S.appEdits[app.id] || {}, upd) }), editErr: '', editSecretWarn: false, auditNew: changes.concat(S.auditNew), saveState: (someBiv && !fullBiv) ? 'partial' : 'saved', savedAt: nowHm() };
+      if (appSt !== status) Object.assign(out, status === 'Actief' ? { flash: 'De registratie van ' + upd.name + ' is compleet en staat nu op Actief.', flashTone: 'success' } : { flash: upd.name + ' staat weer op Onvolledig, omdat er gegevens ontbreken.', flashTone: 'warning' });
+      set(out);
+    };
+    this._saveEdit = saveEdit;
+    const saveUi = {
+      pending: ['clock', '#6d6a68', 'Opslaan…'],
+      saved: ['check-circle', '#2e7d32', 'Alle wijzigingen opgeslagen om ' + S.savedAt],
+      partial: ['check-circle', '#2e7d32', 'Opgeslagen om ' + S.savedAt + '. De BIV-classificatie wordt opgeslagen zodra alle drie zijn ingevuld.'],
+      error: ['warning', '#b8342a', 'Niet opgeslagen, zie de melding hieronder']
+    }[S.saveState] || ['check-circle', '#6d6a68', 'Wijzigingen worden automatisch opgeslagen'];
+
+    // audit
+    const auditRows = allAudit.filter((e) => !S.auditType || e.type === S.auditType);
+
+    // notifications
+    const subs = DB.subs.filter((s) => s.roles.indexOf(rol) >= 0).map((s) => {
+      const on = S.subOn[s.id] !== undefined ? S.subOn[s.id] : s.on;
+      return {
+        onderwerp: s.onderwerp, bereik: s.bereik, events: s.events, freq: S.subFreq[s.id] || s.freq, fixed: !!s.fixed, notFixed: !s.fixed, auto: !!s.auto,
+        on: on, choice: on ? (S.subFreq[s.id] || s.freq) : 'Uitgeschakeld', opts: s.realtimeOnly ? ['Realtime', 'Uitgeschakeld'] : ['Realtime', 'Dagelijkse digest', 'Uitgeschakeld'],
+        setFreq: (e) => { const v = e.target.value; this.setState(v === 'Uitgeschakeld' ? { subOn: Object.assign({}, S.subOn, { [s.id]: false }) } : { subOn: Object.assign({}, S.subOn, { [s.id]: true }), subFreq: Object.assign({}, S.subFreq, { [s.id]: v }) }); }
+      };
+    });
+    const cveRec = DB.cves.find((c) => c.id === S.cveId);
+    const cveApp = cveRec ? appById(cveRec.app) : null;
+    const archiveTitle = app.name + ' archiveren?';
+
+    return {
+      yes: true, logoH: 36, w760: 760, w600: 600, w560: 560, w520: 520, w480: 480, rows3: 3,
+      me: me, isAdmin: isAdmin, notAdmin: !isAdmin, nav: nav,
+      v: { dash: view === 'dashboard', apps: view === 'apps', app: view === 'app', domains: view === 'domains', findings: view === 'findings', jobs: view === 'jobs', audit: view === 'audit', notif: view === 'notif', users: view === 'users' },
+      hasFlash: !!S.flash, flash: S.flash, flashTone: S.flashTone, clearFlash: () => set({ flash: '' }),
+      q: S.q, onQ: (e) => set({ q: e.target.value }), onQSubmit: () => set({ view: 'apps' }),
+      openAdd: () => set({ dlg: 'add', addStep: 1, addName: '', addUrl: '', addType: '', addToel: '', addErr: '', secretWarn: false, addBeheerder: me.name, findingLink: '', addDomain: '' }),
+      goJobs: goView('jobs'), goApps: goView('apps'),
+      stats: stats, att: att, noAtt: att.length === 0, jobRows: jobRows, myApps: myApps, noMyApps: myApps.length === 0,
+
+      appCountLabel: list.length + ' van ' + apps.length + ' applicaties',
+      typeOpts: [{ value: '', label: 'Alle types' }, { value: 'Website', label: 'Website' }, { value: 'Applicatie', label: 'Applicatie' }],
+      typeOnlyOpts: [{ value: '', label: 'Kies een type' }, 'Website', 'Applicatie'],
+      herkomstOnlyOpts: [{ value: '', label: 'Kies herkomst' }, 'Zelf gebouwd/gehost', 'Standaard (SaaS/ingekocht)'],
+      bereikOpts: [{ value: '', label: 'Kies bereikbaarheid' }, 'Internet', 'IP-whitelist', 'Alleen lokaal netwerk'],
+      statusOpts: [{ value: '', label: 'Alle statussen' }, 'Actief', 'Onvolledig', 'Gearchiveerd'],
+      herkomstOpts: [{ value: '', label: 'Alle herkomsten' }, 'Zelf gebouwd/gehost', 'Standaard (SaaS/ingekocht)'],
+      sortOpts: canProt ? [{ value: 'naam', label: 'Sorteren op naam' }, { value: 'bevestigd', label: 'Langst niet bevestigd' }, { value: 'cve', label: "Meeste open CVE's" }] : [{ value: 'naam', label: 'Sorteren op naam' }, { value: 'bevestigd', label: 'Langst niet bevestigd' }],
+      fType: S.fType, fStatus: S.fStatus, fHerkomst: S.fHerkomst, sort: S.sort, fKritiek: S.fKritiek, fPersoons: S.fPersoons,
+      onType: (e) => set({ fType: e.target.value }), onStatus: (e) => set({ fStatus: e.target.value }), onHerkomst: (e) => set({ fHerkomst: e.target.value }), onSort: (e) => set({ sort: e.target.value }),
+      onKritiek: () => set({ fKritiek: !S.fKritiek }), onPersoons: () => set({ fPersoons: !S.fPersoons }),
+      canProt: canProt, noProt: !canProt, appRows: appRows, noAppRows: appRows.length === 0,
+
+      app: appV,
+      appTabs: [{ value: 'overzicht', label: 'Overzicht' }, { value: 'tech', label: "Technologieën en CVE's" }, { value: 'impact', label: 'Impact' }, { value: 'domeinen', label: 'Domeinen en poorten' }, { value: 'contacten', label: 'Contactpersonen' }, { value: 'historie', label: 'Historie' }],
+      appTab: tab, setAppTab: (v) => set({ appTab: v }),
+      t: { overzicht: tab === 'overzicht', tech: tab === 'tech', impact: tab === 'impact' && !editMode, domeinen: tab === 'domeinen', contacten: tab === 'contacten' && !editMode, historie: tab === 'historie' },
+      te: { overzicht: tab === 'overzicht' && editMode, impact: tab === 'impact' && editMode, contacten: tab === 'contacten' && editMode },
+      editMode: editMode, showActions: appVis, dr: dr,
+      notEdit: !editMode, ed: ed, forceSave: () => saveEdit(true),
+      openHdrEdit: () => set({ dlg: 'hdr', hdrName: dr.name, hdrType: dr.type, hdrUrl: dr.url, hdrErr: '' }),
+      hdrDesc: 'Wijzigingen worden direct opgeslagen en vastgelegd in de audit log.',
+      hdrName: S.hdrName, onHdrName: (e) => set({ hdrName: e.target.value, hdrErr: '' }),
+      hdrType: S.hdrType, onHdrType: (e) => set({ hdrType: e.target.value }),
+      hdrUrl: S.hdrUrl, onHdrUrl: (e) => set({ hdrUrl: e.target.value, hdrErr: '' }),
+      hasHdrErr: !!S.hdrErr, hdrErr: S.hdrErr,
+      saveHdr: () => {
+        if (!S.hdrName.trim() || !S.hdrUrl.trim()) { set({ hdrErr: 'Naam en URL of omschrijving zijn verplicht.' }); return; }
+        this.setState({ draft: Object.assign({}, dr, { name: S.hdrName.trim(), type: S.hdrType, url: S.hdrUrl.trim() }), dlg: '', saveState: 'pending', editErr: '', editSecretWarn: false }, () => { if (this._saveEdit) this._saveEdit(); });
+      },
+      saveIcon: saveUi[0], saveColor: saveUi[1], saveText: saveUi[2],
+      editSecretWarn: !!S.editSecretWarn && editMode, hasEditErr: !!S.editErr && editMode, editErr: S.editErr,
+      bivEdit: bivEdit, impEdit: impEdit, bivOpts: [{ value: '', label: 'Kies een niveau' }, { value: '1', label: '1 · Laag' }, { value: '2', label: '2 · Midden' }, { value: '3', label: '3 · Hoog' }],
+      draftContacts: draftContacts, noDraftContacts: draftContacts.length === 0, ncRoleOpts: ['Interne beheerder', 'Functioneel eigenaar', 'Leverancier/externe partij'],
+      ncKindOpts: [{ value: 'user', label: 'Bestaande gebruiker' }, { value: 'manual', label: 'Handmatig (bijvoorbeeld leverancier)' }],
+      ncKind: S.ncKind, onNcKind: (e) => set({ ncKind: e.target.value, ncErr: '' }), ncIsUser: S.ncKind === 'user', ncIsManual: S.ncKind !== 'user',
+      ncRole: S.ncRole, onNcRole: (e) => set({ ncRole: e.target.value }),
+      ncUser: S.ncUser, onNcUser: (e) => set({ ncUser: e.target.value, ncErr: '' }),
+      ncUserOpts: [{ value: '', label: 'Kies een gebruiker' }].concat(users.filter((u) => !u.archived && !dr.contacts.some((c) => c.name === u.name)).map((u) => ({ value: u.name, label: u.name }))),
+      ncName: S.ncName, onNcName: (e) => set({ ncName: e.target.value, ncErr: '' }),
+      ncMail: S.ncMail, onNcMail: (e) => set({ ncMail: e.target.value, ncErr: '' }),
+      ncPhone: S.ncPhone, onNcPhone: (e) => set({ ncPhone: e.target.value }),
+      hasNcErr: !!S.ncErr, ncErr: S.ncErr, addContact: addContact,
+      confirmApp: () => set({ confirmed: Object.assign({}, S.confirmed, { [app.id]: '23-10-2026' }), auditNew: [this.log('Applicatie', app.name, 'laatst bevestigd ' + bevestigd(app), 'laatst bevestigd 23-10-2026')].concat(S.auditNew), flash: 'Bedankt. De gegevens van ' + app.name + ' zijn bevestigd op 23-10-2026.', flashTone: 'success' }),
+      openArchive: () => set({ dlg: 'archive' }),
+      appTechs: appTechs, noTechs: appTechs.length === 0, levelOpts: ["Alle CVE's", 'CVSS ≥ 7,0', 'Alleen CISA KEV'],
+      techQ: S.techQ, onTechQ: (e) => set({ techQ: e.target.value, techCpeFor: '' }),
+      techSugg: techSugg, hasTechSugg: techSugg.length > 0, showNewTech: !!tq && !exact && !S.techCpeFor,
+      startNewTech: () => set({ techCpeFor: tq }), techCpeFor: S.techCpeFor, hasCpe: !!S.techCpeFor, cpeSugg: cpeSugg,
+      appCves: appCves, noAppCves: appCves.length === 0,
+      bivItems: bivItems, impactFlags: impactFlags,
+      appDoms: appDoms, noAppDoms: appDoms.length === 0, contacts: contacts,
+      histDate: S.histDate, onHistDate: (e) => set({ histDate: e.target.value }), hasHistDate: !!S.histDate,
+      histDateNl: S.histDate ? S.histDate.split('-').reverse().join('-') : '',
+      appHist: appHist, noHist: appHist.length === 0,
+
+      domCountLabel: domains.length + ' domeinen, ' + domains.filter((d) => d.nieuw && !domApp(d)).length + ' nieuw',
+      domRows: domRows, allSel: allSel,
+      toggleAll: () => { const next = {}; if (!allSel) domains.filter(scannable).forEach((d) => { next[d.id] = true; }); set({ sel: next }); },
+      scanDisabled: scanSel.length === 0, scanLabel: scanSel.length ? 'Port scan starten (' + scanSel.length + ')' : 'Port scan starten',
+      openScan: () => set({ dlg: 'scan' }),
+      openDomainAdd: () => set({ dlg: 'domain', newDomain: '', newDomainErr: '' }),
+      hasDSel: !!dd, domList: !dd, dSel: dSel, closeDomain: () => set({ domainId: '' }),
+      linkOpts: linkOpts, linkApp: S.linkApp, onLinkApp: (e) => set({ linkApp: e.target.value }), linkDisabled: !S.linkApp,
+      scanRows: scanRows, scanHasExt: extCount > 0,
+      scanExtText: extCount + ' van de ' + scanSel.length + ' domeinen wijzen naar een externe partij (SaaS, CDN of gedeelde hosting). Een scan raakt dan ook systemen van die partij. Scan alleen als we daar afspraken over hebben.',
+      scanIpText: 'We scannen ' + ipCount + ' unieke IP-adressen, elk één keer; resultaten koppelen we aan alle domeinen op dat IP.',
+      doScan: () => { const names = scanSel.map((d) => d.name); set({ dlg: '', sel: {}, jobsRun: Object.assign({}, S.jobsRun, { 'Port scans': true }), auditNew: [this.log('Port scan', names.join(', '), '-', 'handmatig gestart')].concat(S.auditNew), flash: 'Port scan gestart voor ' + names.length + ' domeinen (' + ipCount + ' IP-adressen). Je krijgt een melding als de scan klaar is.', flashTone: 'info' }); },
+
+      findRows: findRows,
+      findingTitle: (S.findingAct === 'Geaccepteerd' ? 'Finding accepteren: ' : 'Finding negeren: ') + (fSel && fSelDom ? fSelDom.name + ':' + fSel.port : ''),
+      findingDesc: S.findingAct === 'Geaccepteerd' ? 'De open poort is bekend en gewenst, maar hoort niet bij een geregistreerde applicatie.' : 'De finding verdwijnt uit de lijst met open findings tot de vervaldatum.',
+      findingReason: S.findingReason, onFindingReason: (e) => set({ findingReason: e.target.value, findingErr: '' }),
+      findingDate: S.findingDate, onFindingDate: (e) => set({ findingDate: e.target.value }),
+      hasFindingErr: !!S.findingErr, findingErr: S.findingErr, saveFinding: () => this.saveFinding(),
+
+      hasFailJob: !!fj, failJob: fj ? { name: fj.name, last: fj.last, log: fj.log } : { name: '', last: '', log: '' },
+
+      auditRows: auditRows, auditType: S.auditType, onAuditType: (e) => set({ auditType: e.target.value }),
+      auditOpts: [{ value: '', label: 'Alle wijzigingen' }, 'Applicatie', 'Domein', 'Technologie', 'CVE-status', 'Finding', 'Port scan', 'Rechten', 'Gebruiker', 'Job gestart'],
+
+      subs: subs, notifAccount: ((users.find((u) => u.name === me.name) || {}).mail || (me.name.toLowerCase().replace(/\s+/g, '.') + '@elaad.example')), freqOpts: ['Realtime', 'Dagelijkse digest', 'Uitgeschakeld'],
+
+      dlgOpen: { scan: S.dlg === 'scan', cve: S.dlg === 'cve', archive: S.dlg === 'archive', add: S.dlg === 'add', finding: S.dlg === 'finding', domain: S.dlg === 'domain', uarch: S.dlg === 'uarch', uadmin: S.dlg === 'uadmin', hdr: S.dlg === 'hdr' },
+
+      usersCountLabel: users.filter((u) => !u.archived).length + ' actieve gebruikers, ' + activeAdmins + ' admins',
+      userRows: userRows, noUserRows: userRows.length === 0,
+      userFilter: S.userFilter, userFilterOpts: ['Actief', 'Gearchiveerd', 'Alle'], onUserFilter: (e) => set({ userFilter: e.target.value }),
+      uSelName: uSel ? uSel.name : '',
+      uArchTitle: uSel ? uSel.name + ' archiveren?' : '',
+      uArchDesc: uSelApps.length ? 'Kies aan wie de applicaties van ' + (uSel ? uSel.name : '') + ' worden overgedragen. Dat is verplicht.' : 'Het account wordt gearchiveerd, niet verwijderd.',
+      uArchApps: uSelApps.map((a) => ({ name: a.name, sole: behOf(a).length === 1 })), hasUArchApps: uSelApps.length > 0, noUArchApps: uSelApps.length === 0,
+      uTargetOpts: uTargetOpts, uTarget: S.uTarget, onUTarget: (e) => set({ uTarget: e.target.value, uErr: '' }),
+      hasUErr: !!S.uErr, uErr: S.uErr, uArchCta: uSelApps.length ? 'Archiveren en overdragen' : 'Archiveren',
+      doUserArch: () => {
+        if (!uSel) return;
+        if (uSelApps.length && !S.uTarget) { set({ uErr: 'Kies aan wie de applicaties worden overgedragen.' }); return; }
+        if (uSel.admin && activeAdmins <= 1) { set({ uErr: 'Dit is de laatste admin. Maak eerst iemand anders admin.' }); return; }
+        const entries = uSelApps.map((a) => this.log('Rechten', S.uTarget + ' · ' + a.name, 'applicatiebeheerder ' + uSel.name, 'applicatiebeheerder ' + S.uTarget)).concat([this.log('Gebruiker', uSel.name, uSel.admin ? 'actief, admin' : 'actief', 'gearchiveerd')]);
+        const tr = Object.assign({}, S.transfers); if (S.uTarget) tr[uSel.name] = S.uTarget;
+        set({ dlg: '', transfers: tr, userOv: Object.assign({}, S.userOv, { [uSel.name]: Object.assign({}, S.userOv[uSel.name] || {}, { archived: true, admin: false }) }), auditNew: entries.concat(S.auditNew), flash: uSel.name + ' is gearchiveerd.' + (uSelApps.length ? ' ' + uSelApps.length + (uSelApps.length === 1 ? ' applicatie is' : ' applicaties zijn') + ' overgedragen aan ' + S.uTarget + ', die nu ook de meldingen krijgt.' : ''), flashTone: 'success' });
+      },
+      uAdminTitle: uSel ? (uSel.admin ? 'Admin-rechten van ' + uSel.name + ' intrekken?' : uSel.name + ' admin maken?') : '',
+      uAdminDesc: uSel && uSel.admin ? 'Daarna is ' + uSel.name + ' weer een gewone gebruiker.' : 'Geef alleen leden van het securityteam admin-rechten.',
+      uAdminTone: uSel && uSel.admin ? 'info' : 'warning',
+      uAdminText: uSel && uSel.admin ? uSel.name + ' houdt toegang als gebruiker en blijft applicatiebeheerder van de eigen applicaties. Slack-meldingen en de details van andere applicaties vervallen.' : 'Admins zien de details van alle applicaties, beheren de domeinlijst, starten port scans, zien background jobs en de audit log, en kunnen andere admins aanmaken. Ze ontvangen alle meldingen in Slack.',
+      uAdminVariant: uSel && uSel.admin ? 'danger' : 'primary', uAdminCta: uSel && uSel.admin ? 'Rechten intrekken' : 'Admin maken',
+      doUserAdmin: () => {
+        if (!uSel) return;
+        if (uSel.admin && activeAdmins <= 1) { set({ dlg: '', flash: 'Je kunt de laatste admin niet degraderen.', flashTone: 'danger' }); return; }
+        const v = !uSel.admin;
+        set({ dlg: '', userOv: Object.assign({}, S.userOv, { [uSel.name]: Object.assign({}, S.userOv[uSel.name] || {}, { admin: v }) }), auditNew: [this.log('Rechten', uSel.name, v ? 'gebruiker' : 'admin', v ? 'admin' : 'gebruiker')].concat(S.auditNew), flash: v ? uSel.name + ' is nu admin.' : uSel.name + ' is geen admin meer.', flashTone: 'success' });
+      },
+      closeDlg: () => set({ dlg: '', addStep: 1, addHerkomst: '', addBereik: '', addHosting: '', addOpslag: '', addErr: '', secretWarn: false }),
+      cveSel: cveRec ? { cve: cveRec.cve, desc: cveApp.name + ' · ' + cveRec.tech + ' · CVSS ' + f1(cveRec.cvss) + ' · EPSS ' + f1(cveRec.epss) + '\u00a0%' + (cveRec.kev ? ' · op CISA KEV-lijst' : '') } : { cve: '', desc: '' },
+      cveOpts: ['Open', 'Niet van toepassing', 'Gepatcht', 'Risico geaccepteerd'], cveNew: S.cveNew,
+      onCveNew: (e) => set({ cveNew: e.target.value, cveErr: '' }),
+      needReason: S.cveNew === 'Niet van toepassing' || S.cveNew === 'Risico geaccepteerd', needDate: S.cveNew === 'Risico geaccepteerd',
+      cveReason: S.cveReason, onCveReason: (e) => set({ cveReason: e.target.value, cveErr: '' }),
+      cveDate: S.cveDate, onCveDate: (e) => set({ cveDate: e.target.value, cveErr: '' }),
+      hasCveErr: !!S.cveErr, cveErr: S.cveErr, saveCve: () => this.saveCve(),
+
+      archiveTitle: archiveTitle, archiveLive: archiveLive, archiveClean: archiveLive.length === 0,
+      archiveCta: archiveLive.length ? 'Toch archiveren' : 'Archiveren',
+      doArchive: () => set({ dlg: '', archived: Object.assign({}, S.archived, { [app.id]: true }), auditNew: [this.log('Applicatie', app.name, appSt, 'Gearchiveerd')].concat(S.auditNew), flash: app.name + ' is gearchiveerd.' + (archiveLive.length ? ' We blijven controleren of het domein nog live is.' : ''), flashTone: 'success' }),
+
+      addName: S.addName, onAddName: (e) => set({ addName: e.target.value, addErr: '' }),
+      addUrl: S.addUrl, onAddUrl: (e) => set({ addUrl: e.target.value, addErr: '' }),
+      addBeheerderV: S.addBeheerder || me.name, onAddBeheerder: (e) => set({ addBeheerder: e.target.value }),
+      addType: S.addType, onAddType: (e) => set({ addType: e.target.value }),
+      addToel: S.addToel, onAddToel: (e) => set({ addToel: e.target.value, secretWarn: false }),
+      userOpts: users.filter((u) => !u.archived).map((u) => u.name),
+      secretWarn: S.secretWarn, hasAddErr: !!S.addErr, addErr: S.addErr, addCta: S.secretWarn ? 'Toch opslaan' : 'Opslaan', saveAdd: () => this.saveAdd(false),
+      addStep1: S.addStep !== 2, addStep2: S.addStep === 2, addBar2: S.addStep === 2 ? '#007ea4' : '#e3e1de',
+      addStepLabel: S.addStep === 2 ? 'Stap 2 van 2 · Aanvullende gegevens (optioneel)' : 'Stap 1 van 2 · Vereiste gegevens',
+      addDesc: S.addStep === 2 ? 'De applicatie is bijna toegevoegd. Alles op dit scherm is optioneel.' : 'Met deze drie gegevens staat de applicatie in de lijst.',
+      nextAdd: () => this.nextAdd(), backAdd: () => set({ addStep: 1, addErr: '', secretWarn: false }), skipAdd: () => this.saveAdd(true),
+      addHerkomst: S.addHerkomst, onAddHerkomst: (e) => set({ addHerkomst: e.target.value }),
+      addBereik: S.addBereik, onAddBereik: (e) => set({ addBereik: e.target.value }),
+      addHosting: S.addHosting, onAddHosting: (e) => set({ addHosting: e.target.value, secretWarn: false }),
+      addOpslag: S.addOpslag, onAddOpslag: (e) => set({ addOpslag: e.target.value, secretWarn: false }),
+
+      newDomain: S.newDomain, newDomainErr: S.newDomainErr, onNewDomain: (e) => set({ newDomain: e.target.value, newDomainErr: '' }),
+      saveDomain: () => {
+        const n = S.newDomain.trim().toLowerCase();
+        if (!/^([a-z0-9-]+\.)+[a-z]{2,}$/.test(n)) { set({ newDomainErr: 'Dit is geen geldige domeinnaam.' }); return; }
+        if (domains.some((d) => d.name === n)) { set({ newDomainErr: 'Dit domein staat al in de lijst.' }); return; }
+        const nd = { id: 'nd' + Date.now(), name: n, ip4: '', ip6: '', cname: '', rdns: '', asn: '', ext: false, app: '', p4: '', p6: '', status: 'Niet gecontroleerd', auto: false, via: 'Handmatig', found: '23-10-2026', nieuw: true, resolves: false, diff: false, http: '', shot: '' };
+        set({ newDomains: S.newDomains.concat([nd]), dlg: '', domainId: nd.id, auditNew: [this.log('Domein', n, '-', 'handmatig toegevoegd')].concat(S.auditNew), flash: n + ' is toegevoegd. De DNS-resolutie (A en AAAA) volgt binnen een paar minuten.', flashTone: 'success' });
+      },
+
+      sessOpen: (this.props.sessieVerlopen ?? false) && !S.sessionClosed,
+      relogin: () => set({ sessionClosed: true, flash: 'Je bent opnieuw ingelogd. Je concept is teruggezet.', flashTone: 'success' })
+    };
+  }
+}
+</script>
+</body>
+</html>

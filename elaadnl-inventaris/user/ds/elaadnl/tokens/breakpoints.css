@@ -1,0 +1,40 @@
+/* ---------------------------------------------------------------------------
+   ElaadNL breakpoints. Mobile-first: write the small layout, then widen.
+   Custom properties cannot be used inside @media, so these values are the
+   single source of truth for hand-written queries and for JS / Mantine
+   theme.breakpoints — keep the two in sync.
+--------------------------------------------------------------------------- */
+:root{
+  /* xs 375px phone · sm 576px large phone · md 768px tablet portrait
+     lg 1024px tablet landscape / small laptop · xl 1280px desktop · 2xl 1440px large desktop */
+  --bp-xs:23.4375rem; /* @kind spacing */
+  --bp-sm:36rem; /* @kind spacing */
+  --bp-md:48rem; /* @kind spacing */
+  --bp-lg:64rem; /* @kind spacing */
+  --bp-xl:80rem; /* @kind spacing */
+  --bp-2xl:90rem; /* @kind spacing */
+}
+
+/* Root type scales up slightly on very large screens and never below 16px, so
+   rem sizing stays legible on a phone and generous on a 1440p display. */
+@media (min-width:80rem){ :root{ font-size:17px } }
+@media (min-width:120rem){ :root{ font-size:18px } }
+
+/* Touch surfaces get the 44px minimum target automatically wherever a
+   component sizes itself with var(--control-h-sm/md). */
+@media (pointer:coarse){
+  :root{
+    --control-h-sm:var(--control-h-touch);
+    --control-h-md:var(--control-h-touch);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  :root{
+    --dur-fast:0ms; /* @kind other */
+    --dur-base:0ms; /* @kind other */
+    --dur-slow:0ms; /* @kind other */
+    --dur-slower:0ms; /* @kind other */
+  }
+  *,*::before,*::after{ animation-duration:.001ms !important; transition-duration:.001ms !important }
+}

@@ -1,0 +1,67 @@
+/* ---------------------------------------------------------------------------
+   ElaadNL typography — huisstijl: "Koppen: Font EXO / Body: font Montserrat"
+   Exo 2 for every heading, eyebrow, button and number. Montserrat for prose.
+
+   Sizes are in rem against a 16px root, NOT px, so a whole interface scales
+   with the user's browser/OS text setting and with a root font-size you set
+   per breakpoint or per platform. Never hard-code px type in a component.
+--------------------------------------------------------------------------- */
+:root{
+  --font-display:"Exo 2","Exo 2 Fallback",system-ui,sans-serif;
+  --font-body:"Montserrat","Montserrat Fallback",system-ui,sans-serif;
+  --font-mono:ui-monospace,"SFMono-Regular","Menlo","Consolas",monospace;
+
+  /* weights actually used */
+  --fw-light:300; /* @kind font */
+  --fw-regular:400; /* @kind font */
+  --fw-medium:500; /* @kind font */
+  --fw-semibold:600; /* @kind font */
+  --fw-bold:700; /* @kind font */
+  --fw-extrabold:800; /* @kind font */
+  --fw-black:900; /* @kind font */
+
+  /* type scale — 1.25 major third, 1rem = 16px base */
+  --fs-3xs:0.6875rem;  /* 11px */
+  --fs-2xs:0.75rem;    /* 12px */
+  --fs-xs:0.8125rem;   /* 13px */
+  --fs-sm:0.875rem;    /* 14px */
+  --fs-base:1rem;      /* 16px */
+  --fs-md:1.125rem;    /* 18px */
+  --fs-lg:1.25rem;     /* 20px */
+  --fs-xl:1.5rem;      /* 24px */
+  --fs-2xl:1.875rem;   /* 30px */
+  --fs-3xl:2.375rem;   /* 38px */
+  --fs-4xl:3rem;       /* 48px */
+  --fs-5xl:3.75rem;    /* 60px */
+  --fs-6xl:4.75rem;    /* 76px */
+
+  --lh-tight:1.06; /* @kind font */
+  --lh-snug:1.18; /* @kind font */
+  --lh-heading:1.22; /* @kind font */
+  --lh-normal:1.5; /* @kind font */
+  --lh-relaxed:1.65; /* @kind font */
+
+  --ls-tight:-0.02em; /* @kind font */
+  --ls-heading:-0.01em; /* @kind font */
+  --ls-normal:0; /* @kind font */
+  --ls-wide:0.02em; /* @kind font */
+  --ls-eyebrow:0.14em; /* @kind font */
+
+  /* Semantic roles. Display roles are FLUID: they interpolate between a
+     mobile-safe minimum and the desktop size, so one token serves phone,
+     tablet and 1080p without media queries. */
+  --type-hero-family:var(--font-display); /* @kind font */
+  --type-hero-size:clamp(2.125rem,4.6vw,3.75rem); /* @kind font */
+  --type-hero-weight:var(--fw-bold); /* @kind font */
+  --type-hero-lh:var(--lh-tight); /* @kind font */
+
+  --type-h1-size:clamp(1.75rem,3.6vw,3rem); /* @kind font */
+  --type-h2-size:clamp(1.375rem,2.4vw,1.875rem); /* @kind font */
+  --type-h3-size:clamp(1.25rem,1.8vw,1.5rem); /* @kind font */
+  --type-h4-size:var(--fs-lg); /* @kind font */
+  --type-eyebrow-size:var(--fs-2xs); /* @kind font */
+  --type-body-size:var(--fs-base); /* @kind font */
+  --type-body-lh:var(--lh-relaxed); /* @kind font */
+  --type-small-size:var(--fs-sm); /* @kind font */
+  --type-meta-size:var(--fs-xs); /* @kind font */
+}

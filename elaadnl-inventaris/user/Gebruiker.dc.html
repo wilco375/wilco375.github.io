@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Software-overzicht</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/elaadnl/styles.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/fonts.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/colors.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/typography.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/spacing.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/shape.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/charts.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/breakpoints.css">
+<link rel="stylesheet" href="ds/elaadnl/tokens/base.css">
+<script src="ds/elaadnl/_ds_bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#f7f6f5}
+a{color:#007ea4}a:hover{color:#004e64}
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; background: #f7f6f5; color: #4d4d4c; font-family: var(--font-body, Montserrat, system-ui, sans-serif); font-size: 16px; line-height: 1.55">
+
+<header style="background: #ffffff; border-bottom: 1px solid #e3e1de">
+  <div style="max-width: 1040px; margin: 0 auto; padding: 14px 24px 0; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-bottom: 12px">
+      <div style="display: flex; align-items: center; gap: 14px">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Logo" brand="elaad" height="{{ logoH }}" src="ds/elaadnl/assets/logos/logo-elaadnl.png"></x-import>
+        <div style="display: flex; flex-direction: column">
+          <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 18px; color: #004e64">Software-overzicht</span>
+          <span style="font-size: 13px; color: #6d6a68">Welke programma’s en websites gebruiken we?</span>
+        </div>
+      </div>
+      <div style="flex: 1 1 24px"></div>
+      <sc-if value="{{ showReportBtn }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ startBlank }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Software melden</x-import></sc-if>
+      <button type="button" onClick="{{ openMe }}" title="Mijn gegevens" aria-label="Mijn gegevens bekijken en aanpassen" style="display: flex; align-items: center; gap: 10px; border: 0; background: none; padding: 4px 8px; border-radius: 6px; cursor: pointer; font: inherit; text-align: left">
+        <span style="display: inline-flex; color: #007ea4"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="user" size="22px"></x-import></span>
+        <div style="display: flex; flex-direction: column">
+          <span style="font-weight: 600; color: #004e64; line-height: 1.3">{{ me.name }}</span>
+          <span style="font-size: 12px; color: #6d6a68">{{ me.role }}</span>
+        </div>
+      </button>
+    </div>
+    <nav aria-label="Hoofdmenu" style="display: flex; flex-wrap: wrap; gap: 4px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
+        <button type="button" onClick="{{ n.go }}" aria-current="{{ n.current }}" style="min-height: 48px; padding: 0 18px; border: 0; border-bottom: 3px solid {{ n.line }}; background: none; cursor: pointer; font-family: var(--font-display, 'Exo 2', sans-serif); font-size: 16px; font-weight: {{ n.fw }}; color: {{ n.fg }}">{{ n.label }}</button>
+      </sc-for>
+    </nav>
+  </div>
+</header>
+
+<main style="flex: 1 1 auto; width: 100%; max-width: 1040px; margin: 0 auto; padding: 28px 24px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+
+<sc-if value="{{ hasFlash }}" hint-placeholder-val="{{ false }}">
+  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="{{ flashTone }}" on-dismiss="{{ clearFlash }}">{{ flash }}</x-import>
+</sc-if>
+
+<!-- ============ START ============ -->
+<sc-if value="{{ v.start }}" hint-placeholder-val="{{ true }}">
+<section style="display: flex; flex-direction: column; gap: 20px">
+  <div>
+    <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 30px; line-height: 1.2; color: #004e64">Hallo {{ firstName }}</h1>
+    <p style="margin: 6px 0 0; color: #6d6a68">Welkom bij het software-overzicht van ElaadNL.</p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-top: 4px solid #007ea4; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 28px; display: flex; flex-direction: column; gap: 16px">
+    <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 24px; line-height: 1.25; color: #004e64">Gebruik je software die hier nog niet in staat?</h2>
+    <p style="margin: 0; max-width: 680px">Dat kan een programma zijn, een app of een website waar je voor inlogt. Bijvoorbeeld om bestanden te versturen, facturen te maken of samen te werken. Melden duurt ongeveer een minuut en je hoeft er niets van IT te weten.</p>
+    <div><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ startBlank }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="plus" size="18px"></x-import>Software melden</x-import></div>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+    <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Staat het er misschien al in?</h2>
+    <p style="margin: 0; font-size: 14px; color: #6d6a68">Typ de naam, dan zie je meteen of een collega het al heeft gemeld.</p>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.SearchField" placeholder="Typ bijvoorbeeld Claude" value="{{ sq }}" on-change="{{ onSq }}"></x-import>
+    <sc-for list="{{ sqRows }}" as="r" hint-placeholder-count="2">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 0; border-top: 1px solid #e3e1de">
+        <div style="flex: 1 1 220px; display: flex; flex-direction: column; min-width: 0">
+          <button type="button" onClick="{{ r.open }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; align-self: flex-start">{{ r.name }}</button>
+          <span style="font-size: 13px; color: #6d6a68">Verantwoordelijk: {{ r.owners }}</span>
+        </div>
+        <sc-if value="{{ r.mine }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="brand">Van jou</x-import></sc-if>
+      </div>
+    </sc-for>
+    <sc-if value="{{ sqNone }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid #e3e1de">
+        <span>Daar hebben we niets over gevonden. Dan staat het er nog niet in.</span>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ startFromSearch }}">“{{ sqTrim }}” melden</x-import>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 4px">
+    <h2 style="margin: 0 0 4px; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Mijn software</h2>
+    <sc-if value="{{ noMine }}" hint-placeholder-val="{{ false }}">
+      <p style="margin: 0; color: #6d6a68">Je hebt nog niets gemeld. Zodra je software meldt, vind je het hier terug.</p>
+    </sc-if>
+    <sc-for list="{{ mineRows }}" as="m" hint-placeholder-count="3">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 12px 0; border-top: 1px solid #e3e1de">
+        <button type="button" onClick="{{ m.open }}" style="flex: 1 1 200px; border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left">{{ m.name }}</button>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ m.tone }}" dot="{{ yes }}">{{ m.chip }}</x-import>
+        <sc-if value="{{ m.late }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" size="sm" on-click="{{ m.confirm }}">Ja, dit klopt nog</x-import></sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="padding: 4px 4px 0; display: flex; flex-direction: column; gap: 4px; max-width: 760px">
+    <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; color: #004e64">Waarom vragen we dit?</span>
+    <span style="font-size: 14px; color: #6d6a68">Zo weten we welke software er bij ElaadNL in gebruik is. Als er een beveiligingsprobleem wordt gevonden in een programma of website, kunnen we daardoor snel de juiste persoon waarschuwen. Er is dus niets mis als je iets meldt, het helpt juist.</span>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ ALLE SOFTWARE ============ -->
+<sc-if value="{{ v.all }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px">
+    <div>
+      <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 30px; line-height: 1.2; color: #004e64">Alle software</h1>
+      <p style="margin: 6px 0 0; color: #6d6a68; max-width: 640px">Dit is alles wat we binnen ElaadNL gebruiken. Mis je iets? Meld het dan.</p>
+    </div>
+  </div>
+  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Tabs" items="{{ listTabs }}" value="{{ listTab }}" on-change="{{ setListTab }}" variant="underline"></x-import>
+  <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.SearchField" placeholder="Zoek op naam" value="{{ lq }}" on-change="{{ onLq }}"></x-import>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 760px">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr) 200px; gap: 16px; padding: 12px 20px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #6d6a68">
+        <span>Naam</span><span>Waarvoor</span><span>Verantwoordelijk</span>
+      </div>
+      <sc-if value="{{ noListRows }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 24px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px"><span>Niets gevonden.</span><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ startBlank }}">Software melden</x-import></div>
+      </sc-if>
+      <sc-for list="{{ listRows }}" as="r" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr) 200px; gap: 16px; align-items: center; padding: 14px 20px; border-bottom: 1px solid #e3e1de; font-size: 15px">
+          <div style="display: flex; flex-direction: column; min-width: 0; align-items: flex-start; gap: 2px">
+            <button type="button" onClick="{{ r.open }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; overflow-wrap: anywhere">{{ r.name }}</button>
+            <sc-if value="{{ r.mine }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="brand">Van jou</x-import></sc-if>
+          </div>
+          <span style="min-width: 0; color: {{ r.gebruikColor }}">{{ r.gebruik }}</span>
+          <span style="min-width: 0">{{ r.owners }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ SOFTWARE MELDEN ============ -->
+<sc-if value="{{ v.wiz }}" hint-placeholder-val="{{ false }}">
+<section style="width: 100%; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
+
+  <sc-if value="{{ wNotDone }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <div><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ wBack }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-left" size="18px"></x-import>Terug</x-import></div>
+      <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: #007ea4">Stap {{ wStep }} van 3</span>
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+        <span style="height: 6px; border-radius: 3px; background: #007ea4"></span>
+        <span style="height: 6px; border-radius: 3px; background: {{ wBar2 }}"></span>
+        <span style="height: 6px; border-radius: 3px; background: {{ wBar3 }}"></span>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ wS1 }}" hint-placeholder-val="{{ true }}">
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 28px; display: flex; flex-direction: column; gap: 22px">
+    <div>
+      <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Wat wil je melden?</h1>
+      <p style="margin: 8px 0 0; color: #6d6a68">Een programma, een app of een website waar je voor inlogt. Bijvoorbeeld om bestanden te versturen, facturen te maken of samen te werken.</p>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Hoe heet het?" error="{{ wErrName }}" html-for="w-naam" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="w-naam" value="{{ w.name }}" on-change="{{ onWName }}" placeholder="Bijvoorbeeld Claude"></x-import>
+    </x-import>
+    <sc-if value="{{ hasDup }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info" title="Staat dit er misschien al in?">
+        <div style="display: flex; flex-direction: column; gap: 6px; align-items: flex-start">
+          <span>Dit lijkt op wat je typt. Kijk even of het dezelfde is, dan hoef je het niet nog een keer te melden.</span>
+          <sc-for list="{{ dups }}" as="d" hint-placeholder-count="2">
+            <button type="button" onClick="{{ d.open }}" style="border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left">{{ d.name }}</button>
+          </sc-for>
+        </div>
+      </x-import>
+    </sc-if>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Wat is het adres, of wat is het?" hint="Staat het op internet? Plak dan het adres, bijvoorbeeld claude.ai. Anders mag je in een paar woorden zeggen wat het is." error="{{ wErrUrl }}" html-for="w-url" required="{{ yes }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="w-url" value="{{ w.url }}" on-change="{{ onWUrl }}" placeholder="claude.ai"></x-import>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Wie is verantwoordelijk?" hint="Dit is de persoon of het bedrijf dat weet waarvoor het gebruikt wordt en bij wie we terechtkunnen met vragen. Weet je het niet? Dat mag ook." error="{{ wErrOther }}" html-for="w-who" required="{{ yes }}">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 10px">
+  <sc-for list="{{ whoChoices }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+        <sc-if value="{{ wWhoOther }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" id="w-who" aria-label="Kies een collega" options="{{ personOpts }}" value="{{ w.other }}" on-change="{{ onWOther }}"></x-import>
+          <sc-if value="{{ wWhoExt }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Naam van de persoon of het bedrijf" html-for="w-ext-naam" required="{{ yes }}">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="w-ext-naam" value="{{ w.extName }}" on-change="{{ onWExtName }}"></x-import>
+              </x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="E-mailadres" html-for="w-ext-mail">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="w-ext-mail" type="email" value="{{ w.extMail }}" on-change="{{ onWExtMail }}"></x-import>
+              </x-import>
+              <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Telefoonnummer" html-for="w-ext-tel">
+                <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="w-ext-tel" type="tel" value="{{ w.extPhone }}" on-change="{{ onWExtPhone }}"></x-import>
+              </x-import>
+            </div>
+            <span style="font-size: 13px; color: #6d6a68">Alleen de naam is verplicht. Een e-mailadres of telefoonnummer helpt ons om contact op te nemen.</span>
+          </sc-if>
+        </sc-if>
+      </div>
+    </x-import>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding-top: 4px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ wNext }}">Doorgaan<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-right" size="18px"></x-import></x-import>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ wS2 }}" hint-placeholder-val="{{ false }}">
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 28px; display: flex; flex-direction: column; gap: 22px">
+    <div>
+      <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Vertel ons nog iets meer</h1>
+      <p style="margin: 8px 0 0; color: #6d6a68">Dit helpt ons, maar het hoeft niet. Weet je iets niet? Sla de vraag dan gewoon over. Je kunt het later altijd aanvullen.</p>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Waarvoor wordt deze applicatie gebruikt?" html-for="w-use">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="w-use" rows="{{ rows3 }}" value="{{ w.useText }}" on-change="{{ onWUseText }}" placeholder="Bijvoorbeeld: Opstellen van documenten."></x-import>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Welke gegevens slaan we op in de applicatie?" html-for="w-opslag">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="w-opslag" rows="{{ rows3 }}" value="{{ w.opslag }}" on-change="{{ onWOpslag }}" placeholder="Bijvoorbeeld: Publieke content; Contactgegevens van relaties; Testresultaten"></x-import>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Is het een bestaand product, of hebben wij het zelf gemaakt?" html-for="w-orig">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 10px">
+  <sc-for list="{{ originChoices }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+    </x-import>
+    <sc-if value="{{ wSecret }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Staat hier een wachtwoord of code in?">Het lijkt alsof je een wachtwoord of een geheime code hebt ingevuld. Dat willen we liever niet bewaren. Haal het weg en bewaar het in de wachtwoordkluis. Weet je zeker dat het geen wachtwoord is? Dan kun je toch doorgaan.</x-import>
+    </sc-if>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 4px">
+      <span style="flex: 1 1 auto"></span>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ wNext2 }}">{{ wNext2Cta }}<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="arrow-right" size="18px"></x-import></x-import>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ wS3 }}" hint-placeholder-val="{{ false }}">
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 28px; display: flex; flex-direction: column; gap: 22px">
+    <div>
+      <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Wat als er iets misgaat?</h1>
+      <p style="margin: 8px 0 0; color: #6d6a68">Met je antwoorden bepalen we hoe goed deze software beschermd moet worden. Weet je het niet? Sla de vraag dan gewoon over. Je kunt het later altijd aanvullen.</p>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Stel, deze applicatie zou (tijdelijk) niet beschikbaar zijn. Hoe erg zou dit zijn?" html-for="w-bivB">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+  <sc-for list="{{ wBivB }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="w-bivBt" aria-label="Toelichting" rows="{{ rows2 }}" value="{{ w.bivTb }}" on-change="{{ onWBivb }}" placeholder="Wil je dit toelichten? (mag leeg blijven)"></x-import>
+      </div>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Stel, de applicatie zou worden gehackt en de hacker kan gegevens manipuleren. Hoe erg zou dat zijn?" html-for="w-bivI">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+  <sc-for list="{{ wBivI }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="w-bivIt" aria-label="Toelichting" rows="{{ rows2 }}" value="{{ w.bivTi }}" on-change="{{ onWBivi }}" placeholder="Wil je dit toelichten? (mag leeg blijven)"></x-import>
+      </div>
+    </x-import>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Stel dat de data die in deze applicatie is opgeslagen zou lekken en openbaar worden. Hoe erg zou dat zijn?" html-for="w-bivV">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+  <sc-for list="{{ wBivV }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="w-bivVt" aria-label="Toelichting" rows="{{ rows2 }}" value="{{ w.bivTv }}" on-change="{{ onWBivv }}" placeholder="Wil je dit toelichten? (mag leeg blijven)"></x-import>
+      </div>
+    </x-import>
+    <sc-if value="{{ wSecret }}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Staat hier een wachtwoord of code in?">Het lijkt alsof je een wachtwoord of een geheime code hebt ingevuld. Dat willen we liever niet bewaren. Haal het weg en bewaar het in de wachtwoordkluis. Weet je zeker dat het geen wachtwoord is? Dan kun je toch opslaan.</x-import>
+    </sc-if>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 4px">
+      <span style="flex: 1 1 auto"></span>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ wSave }}">{{ wSaveCta }}</x-import>
+    </div>
+  </div>
+  </sc-if>
+  <sc-if value="{{ wS4 }}" hint-placeholder-val="{{ false }}">
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-top: 4px solid #2e7d32; border-radius: 10px; box-shadow: var(--shadow-sm); padding: 32px 28px; display: flex; flex-direction: column; gap: 18px">
+    <span style="display: inline-flex; color: #2e7d32"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="check-circle" size="48px"></x-import></span>
+    <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 28px; line-height: 1.2; color: #004e64">Bedankt, {{ doneName }} staat erin</h1>
+    <p style="margin: 0">Fijn dat je het hebt gemeld. Je hoeft verder niets te doen.</p>
+    <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; background: #f7f6f5; border-radius: 8px">
+      <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; color: #004e64">Wat gebeurt er nu?</span>
+      <span>1. Het securityteam kijkt mee en vult de technische kant aan.</span>
+      <span>2. Je blijft de contactpersoon. Heeft iemand een vraag, dan komen ze bij jou uit.</span>
+      <span>3. Een paar keer per jaar vragen we je te bevestigen dat alles nog klopt.</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ wOpenDone }}">Bekijk {{ doneName }}</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ startBlank }}">Nog iets melden</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ goStart }}">Naar start</x-import>
+    </div>
+  </div>
+  </sc-if>
+</section>
+</sc-if>
+
+<!-- ============ SOFTWARE DETAIL ============ -->
+<sc-if value="{{ v.app }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 18px">
+  <nav aria-label="Kruimelpad" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px">
+    <button type="button" onClick="{{ goAll }}" style="border: 0; background: none; padding: 0; font: inherit; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer">Alle software</button>
+    <span style="display: inline-flex; color: #8b8886"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="caret-right" size="14px"></x-import></span>
+    <span style="overflow-wrap: anywhere">{{ app.name }}</span>
+  </nav>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 30px; line-height: 1.2; color: #004e64; overflow-wrap: anywhere">{{ app.name }}</h1>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+      <sc-if value="{{ app.mine }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="brand">Van jou</x-import><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Badge" tone="{{ app.tone }}" dot="{{ yes }}">{{ app.chip }}</x-import></sc-if>
+      <span style="color: #6d6a68; overflow-wrap: anywhere">{{ app.url }}</span>
+    </div>
+    <sc-if value="{{ app.mine }}" hint-placeholder-val="{{ true }}"><span role="status" aria-live="polite" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #6d6a68"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Icon" name="check-circle" size="16px"></x-import>{{ savedText }}</span></sc-if>
+  </div>
+
+  <sc-if value="{{ app.late }}" hint-placeholder-val="{{ false }}">
+    <div style="background: #fff8e1; border: 1px solid #e0c35a; border-radius: 10px; padding: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px">
+      <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; color: #004e64">Klopt alles nog?</span>
+        <span style="font-size: 14px">Kijk even naar de gegevens hieronder. Klopt het? Dan is één klik genoeg. Klopt er iets niet, pas het dan aan.</span>
+      </div>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ confirmApp }}">Ja, alles klopt</x-import>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ app.mine }}" hint-placeholder-val="{{ true }}">
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 20px">
+      <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Wat is het?</h2>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Naam" html-for="e-naam">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="e-naam" value="{{ app.name }}" on-change="{{ ed.name }}"></x-import>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Adres, of wat is het?" html-for="e-url">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="e-url" value="{{ app.url }}" on-change="{{ ed.url }}"></x-import>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Waarvoor wordt deze applicatie gebruikt?" html-for="e-gebruik">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="e-gebruik" rows="{{ rows3 }}" value="{{ app.gebruik }}" on-change="{{ ed.gebruik }}" placeholder="Bijvoorbeeld: Opstellen van documenten."></x-import>
+      </x-import>
+      <sc-if value="{{ secretHit }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Staat hier een wachtwoord of code in?">Het lijkt alsof je een wachtwoord of een geheime code hebt ingevuld. Haal het liever weg en bewaar het in de wachtwoordkluis.</x-import>
+      </sc-if>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 20px">
+      <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Een paar vragen</h2>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Welke gegevens slaan we op in de applicatie?" html-for="e-opslag">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="e-opslag" rows="{{ rows3 }}" value="{{ app.opslag }}" on-change="{{ ed.opslag }}" placeholder="Bijvoorbeeld: Publieke content; Contactgegevens van relaties; Testresultaten"></x-import>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Is het een bestaand product, of hebben wij het zelf gemaakt?" html-for="e-orig">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 10px">
+  <sc-for list="{{ eOrigin }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+      </x-import>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 20px">
+      <div>
+        <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Wat als er iets misgaat?</h2>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #6d6a68">Hiermee bepalen we hoe goed deze software beschermd moet worden.</p>
+      </div>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Stel, deze applicatie zou (tijdelijk) niet beschikbaar zijn. Hoe erg zou dit zijn?" html-for="e-bivB">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+  <sc-for list="{{ eBivB }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="e-bivBt" aria-label="Toelichting" rows="{{ rows2 }}" value="{{ app.bivTb }}" on-change="{{ ed.bivb }}" placeholder="Wil je dit toelichten? (mag leeg blijven)"></x-import>
+        </div>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Stel, de applicatie zou worden gehackt en de hacker kan gegevens manipuleren. Hoe erg zou dat zijn?" html-for="e-bivI">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+  <sc-for list="{{ eBivI }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="e-bivIt" aria-label="Toelichting" rows="{{ rows2 }}" value="{{ app.bivTi }}" on-change="{{ ed.bivi }}" placeholder="Wil je dit toelichten? (mag leeg blijven)"></x-import>
+        </div>
+      </x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Stel dat de data die in deze applicatie is opgeslagen zou lekken en openbaar worden. Hoe erg zou dat zijn?" html-for="e-bivV">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
+  <sc-for list="{{ eBivV }}" as="c" hint-placeholder-count="3">
+    <button type="button" onClick="{{ c.pick }}" aria-pressed="{{ c.pressed }}" style="display: flex; align-items: center; gap: 12px; text-align: left; min-height: 56px; padding: 10px 14px; border-radius: 8px; border: 2px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; font: inherit; color: #4d4d4c">
+      <span style="flex: 0 0 22px; width: 22px; height: 22px; box-sizing: border-box; border-radius: {{ c.radius }}; border: 2px solid {{ c.border }}; background: {{ c.dot }}"></span>
+      <span style="display: flex; flex-direction: column; min-width: 0">
+        <span style="font-weight: 600; color: #004e64">{{ c.label }}</span>
+        <sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">{{ c.hint }}</span></sc-if>
+      </span>
+    </button>
+  </sc-for>
+</div>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Textarea" id="e-bivVt" aria-label="Toelichting" rows="{{ rows2 }}" value="{{ app.bivTv }}" on-change="{{ ed.bivv }}" placeholder="Wil je dit toelichten? (mag leeg blijven)"></x-import>
+        </div>
+      </x-import>
+    </div>
+
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+      <div>
+        <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Wie is verantwoordelijk?</h2>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #6d6a68">Collega’s kunnen deze mensen bereiken als ze een vraag hebben.</p>
+      </div>
+      <sc-if value="{{ app.ownerUnknown }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info">Nog niet bekend wie hier verantwoordelijk voor is. Weet je dat later wel? Voeg die persoon of dat bedrijf dan hieronder toe.</x-import>
+      </sc-if>
+      <sc-for list="{{ owners }}" as="o" hint-placeholder-count="2">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 10px 0; border-top: 1px solid #e3e1de">
+          <div style="flex: 1 1 220px; display: flex; flex-direction: column; min-width: 0">
+            <span style="font-weight: 600; color: #004e64">{{ o.name }}<sc-if value="{{ o.isMe }}" hint-placeholder-val="{{ false }}"><span style="font-weight: 400; color: #6d6a68"> (jij)</span></sc-if></span>
+            <span style="font-size: 14px; color: #6d6a68; overflow-wrap: anywhere">{{ o.line }}</span>
+          </div>
+          <sc-if value="{{ o.canRemove }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" size="sm" on-click="{{ o.remove }}">Verwijderen</x-import></sc-if>
+        </div>
+      </sc-for>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 10px; border-top: 1px solid #e3e1de">
+        <div style="flex: 1 1 240px; max-width: 360px"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Select" aria-label="Iemand toevoegen" options="{{ addPersonOpts }}" value="{{ addPerson }}" on-change="{{ onAddPerson }}"></x-import></div>
+        <sc-if value="{{ addNotExt }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" disabled="{{ addPersonDisabled }}" on-click="{{ addOwner }}">Toevoegen</x-import></sc-if>
+      </div>
+      <sc-if value="{{ addIsExt }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Naam van de persoon of het bedrijf" html-for="a-ext-naam" required="{{ yes }}">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="a-ext-naam" value="{{ addExtName }}" on-change="{{ onAddExtName }}"></x-import>
+          </x-import>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="E-mailadres" html-for="a-ext-mail">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="a-ext-mail" type="email" value="{{ addExtMail }}" on-change="{{ onAddExtMail }}"></x-import>
+          </x-import>
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Telefoonnummer" html-for="a-ext-tel">
+            <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="a-ext-tel" type="tel" value="{{ addExtPhone }}" on-change="{{ onAddExtPhone }}"></x-import>
+          </x-import>
+        </div>
+        <span style="font-size: 13px; color: #6d6a68">Alleen de naam is verplicht. Een e-mailadres of telefoonnummer helpt collega’s om contact op te nemen.</span>
+        <sc-if value="{{ hasAddExtErr }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="danger">{{ addExtErr }}</x-import>
+        </sc-if>
+        <div><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ addOwner }}">Toevoegen</x-import></div>
+      </sc-if>
+    </div>
+
+    <div>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ toggleTech }}">{{ techToggleLabel }}</x-import>
+    </div>
+    <sc-if value="{{ showTech }}" hint-placeholder-val="{{ false }}">
+      <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+        <div>
+          <h2 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 20px; color: #004e64">Technische details</h2>
+          <p style="margin: 4px 0 0; font-size: 14px; color: #6d6a68">Dit is vooral interessant voor IT. Het securityteam houdt deze gegevens bij. Klopt er iets niet? Laat het ze weten.</p>
+        </div>
+        <sc-if value="{{ noTech }}" hint-placeholder-val="{{ false }}"><span style="color: #6d6a68">Het securityteam heeft hier nog niets ingevuld.</span></sc-if>
+        <sc-for list="{{ techRows }}" as="t" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 16px; padding: 10px 0; border-top: 1px solid #e3e1de; font-size: 15px">
+            <span style="color: #6d6a68">{{ t.label }}</span><span style="overflow-wrap: anywhere">{{ t.value }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ hasTech }}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #6d6a68">Beveiligingsmeldingen over deze software krijg je per e-mail, met knoppen om ze af te handelen.</span></sc-if>
+      </div>
+    </sc-if>
+
+    <div style="padding-top: 8px; border-top: 1px solid #e3e1de; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <span style="flex: 1 1 260px; font-size: 14px; color: #6d6a68">Gebruiken we dit niet meer? Dan halen we het uit het overzicht.</span>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" on-click="{{ openArch }}">Niet meer in gebruik</x-import>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ app.notMine }}" hint-placeholder-val="{{ false }}">
+    <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 4px">
+      <div style="display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 16px; padding: 10px 0; font-size: 16px">
+        <span style="color: #6d6a68">Waarvoor</span><span>{{ app.gebruikRead }}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 16px; padding: 10px 0; border-top: 1px solid #e3e1de; font-size: 16px">
+        <span style="color: #6d6a68">Adres</span><span style="overflow-wrap: anywhere">{{ app.url }}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 16px; padding: 10px 0; border-top: 1px solid #e3e1de; font-size: 16px">
+        <span style="color: #6d6a68">Verantwoordelijk</span>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <sc-for list="{{ owners }}" as="o" hint-placeholder-count="2"><span><strong style="color: #004e64">{{ o.name }}</strong><sc-if value="{{ o.hasMail }}" hint-placeholder-val="{{ true }}"> <a href="mailto:{{ o.mail }}">{{ o.mail }}</a></sc-if><sc-if value="{{ o.hasPhone }}" hint-placeholder-val="{{ false }}"> <span style="color: #6d6a68">{{ o.phone }}</span></sc-if></span></sc-for>
+          <sc-if value="{{ app.ownerUnknown }}" hint-placeholder-val="{{ false }}"><span style="color: #6d6a68">Nog niet bekend wie hier verantwoordelijk voor is.</span></sc-if>
+        </div>
+      </div>
+    </div>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info" title="Klopt er iets niet, of heb je een vraag?">Neem contact op met {{ app.ownerFirst }}. Zij zijn verantwoordelijk voor deze software en kunnen de gegevens aanpassen.</x-import>
+  </sc-if>
+</section>
+</sc-if>
+
+<!-- ============ MIJN E-MAILS ============ -->
+<sc-if value="{{ v.mail }}" hint-placeholder-val="{{ false }}">
+<section style="width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 16px">
+  <div>
+    <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 30px; line-height: 1.2; color: #004e64">Mijn e-mails</h1>
+    <p style="margin: 6px 0 0; color: #6d6a68">Hier kies je welke e-mails je van het software-overzicht krijgt. We sturen ze naar {{ meMail }}.</p>
+  </div>
+  <sc-if value="{{ noPrefsNeed }}" hint-placeholder-val="{{ false }}">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="info">Zodra je software meldt, krijg je hier meer opties, bijvoorbeeld voor waarschuwingen over jouw software.</x-import>
+  </sc-if>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px">
+    <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="3">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding: 20px 24px; border-bottom: 1px solid #e3e1de">
+        <div style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 600; font-size: 17px; color: #004e64">{{ p.title }}</span>
+          <span style="font-size: 14px; color: #6d6a68">{{ p.text }}</span>
+        </div>
+        <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Switch" checked="{{ p.on }}" on-change="{{ p.toggle }}" label="{{ p.label }}"></x-import>
+      </div>
+    </sc-for>
+  </div>
+</section>
+</sc-if>
+
+<!-- ============ DOMEINEN (VOOR IT) ============ -->
+<sc-if value="{{ v.domains }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 16px">
+  <div>
+    <h1 style="margin: 0; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 30px; line-height: 1.2; color: #004e64">Domeinnamen</h1>
+    <p style="margin: 6px 0 0; color: #6d6a68; max-width: 700px">Een domeinnaam is het adres van een website, zoals elaad.example. Deze lijst is vooral handig voor IT. Zie je een adres waarvan je weet bij welke software het hoort? Meld die software dan.</p>
+  </div>
+  <div style="background: #ffffff; border: 1px solid #e3e1de; border-radius: 10px; overflow-x: auto">
+    <div style="min-width: 680px">
+      <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr) 200px; gap: 16px; padding: 12px 20px; background: #f7f6f5; border-bottom: 1px solid #e3e1de; font-family: var(--font-display, 'Exo 2', sans-serif); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #6d6a68">
+        <span>Adres</span><span>Hoort bij</span><span></span>
+      </div>
+      <sc-for list="{{ domRows }}" as="d" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr) 200px; gap: 16px; align-items: center; padding: 12px 20px; min-height: 60px; box-sizing: border-box; border-bottom: 1px solid #e3e1de; font-size: 15px">
+          <span style="font-weight: 600; color: #004e64; overflow-wrap: anywhere; min-width: 0">{{ d.name }}</span>
+          <span style="min-width: 0">
+            <sc-if value="{{ d.hasApp }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ d.open }}" style="border: 0; background: none; padding: 0; font: inherit; color: #007ea4; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; overflow-wrap: anywhere">{{ d.appName }}</button></sc-if>
+            <sc-if value="{{ d.noApp }}" hint-placeholder-val="{{ false }}"><span style="color: #6d6a68">Nog niet bekend</span></sc-if>
+          </span>
+          <span><sc-if value="{{ d.noApp }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="secondary" size="sm" on-click="{{ d.register }}">Software melden</x-import></sc-if></span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+</main>
+
+<footer style="border-top: 1px solid #e3e1de; background: #ffffff">
+  <div style="max-width: 1040px; margin: 0 auto; padding: 18px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; color: #6d6a68">
+    <span>Vragen of hulp nodig? Mail <a href="mailto:security@elaad.example">security@elaad.example</a>.</span>
+  </div>
+</footer>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.arch }}" title="{{ archTitle }}" description="Dan halen we het uit het overzicht." width="{{ w520 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Alert" tone="warning" title="Staat er nog een website of dienst aan?">Laat IT die dan ook uitzetten. Anders blijft het bereikbaar, ook al staat het niet meer in het overzicht.</x-import>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="danger" on-click="{{ doArchive }}">Ja, niet meer in gebruik</x-import>
+    </div>
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Dialog" open="{{ dlgOpen.me }}" title="Mijn gegevens" description="Collega’s zien deze gegevens als jij de contactpersoon van software bent." width="{{ w520 }}" on-close="{{ closeDlg }}">
+  <div style="display: flex; flex-direction: column; gap: 16px">
+    <div style="display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px 12px">
+      <span style="color: #6d6a68">Naam</span><span style="font-weight: 600; color: #004e64">{{ me.name }}</span>
+      <span style="color: #6d6a68">E-mailadres</span><span style="overflow-wrap: anywhere">{{ meMail }}</span>
+    </div>
+    <span style="font-size: 14px; color: #6d6a68">Je naam en e-mailadres komen uit je account en kun je hier niet aanpassen.</span>
+    <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.FormField" label="Telefoonnummer" hint="Mag leeg blijven." html-for="me-tel">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Input" id="me-tel" type="tel" value="{{ mePhone }}" on-change="{{ onMePhone }}" placeholder="06 12 34 56 78"></x-import>
+    </x-import>
+    <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="ghost" on-click="{{ closeDlg }}">Annuleren</x-import>
+      <x-import component-from-global-scope="ElaadNLDesignSystem_3820f3.Button" variant="primary" on-click="{{ saveMe }}">Opslaan</x-import>
+    </div>
+  </div>
+</x-import>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"rol":{"editor":"enum","options":["Gebruiker","Applicatiebeheerder"],"default":"Gebruiker","section":"Prototype"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: 'start', appId: '', prevView: 'start', sq: '', lq: '', listTab: 'all',
+      w: this.blankW('', ''), wStep: 1, wErr: {}, wSecret: false, wDone: '', wDomain: '',
+      appEdits: {}, newApps: [], confirmed: {}, archived: {}, domLink: {},
+      showTech: false, dlg: '', myPhone: null, userPhone: {}, subOn: {},
+      flash: '', flashTone: 'success', addPerson: '', savedAt: '', addExtName: '', addExtMail: '', addExtPhone: '', addExtErr: ''
+    };
+  }
+
+  blankW(name, url) {
+    return { name: name || '', url: url || '', who: 'me', other: '', extName: '', extMail: '', extPhone: '', uses: [], useText: '', opslag: '', origin: '', bivB: '', bivI: '', bivV: '', bivTb: '', bivTi: '', bivTv: '' };
+  }
+
+  me() {
+    const rol = this.props.rol ?? 'Gebruiker';
+    const M = {
+      Gebruiker: { name: 'Karen de Vries', role: 'Receptie' },
+      Applicatiebeheerder: { name: 'Mark de Boer', role: 'Applicatiebeheerder' }
+    };
+    return M[rol] || M.Gebruiker;
+  }
+
+  people() {
+    return [
+      { name: 'Karen de Vries', mail: 'karen.devries@elaad.example', phone: '' },
+      { name: 'Mark de Boer', mail: 'mark.deboer@elaad.example', phone: '06 12 34 56 78' },
+      { name: 'Fatima El Amrani', mail: 'fatima.elamrani@elaad.example', phone: '' },
+      { name: 'Pieter Bakker', mail: 'pieter.bakker@elaad.example', phone: '06 45 67 89 01' },
+      { name: 'Joost Hendriks', mail: 'joost.hendriks@elaad.example', phone: '' },
+      { name: 'Ruben Smit', mail: 'ruben.smit@elaad.example', phone: '' },
+      { name: 'Sanne Jansen', mail: 'sanne.jansen@elaad.example', phone: '06 23 45 67 89' }
+    ];
+  }
+
+  seedApps() {
+    const A = (o) => Object.assign({ url: '', gebruik: '', opslag: '', origin: '', bivB: '', bivI: '', bivV: '', bivTb: '', bivTi: '', bivTv: '', beheerders: [], bevestigd: '23-10-2026', late: false, status: 'Actief', tech: null, extContacts: [], ownerUnknown: false }, o);
+    return [
+      A({ id: 'a1', name: 'Bedrijfswebsite', url: 'elaad.example', gebruik: 'De openbare website met nieuws, publicaties en evenementen.', opslag: 'Publieke content; inschrijvingen voor evenementen', bivB: 'midden', bivI: 'midden', bivV: 'midden', origin: 'bestaand', beheerders: ['Pieter Bakker'] }),
+      A({ id: 'a2', name: 'Klantportaal', url: 'klanten.elaad.example', gebruik: 'Online omgeving waar klanten hun bestellingen, facturen en documenten bekijken.', opslag: 'Bestelgegevens en facturen; aanmeldingen voor de nieuwsbrief', bivB: 'midden', bivI: 'hoog', bivV: 'laag', bivTb: 'Een paar dagen uitval is acceptabel.', bivTi: 'Gemanipuleerde bestellingen of facturen leiden tot fouten en klachten.', bivTv: 'Bestel- en klantgegevens zijn vertrouwelijk.', origin: 'zelf', beheerders: ['Mark de Boer'], late: true, tech: { bereik: 'Internet', hosting: 'Hyperscaler West-Europa', techs: ['React', 'Node.js', 'nginx', 'PostgreSQL'], cves: 2, kritiek: 1 } }),
+      A({ id: 'a3', name: 'Klantportaal (testversie)', url: 'test.klanten.elaad.example', gebruik: 'De testomgeving van Klantportaal.', opslag: 'Kopie van testgegevens', bivB: 'laag', bivI: 'laag', bivV: 'laag', origin: 'zelf', beheerders: ['Mark de Boer'], late: true, tech: { bereik: 'IP-whitelist', hosting: 'Hyperscaler West-Europa', techs: ['React', 'Node.js', 'nginx', 'PostgreSQL'], cves: 2, kritiek: 1 } }),
+      A({ id: 'a4', name: 'Verkoopdashboard', url: 'cijfers.elaad.example', gebruik: 'Dashboard met verkoopcijfers voor het managementteam.', opslag: 'Samengevatte verkoopcijfers', origin: 'zelf', beheerders: ['Fatima El Amrani'] }),
+      A({ id: 'a5', name: 'Roosterplanner', url: 'rooster.elaad.example', gebruik: 'Maakt werkroosters voor medewerkers.', origin: 'zelf', beheerders: ['Mark de Boer'], status: 'Onvolledig', tech: { bereik: 'Internet', hosting: '', techs: ['Python', 'Django'], cves: 0, kritiek: 0 } }),
+      A({ id: 'a6', name: 'Magazijnbeheer', url: 'magazijn.intern.lan', gebruik: 'Voorraad en bestellingen in het magazijn bijhouden.', opslag: 'Voorraadlijsten en leveranciersafspraken', origin: 'zelf', beheerders: ['Joost Hendriks'] }),
+      A({ id: 'a7', name: 'Ontwikkelhub', url: 'code.elaad.example', gebruik: 'Hier staat onze eigen programmacode.', origin: 'bestaand', beheerders: ['Sanne Jansen'] }),
+      A({ id: 'a8', name: 'Boekhoudpakket', url: 'boek.cijfersnel.example', gebruik: 'Boekhouding en facturen.', opslag: 'Facturen en boekhoudgegevens', origin: 'bestaand', beheerders: ['Pieter Bakker'], status: 'Onvolledig' }),
+      A({ id: 'a9', name: 'Kassa-testomgeving', url: 'Testomgeving voor het kassasysteem', origin: 'zelf', beheerders: ['Ruben Smit'], late: true })
+    ];
+  }
+
+  seedDomains() {
+    return [
+      { id: 'd1', name: 'elaad.example', app: 'a1' }, { id: 'd2', name: 'klanten.elaad.example', app: 'a2' },
+      { id: 'd3', name: 'test.klanten.elaad.example', app: 'a3' }, { id: 'd4', name: 'cijfers.elaad.example', app: 'a4' },
+      { id: 'd5', name: 'rooster.elaad.example', app: 'a5' }, { id: 'd6', name: 'code.elaad.example', app: 'a7' },
+      { id: 'd7', name: 'test-kassa.elaad.example', app: '' }, { id: 'd8', name: 'dashboard-dev.elaad.example', app: '' },
+      { id: 'd9', name: 'acties.elaad.example', app: '' }
+    ];
+  }
+
+  renderVals() {
+    const S = this.state;
+    const set = (o, cb) => this.setState(o, cb);
+    const rol = this.props.rol ?? 'Gebruiker';
+    const me = this.me();
+    const scrollTop = () => { try { window.scrollTo(0, 0); } catch (err) {} };
+    const nowHm = () => { const t = new Date(); return String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0'); };
+
+    const people = this.people().map((p) => (S.userPhone[p.name] !== undefined ? Object.assign({}, p, { phone: S.userPhone[p.name] }) : p));
+    const mailOf = (n) => (people.find((p) => p.name === n) || {}).mail || '';
+    const meUser = people.find((p) => p.name === me.name) || { mail: '', phone: '' };
+
+    const apps = this.seedApps().concat(S.newApps).map((a) => (S.appEdits[a.id] ? Object.assign({}, a, S.appEdits[a.id]) : a)).filter((a) => a.status !== 'Gearchiveerd' && !S.archived[a.id]);
+    const isMine = (a) => a.beheerders.indexOf(me.name) >= 0;
+    const mine = apps.filter(isMine);
+    const isLate = (a) => !S.confirmed[a.id] && a.late && isMine(a);
+    const chipOf = (a) => (isLate(a) ? { chip: 'Controle nodig', tone: 'warning' } : { chip: 'In orde', tone: 'success' });
+    const byName = (a, b) => a.name.localeCompare(b.name, 'nl');
+    const EXT_LABEL = 'Iemand die niet in de lijst staat, of een bedrijf';
+    const ownersText = (a) => a.beheerders.concat((a.extContacts || []).map((c) => c.name)).join(', ') + (a.ownerUnknown ? ' (verantwoordelijke nog onbekend)' : '');
+    const secretRx = /(AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|xox[abpr]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(password|passwd|wachtwoord|api[_-]?key|token|secret)\s*[:=]\s*\S{6,})/i;
+
+    const app = apps.find((a) => a.id === S.appId) || null;
+    let view = S.view;
+    if (view === 'app' && !app) view = 'all';
+
+    const goView = (v2) => () => { set({ view: v2, appId: '', flash: '' }, scrollTop); };
+    const openApp = (id) => () => { set({ view: 'app', appId: id, showTech: false, addPerson: '', flash: '' }, scrollTop); };
+    const startWiz = (name, url, domain) => () => {
+      set({ view: 'new', prevView: S.view === 'new' ? S.prevView : S.view, wStep: 1, w: this.blankW(name, url), wErr: {}, wSecret: false, wDone: '', wDomain: domain || '', flash: '' }, scrollTop);
+    };
+
+    const mk = (opts, cur, onPick, multi) => opts.map((o) => {
+      const on = multi ? cur.indexOf(o.v) >= 0 : cur === o.v;
+      return { label: o.l, hint: o.h || '', hasHint: !!o.h, pressed: on ? 'true' : 'false', border: on ? '#007ea4' : '#aca9a5', bg: on ? '#e8f5f9' : '#ffffff', dot: on ? '#007ea4' : '#ffffff', radius: multi ? '4px' : '50%', pick: () => onPick(o.v) };
+    });
+    const ORIGIN = [{ v: 'bestaand', l: 'Een bestaand product of abonnement', h: 'Bijvoorbeeld Claude of Microsoft 365' }, { v: 'zelf', l: 'Door onszelf gemaakt', h: 'Door ElaadNL ontwikkeld of speciaal voor ons gebouwd' }];
+    const LEVELS = [{ v: 'laag', l: 'Laag', h: 'Niet erg, we merken er weinig van' }, { v: 'midden', l: 'Midden', h: 'Vervelend, maar op te lossen' }, { v: 'hoog', l: 'Hoog', h: 'Heel erg, met grote gevolgen' }];
+    const USES = [
+      { v: 'bestanden', l: 'Bestanden versturen of delen' }, { v: 'samenwerken', l: 'Samenwerken met collega’s of anderen' },
+      { v: 'administratie', l: 'Administratie en financiën' }, { v: 'mail', l: 'E-mail, agenda of chat' },
+      { v: 'klanten', l: 'Contact met klanten of partners' }, { v: 'anders', l: 'Iets anders' }
+    ];
+
+    // ---- melden (wizard)
+    const w = S.w;
+    const setW = (k, val) => set({ w: Object.assign({}, w, { [k]: val }), wErr: {}, wSecret: false });
+    const toggleUse = (v2) => setW('uses', w.uses.indexOf(v2) >= 0 ? w.uses.filter((x) => x !== v2) : w.uses.concat([v2]));
+    const wq = w.name.trim().toLowerCase();
+    const dups = wq.length >= 3 ? apps.filter((a) => a.name.toLowerCase().indexOf(wq) >= 0).slice(0, 3).map((a) => ({ name: a.name, open: openApp(a.id) })) : [];
+    const wNext = () => {
+      const errs = {};
+      if (!w.name.trim()) errs.name = 'Vul in hoe het heet.';
+      if (!w.url.trim()) errs.url = 'Vul een adres of een korte omschrijving in.';
+      if (w.who === 'other' && !w.other) errs.other = 'Kies een collega, of vul zelf iemand in.';
+      if (w.who === 'other' && w.other === '__ext' && !w.extName.trim()) errs.other = 'Vul de naam in van de persoon of het bedrijf.';
+      if (Object.keys(errs).length) { set({ wErr: errs }); return; }
+      set({ wStep: 2, wErr: {} }, scrollTop);
+    };
+    const wNext2 = () => {
+      if (!S.wSecret && secretRx.test([w.name, w.url, w.useText, w.opslag].join(' '))) { set({ wSecret: true }); return; }
+      set({ wStep: 3, wSecret: false }, scrollTop);
+    };
+    const wSaveFn = (skip) => {
+      const texts = [w.name, w.url, w.useText, w.opslag, w.bivTb, w.bivTi, w.bivTv].join(' ');
+      if (!S.wSecret && secretRx.test(texts)) { set({ wSecret: true }); return; }
+      const colleague = (w.who === 'other' && w.other && w.other !== '__ext') ? w.other : '';
+      const beheerders = colleague ? [colleague, me.name] : [me.name];
+      const extContacts = (w.who === 'other' && w.other === '__ext') ? [{ name: w.extName.trim(), mail: w.extMail.trim(), phone: w.extPhone.trim() }] : [];
+      const labels = skip ? [] : w.uses.map((v2) => (USES.find((u) => u.v === v2) || { l: '' }).l);
+      const gebruik = skip ? '' : labels.concat(w.useText.trim() ? [w.useText.trim()] : []).join('. ');
+      const id = 'n' + Date.now();
+      const created = { id: id, name: w.name.trim(), url: w.url.trim(), gebruik: gebruik, opslag: w.opslag.trim(), bivB: w.bivB, bivI: w.bivI, bivV: w.bivV, bivTb: w.bivTb.trim(), bivTi: w.bivTi.trim(), bivTv: w.bivTv.trim(), origin: skip ? '' : w.origin, beheerders: beheerders, extContacts: extContacts, ownerUnknown: w.who === 'unknown', bevestigd: '23-10-2026', late: false, status: 'Onvolledig', tech: null };
+      set({ newApps: S.newApps.concat([created]), wStep: 4, wDone: id, wSecret: false, domLink: S.wDomain ? Object.assign({}, S.domLink, { [S.wDomain]: id }) : S.domLink }, scrollTop);
+    };
+    const doneApp = apps.find((a) => a.id === S.wDone) || null;
+
+    // ---- details
+    const upd = (patch, extra) => {
+      if (!app) return;
+      set(Object.assign({ appEdits: Object.assign({}, S.appEdits, { [app.id]: Object.assign({}, S.appEdits[app.id] || {}, patch) }), savedAt: nowHm() }, extra || {}));
+    };
+    const ed = { name: (e) => upd({ name: e.target.value }), url: (e) => upd({ url: e.target.value }), gebruik: (e) => upd({ gebruik: e.target.value }), opslag: (e) => upd({ opslag: e.target.value }), bivb: (e) => upd({ bivTb: e.target.value }), bivi: (e) => upd({ bivTi: e.target.value }), bivv: (e) => upd({ bivTv: e.target.value }) };
+    const appMine = !!app && isMine(app);
+    const phoneOf = (n) => (people.find((p) => p.name === n) || {}).phone || '';
+    const lineOf = (mail, phone) => [mail, phone].filter(Boolean).join(' · ');
+    const owners = app ? app.beheerders.map((n) => ({ name: n, mail: mailOf(n), phone: phoneOf(n), line: lineOf(mailOf(n), phoneOf(n)), hasMail: !!mailOf(n), hasPhone: !!phoneOf(n), ext: false, isMe: n === me.name, canRemove: appMine && n !== me.name && app.beheerders.length > 1, remove: () => upd({ beheerders: app.beheerders.filter((x) => x !== n) }) })).concat((app.extContacts || []).map((c, i) => ({ name: c.name, mail: c.mail, phone: c.phone, line: lineOf(c.mail, c.phone), hasMail: !!c.mail, hasPhone: !!c.phone, ext: true, isMe: false, canRemove: appMine, remove: () => upd({ extContacts: app.extContacts.filter((x, j) => j !== i) }) }))) : [];
+    const addPersonOpts = [{ value: '', label: 'Iemand toevoegen' }].concat(people.filter((p) => app && app.beheerders.indexOf(p.name) < 0).map((p) => ({ value: p.name, label: p.name }))).concat([{ value: '__ext', label: EXT_LABEL }]);
+    const BEREIK = { 'Internet': 'Iedereen via internet', 'IP-whitelist': 'Alleen vanaf vaste adressen', 'Alleen lokaal netwerk': 'Alleen op ons eigen netwerk' };
+    const techRows = (app && app.tech) ? [
+      { label: 'Wie kan erbij?', value: BEREIK[app.tech.bereik] || app.tech.bereik },
+      { label: 'Waar draait het?', value: app.tech.hosting || 'Nog niet bekend' },
+      { label: 'Waarvan gemaakt?', value: app.tech.techs.join(', ') || 'Nog niet bekend' },
+      { label: 'Open beveiligingsmeldingen', value: app.tech.cves ? (app.tech.cves + (app.tech.kritiek ? ', waarvan ' + app.tech.kritiek + ' ernstig' : '')) : 'Geen' }
+    ] : [];
+    const appView = app ? Object.assign({}, app, chipOf(app), {
+      mine: appMine, notMine: !appMine, late: isLate(app),
+      gebruikRead: app.gebruik || 'Nog niet ingevuld', ownerFirst: app.ownerUnknown ? 'het securityteam' : ((app.extContacts || [])[0] ? app.extContacts[0].name : (app.beheerders[0] || '').split(' ')[0])
+    }) : { name: '', url: '', gebruik: '', mine: false, notMine: false, late: false, chip: '', tone: 'neutral', gebruikRead: '', ownerFirst: '' };
+    const confirmFn = (a) => () => set({ confirmed: Object.assign({}, S.confirmed, { [a.id]: true }), flash: 'Bedankt! We hebben genoteerd dat de gegevens van ' + a.name + ' kloppen.', flashTone: 'success' });
+
+    // ---- lijsten
+    const mineRows = mine.slice().sort(byName).map((a) => Object.assign({ name: a.name, late: isLate(a), open: openApp(a.id), confirm: confirmFn(a) }, chipOf(a)));
+    const sqT = S.sq.trim().toLowerCase();
+    const sqRows = sqT.length >= 2 ? apps.filter((a) => a.name.toLowerCase().indexOf(sqT) >= 0 || a.url.toLowerCase().indexOf(sqT) >= 0).slice(0, 5).map((a) => ({ name: a.name, owners: ownersText(a), mine: isMine(a), open: openApp(a.id) })) : [];
+    const lqT = S.lq.trim().toLowerCase();
+    const listBase = S.listTab === 'mine' ? mine : apps;
+    const listRows = listBase.filter((a) => !lqT || a.name.toLowerCase().indexOf(lqT) >= 0 || a.url.toLowerCase().indexOf(lqT) >= 0).sort(byName).map((a) => ({
+      name: a.name, mine: isMine(a), gebruik: a.gebruik || 'Nog niet ingevuld', gebruikColor: a.gebruik ? '#4d4d4c' : '#8b8886', owners: ownersText(a), open: openApp(a.id)
+    }));
+
+    // ---- e-mails
+    const prefDefs = [
+      { id: 'warn', title: 'Waarschuwingen over mijn software', text: 'Bijvoorbeeld als er een beveiligingsprobleem is gevonden of als een website niet bereikbaar is.', def: true, need: true },
+      { id: 'review', title: 'Herinnering om mijn gegevens te controleren', text: 'Een paar keer per jaar vragen we je te bevestigen dat alles nog klopt.', def: true, need: true },
+      { id: 'kev', title: 'Ernstige beveiligingsproblemen bij ElaadNL', text: 'Alleen als er iets ernstigs speelt dat veel mensen raakt.', def: rol === 'Applicatiebeheerder', need: false },
+      { id: 'new', title: 'Nieuwe software in het overzicht', text: 'Een bericht als er nieuwe software of websites worden toegevoegd.', def: false, need: false }
+    ].filter((p) => !p.need || mine.length > 0);
+    const prefs = prefDefs.map((p) => { const on = S.subOn[p.id] !== undefined ? S.subOn[p.id] : p.def; return { title: p.title, text: p.text, on: on, label: on ? 'Aan' : 'Uit', toggle: () => set({ subOn: Object.assign({}, S.subOn, { [p.id]: !on }) }) }; });
+
+    // ---- domeinen (voor IT)
+    const domRows = this.seedDomains().map((d) => { const aid = S.domLink[d.id] !== undefined ? S.domLink[d.id] : d.app; const a = aid ? apps.find((x) => x.id === aid) : null; return { name: d.name, hasApp: !!a, noApp: !a, appName: a ? a.name : '', open: a ? openApp(a.id) : null, register: startWiz('', d.name, d.id) }; }).sort((x, y) => (x.noApp === y.noApp ? x.name.localeCompare(y.name) : (x.noApp ? -1 : 1)));
+
+    // ---- navigatie
+    const activeNav = view === 'app' ? 'all' : view;
+    const nav = [['start', 'Start'], ['all', 'Alle software'], ['domains', 'Domeinnamen']].map((n) => ({ label: n[1], go: goView(n[0]), current: activeNav === n[0] ? 'page' : 'false', fg: activeNav === n[0] ? '#004e64' : '#4d4d4c', fw: activeNav === n[0] ? '700' : '500', line: activeNav === n[0] ? '#007ea4' : 'transparent' }));
+    const sqTrim = S.sq.trim();
+
+    return {
+      logoH: 40, w520: 520, rows3: 3, rows2: 2, yes: true,
+      me: me, firstName: me.name.split(' ')[0], meMail: meUser.mail,
+      nav: nav, v: { start: view === 'start', all: view === 'all', wiz: view === 'new', app: view === 'app', mail: view === 'mail', domains: view === 'domains' },
+      showReportBtn: view !== 'new',
+      hasFlash: !!S.flash, flash: S.flash, flashTone: S.flashTone, clearFlash: () => set({ flash: '' }),
+      startBlank: startWiz('', '', ''), goStart: goView('start'), goAll: goView('all'), goDomains: goView('domains'),
+      sq: S.sq, onSq: (e) => set({ sq: e.target.value }), sqRows: sqRows, sqTrim: sqTrim,
+      sqNone: sqT.length >= 2 && sqRows.length === 0, startFromSearch: startWiz(sqTrim, '', ''),
+      noMine: mineRows.length === 0, mineRows: mineRows,
+      listTabs: [{ value: 'all', label: 'Alle software' }, { value: 'mine', label: 'Mijn software (' + mine.length + ')' }], listTab: S.listTab, setListTab: (val) => set({ listTab: val }),
+      lq: S.lq, onLq: (e) => set({ lq: e.target.value }), listRows: listRows, noListRows: listRows.length === 0,
+
+      w: w, wStep: S.wStep, wNotDone: S.wStep !== 4, wS1: S.wStep === 1, wS2: S.wStep === 2, wS3: S.wStep === 3, wS4: S.wStep === 4, wBar2: S.wStep >= 2 ? '#007ea4' : '#e3e1de', wBar3: S.wStep >= 3 ? '#007ea4' : '#e3e1de',
+      wBack: () => { if (S.wStep > 1) set({ wStep: S.wStep - 1, wSecret: false }, scrollTop); else set({ view: S.prevView || 'start' }, scrollTop); },
+      onWName: (e) => setW('name', e.target.value), onWUrl: (e) => setW('url', e.target.value), onWOther: (e) => setW('other', e.target.value), onWUseText: (e) => setW('useText', e.target.value),
+      wErrName: S.wErr.name || '', wErrUrl: S.wErr.url || '', wErrOther: S.wErr.other || '',
+      hasDup: dups.length > 0, dups: dups,
+      whoChoices: mk([{ v: 'me', l: 'Ik', h: 'Jij weet waarvoor het gebruikt wordt' }, { v: 'other', l: 'Iemand anders', h: 'Een collega, of iemand van buiten' }, { v: 'unknown', l: 'Weet ik niet', h: 'Dat kan. Het securityteam zoekt het uit.' }], w.who, (val) => setW('who', val), false),
+      wWhoOther: w.who === 'other', wWhoExt: w.who === 'other' && w.other === '__ext', onWExtName: (e) => setW('extName', e.target.value), onWExtMail: (e) => setW('extMail', e.target.value), onWExtPhone: (e) => setW('extPhone', e.target.value), personOpts: [{ value: '', label: 'Kies een collega' }].concat(people.filter((p) => p.name !== me.name).map((p) => ({ value: p.name, label: p.name }))).concat([{ value: '__ext', label: EXT_LABEL }]),
+      useChoices: mk(USES, w.uses, toggleUse, true), onWOpslag: (e) => setW('opslag', e.target.value),
+      wBivB: mk(LEVELS, w.bivB, (val) => setW('bivB', w.bivB === val ? '' : val), false), wBivI: mk(LEVELS, w.bivI, (val) => setW('bivI', w.bivI === val ? '' : val), false), wBivV: mk(LEVELS, w.bivV, (val) => setW('bivV', w.bivV === val ? '' : val), false),
+      onWBivb: (e) => setW('bivTb', e.target.value), onWBivi: (e) => setW('bivTi', e.target.value), onWBivv: (e) => setW('bivTv', e.target.value),
+      eBivB: mk(LEVELS, app ? app.bivB : '', (val) => upd({ bivB: app.bivB === val ? '' : val }), false), eBivI: mk(LEVELS, app ? app.bivI : '', (val) => upd({ bivI: app.bivI === val ? '' : val }), false), eBivV: mk(LEVELS, app ? app.bivV : '', (val) => upd({ bivV: app.bivV === val ? '' : val }), false), originChoices: mk(ORIGIN, w.origin, (val) => setW('origin', w.origin === val ? '' : val), false),
+      wSecret: S.wSecret, wNext: wNext, wNext2: wNext2, wNext2Cta: S.wSecret ? 'Toch doorgaan' : 'Doorgaan', wSave: () => wSaveFn(false), wSaveCta: S.wSecret ? 'Toch opslaan' : 'Opslaan en afronden',
+      doneName: doneApp ? doneApp.name : '', wOpenDone: () => { if (S.wDone) openApp(S.wDone)(); },
+
+      app: appView, ed: ed, owners: owners, savedText: S.savedAt ? 'Alles is opgeslagen om ' + S.savedAt : 'Wijzigingen worden automatisch opgeslagen',
+      secretHit: !!app && appMine && secretRx.test([app.name, app.url, app.gebruik, app.opslag, app.bivTb, app.bivTi, app.bivTv].join(' ')),
+      eOrigin: mk(ORIGIN, app ? app.origin : '', (val) => upd({ origin: app.origin === val ? '' : val }), false),
+      confirmApp: () => { if (app) confirmFn(app)(); },
+      addPersonOpts: addPersonOpts, addPerson: S.addPerson, onAddPerson: (e) => set({ addPerson: e.target.value }), addPersonDisabled: !S.addPerson,
+      addOwner: () => {
+        if (!S.addPerson || !app) return;
+        if (S.addPerson === '__ext') {
+          if (!S.addExtName.trim()) { set({ addExtErr: 'Vul de naam van de persoon of het bedrijf in.' }); return; }
+          upd({ extContacts: (app.extContacts || []).concat([{ name: S.addExtName.trim(), mail: S.addExtMail.trim(), phone: S.addExtPhone.trim() }]), ownerUnknown: false }, { addPerson: '', addExtName: '', addExtMail: '', addExtPhone: '', addExtErr: '' });
+        } else {
+          upd({ beheerders: app.beheerders.concat([S.addPerson]), ownerUnknown: false }, { addPerson: '' });
+        }
+      },
+      addIsExt: S.addPerson === '__ext', addNotExt: S.addPerson !== '__ext', addExtName: S.addExtName, addExtMail: S.addExtMail, addExtPhone: S.addExtPhone,
+      onAddExtName: (e) => set({ addExtName: e.target.value, addExtErr: '' }), onAddExtMail: (e) => set({ addExtMail: e.target.value }), onAddExtPhone: (e) => set({ addExtPhone: e.target.value }),
+      hasAddExtErr: !!S.addExtErr, addExtErr: S.addExtErr,
+      showTech: S.showTech, toggleTech: () => set({ showTech: !S.showTech }), techToggleLabel: S.showTech ? 'Technische details verbergen' : 'Technische details tonen (voor IT)',
+      techRows: techRows, noTech: techRows.length === 0, hasTech: techRows.length > 0,
+      openArch: () => set({ dlg: 'arch' }), archTitle: app ? app.name + ' niet meer in gebruik?' : '',
+      doArchive: () => { if (!app) return; set({ archived: Object.assign({}, S.archived, { [app.id]: true }), dlg: '', view: 'all', appId: '', flash: app.name + ' staat niet meer in het overzicht.', flashTone: 'success' }, scrollTop); },
+
+      prefs: prefs, noPrefsNeed: mine.length === 0,
+      domRows: domRows,
+
+      dlgOpen: { arch: S.dlg === 'arch', me: S.dlg === 'me' }, closeDlg: () => set({ dlg: '' }),
+      openMe: () => set({ dlg: 'me', myPhone: null }), mePhone: S.myPhone !== null ? S.myPhone : (meUser.phone || ''), onMePhone: (e) => set({ myPhone: e.target.value }),
+      saveMe: () => set({ dlg: '', userPhone: Object.assign({}, S.userPhone, { [me.name]: (S.myPhone !== null ? S.myPhone : (meUser.phone || '')).trim() }), flash: 'Je gegevens zijn opgeslagen.', flashTone: 'success' })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+/* Element defaults so bare HTML already looks like ElaadNL. */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font-body);font-size:var(--type-body-size);line-height:var(--type-body-lh);font-weight:var(--fw-regular);color:var(--text-body);background:var(--surface-page);-webkit-font-smoothing:antialiased;text-wrap:pretty}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-heading);font-weight:var(--fw-bold);line-height:var(--lh-heading);letter-spacing:var(--ls-heading);margin:0 0 var(--space-4)}
+h1{font-size:var(--type-h1-size);line-height:var(--lh-tight)}
+h2{font-size:var(--type-h2-size)}
+h3{font-size:var(--type-h3-size)}
+h4{font-size:var(--type-h4-size)}
+p{margin:0 0 var(--space-4)}
+strong,b{font-weight:var(--fw-semibold)}
+small{font-size:var(--type-small-size)}
+a{color:var(--text-link);text-decoration:none;border-bottom:1px solid rgba(0,126,164,.35);transition:color var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard)}
+a:hover{color:var(--text-link-hover);border-bottom-color:var(--text-link-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px;border-radius:var(--radius-sm)}
+hr{border:0;border-top:var(--rule);margin:var(--space-8) 0}
+img,svg,video{max-width:100%;height:auto;display:block}
+code,pre{font-family:var(--font-mono);font-size:.92em}
+::selection{background:var(--brand-accent);color:var(--text-on-accent)}
+.eyebrow{font-family:var(--font-display);font-size:var(--type-eyebrow-size);font-weight:var(--fw-bold);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--brand-primary)}
+.container{width:100%;max-width:var(--container-max);margin-inline:auto;padding-inline:var(--container-pad)}
+.gradient-rule{height:4px;border:0;background:var(--gradient-brand);margin:0}

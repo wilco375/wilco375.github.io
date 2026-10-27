@@ -1,0 +1,44 @@
+/* ---------------------------------------------------------------------------
+   ElaadNL data visualisation
+   ElaadNL is a data house — Outlooks, load profiles, measurement series. The
+   categorical ramp is ordered so the first three series are the brand's own
+   voices (deep blue, olive, cyan) and never needs a hue outside the huisstijl.
+   Use series in order; do not reassign by aesthetics.
+--------------------------------------------------------------------------- */
+:root{
+  --chart-1:#007ea4;
+  --chart-2:#899903;
+  --chart-3:#00abd7;
+  --chart-4:#556101;
+  --chart-5:#004e64;
+  --chart-6:#c3c000;
+  --chart-7:#4dbedb;
+  --chart-8:#6d6a68;
+
+  /* chrome */
+  --chart-grid:#e3e1de;
+  --chart-grid-strong:#cbc8c4;
+  --chart-axis:#aca9a5;
+  --chart-axis-label:#6d6a68;
+  --chart-ink:#004e64;
+  --chart-plot-bg:transparent;
+
+  /* meaning */
+  --chart-positive:#899903;
+  --chart-negative:#b8342a;
+  --chart-neutral:#8b8886;
+  --chart-threshold:#b8342a;
+  --chart-target:#4d4d4c;
+  --chart-forecast:#8fd4e6;
+  --chart-band:rgba(0,126,164,.10);
+  --chart-band-warning:rgba(195,160,0,.12);
+  --chart-highlight:#dedc00;
+
+  /* geometry */
+  --chart-stroke:2px; /* @kind spacing */
+  --chart-stroke-thin:1.5px; /* @kind spacing */
+  --chart-dot:4px; /* @kind spacing */
+  --chart-bar-radius:2px;
+  --chart-bar-gap:0.28; /* @kind other */
+  --chart-dash:6 4; /* @kind other */
+}

@@ -1,0 +1,34 @@
+/* ---------------------------------------------------------------------------
+   ElaadNL webfonts — Exo 2 (headings) + Montserrat (body).
+   Both are SIL Open Font Licence 1.1; see assets/fonts/OFL.txt.
+
+   HOW TO GET THE FONTS
+   Prefer a PACKAGE MANAGER over the copies in assets/fonts/ — versioned,
+   subsettable, tree-shaken, no binaries in your repo:
+
+     npm i @fontsource-variable/exo-2 @fontsource-variable/montserrat
+       import '@fontsource-variable/exo-2';
+       import '@fontsource-variable/montserrat';
+     # weight/subset control:
+       import '@fontsource-variable/exo-2/wght.css';
+       import '@fontsource-variable/montserrat/latin-wght-normal.css';
+
+     # Expo / React Native
+     npx expo install @expo-google-fonts/exo-2 @expo-google-fonts/montserrat expo-font
+
+     # Flutter        pubspec.yaml: google_fonts: ^6.2.1
+     # Android        implementation("androidx.compose.ui:ui-text-google-fonts")
+     # Homebrew (design work)  brew install --cask font-exo2 font-montserrat
+
+   The @font-face rules below load the copies in assets/fonts/ and exist so
+   that static artefacts (slides, mocks, specimen cards, exported HTML) work
+   offline with no build step. In an application, drop them and use the
+   package instead — then only the --font-display / --font-body tokens matter.
+
+   Do NOT hotlink Google Fonts from a production ElaadNL surface: it adds a
+   third-party request and is a GDPR problem for a public-sector-adjacent body.
+--------------------------------------------------------------------------- */
+@font-face{font-family:"Exo 2";src:url("../assets/fonts/Exo2-VariableFont_wght.ttf") format("truetype-variations"),url("../assets/fonts/Exo2-Regular.ttf") format("truetype");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Exo 2";src:url("../assets/fonts/Exo2-Italic-VariableFont_wght.ttf") format("truetype-variations");font-weight:100 900;font-style:italic;font-display:swap}
+@font-face{font-family:"Montserrat";src:url("../assets/fonts/Montserrat-VariableFont_wght.ttf") format("truetype-variations"),url("../assets/fonts/Montserrat-Regular.ttf") format("truetype");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Montserrat";src:url("../assets/fonts/Montserrat-Italic-VariableFont_wght.ttf") format("truetype-variations");font-weight:100 900;font-style:italic;font-display:swap}
